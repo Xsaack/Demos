@@ -258,7 +258,8 @@
     .reveal.visible { opacity: 1; transform: none; }
 
     @media(max-width: 768px) {
-      .nav-links { display: none; position: absolute; top: 108px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+      .nav-phone { display: none; }
+      .nav-links { display: none; position: fixed; top: 116px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 998; }
       .nav-links.open { display: flex; }
       .hamburger { display: flex; }
       .ba-grid, .video-grid { grid-template-columns: 1fr; }
