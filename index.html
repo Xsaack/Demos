@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Green's Carpet & Upholstery Cleaning | Bonner Springs, KS</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('olFi0GxDR4FXZj0K2');</script>
 <style>
   :root {
     --navy: #1a2744;
@@ -66,7 +68,7 @@
 
   /* HERO */
   .hero {
-    margin-top: 116px; min-height: calc(100vh - 116px);
+    margin-top: 80px; min-height: calc(100vh - 80px);
     background: url("imgen/imagen3.png") center center / cover no-repeat;
     display: flex; align-items: center; position: relative; overflow: hidden;
   }
@@ -170,6 +172,72 @@
     background: url("imgen/imagen1.png") center center / cover no-repeat !important;
   }
   .service-card--water-bg { display: none; }
+  .service-card--upholstery {
+    background: url("imgen/imagen8.png") center center / cover no-repeat !important;
+  }
+  .service-card--upholstery::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(10, 20, 50, 0.65);
+    backdrop-filter: blur(1.8px);
+    z-index: 0;
+  }
+  .service-card--upholstery > * { position: relative; z-index: 1; }
+  .service-card--upholstery h3 { color: var(--white) !important; }
+  .service-card--upholstery p { color: rgba(255,255,255,0.85) !important; }
+  .service-card--repair {
+    background: url("imgen/imagen9.png") center center / cover no-repeat !important;
+  }
+  .service-card--repair::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(10, 20, 50, 0.65);
+    backdrop-filter: blur(1.8px);
+    z-index: 0;
+  }
+  .service-card--repair > * { position: relative; z-index: 1; }
+  .service-card--repair h3 { color: var(--white) !important; }
+  .service-card--repair p { color: rgba(255,255,255,0.85) !important; }
+  .service-card--stain {
+    background: url("imgen/imagen10.png") center center / cover no-repeat !important;
+  }
+  .service-card--stain::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(10, 20, 50, 0.65);
+    backdrop-filter: blur(1.8px);
+    z-index: 0;
+  }
+  .service-card--stain > * { position: relative; z-index: 1; }
+  .service-card--stain h3 { color: var(--white) !important; }
+  .service-card--stain p { color: rgba(255,255,255,0.85) !important; }
+  .service-card--stain li { color: rgba(255,255,255,0.85) !important; }
+  .service-card--residential {
+    background: url("imgen/imagen11.png") center center / cover no-repeat !important;
+  }
+  .service-card--residential::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(10, 20, 50, 0.65);
+    backdrop-filter: blur(1.8px);
+    z-index: 0;
+  }
+  .service-card--residential > * { position: relative; z-index: 1; }
+  .service-card--residential h3 { color: var(--white) !important; }
+  .service-card--residential p { color: rgba(255,255,255,0.85) !important; }
+  .service-card--military {
+    background: url("imgen/imagen12.png") center center / cover no-repeat !important;
+  }
+  .service-card--military::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(10, 20, 50, 0.65);
+    backdrop-filter: blur(1.8px);
+    z-index: 0;
+  }
+  .service-card--military > * { position: relative; z-index: 1; }
+  .service-card--military h3 { color: var(--white) !important; }
+  .service-card--military p { color: rgba(255,255,255,0.85) !important; }
   .service-card--water::before {
     content: '';
     position: absolute; inset: 0;
@@ -373,7 +441,7 @@
         Green's Carpet &amp; Upholstery Cleaning in Bonner Springs, KS — trusted since 1993. Professional carpet cleaning, upholstery care, water damage restoration, and more.
       </p>
       <div class="hero-slogan">
-        <span class="slogan-quote">"</span>Remember you walk on our reputation<span class="slogan-quote">"</span>
+        <span class="slogan-quote">"</span> Remember you walk on our reputation<span class="slogan-quote">"</span>
       </div>
       <div class="hero-buttons">
         <a href="#contact" class="btn-primary">Request Service</a>
@@ -391,7 +459,7 @@
       <div>
         <a href="#services" class="service-pill">🧹 Carpet Cleaning</a>
         <a href="#services" class="service-pill">🛋️ Upholstery Cleaning</a>
-        <a href="#services" class="service-pill">💧 Wather Damage / Restoration</a>
+        <a href="#services" class="service-pill">💧 Water Damage / Restoration</a>
         <a href="#services" class="service-pill">↔️ Carpet Restretching</a>
         <a href="#services" class="service-pill">🔧 Carpet Repair</a>
         <a href="#services" class="service-pill">🧼 Stain Removal</a>
@@ -420,7 +488,7 @@
         <h3>Carpet Cleaning</h3>
         <p>We remove deep dirt, stains, and allergens using a high-powered truck-mounted steam unit. Visible results, fast drying.</p>
       </a>
-      <a href="#contact" class="service-card reveal">
+      <a href="#contact" class="service-card service-card--upholstery reveal">
         <div class="service-icon">🛋️</div>
         <h3>Upholstery Cleaning</h3>
         <p>Sofas, chairs, headboards and more. We remove stains, odors, and bacteria without damaging fabrics, leaving your furniture fresh and renewed.</p>
@@ -430,12 +498,12 @@
         <h3>Carpet Restretching</h3>
         <p>Ripples, bubbles, or wrinkles? We use power stretchers to eliminate looseness, reinstall tack strips and trim excess carpet for a perfect finish.</p>
       </a>
-      <a href="#contact" class="service-card reveal">
+      <a href="#contact" class="service-card service-card--repair reveal">
         <div class="service-icon">🔧</div>
         <h3>Carpet Repair</h3>
         <p>Tears, burns, seams coming apart, or damaged sections? We patch and repair your carpet to restore its look and extend its life — saving you the cost of full replacement.</p>
       </a>
-      <a href="#contact" class="service-card reveal">
+      <a href="#contact" class="service-card service-card--stain reveal">
         <div class="service-icon">🧼</div>
         <h3>Stain Removal</h3>
         <p>We specialize in removing the toughest stains from your carpets and upholstery:</p>
@@ -450,15 +518,15 @@
       <a href="#contact" class="service-card service-card--water reveal">
         <div class="service-card--water-bg"></div>
         <div class="service-icon">💧</div>
-        <h3>Wather Damage / Restoration</h3>
-        <p>Burst pipe or flood damage: we extract water, dry the space with dehumidifiers and air scrubbers, and assess repair options to save your home.</p>
+        <h3>Water Damage / Restoration</h3>
+        <p>Burst pipes, flood jobs, and storm damage: we extract standing water fast and fully dry the space to prevent mold and structural damage. Our equipment includes air movers, air scrubbers, and dehumidifiers — everything needed to restore your home or business.</p>
       </a>
-      <a href="#contact" class="service-card reveal">
+      <a href="#contact" class="service-card service-card--residential reveal">
         <div class="service-icon">🏠</div>
         <h3>Residential & Commercial</h3>
         <p>Serving Bonner Springs, KS and the Greater Kansas City area. Punctuality and professionalism guaranteed on every visit.</p>
       </a>
-      <a href="#contact" class="service-card reveal">
+      <a href="#contact" class="service-card service-card--military reveal">
         <div class="service-icon">🎖️</div>
         <h3>Military Discounts</h3>
         <p>We appreciate your service to our nation. Special discounts available for active military personnel and veterans on all our services.</p>
@@ -477,7 +545,7 @@
           <div class="big-text" style="font-size:3rem; color:var(--gold-light); margin-top:-8px;">1993</div>
           <p>Over 30 years serving Bonner Springs and the Greater Kansas City Area</p>
           <div style="margin-top:28px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.15)">
-            <p style="font-size:1.1rem; color:var(--gold); font-family:'Playfair Display',serif; font-style:italic">"Remember you walk on our reputation"</p>
+            <p style="font-size:1.1rem; color:var(--gold); font-family:'Playfair Display',serif; font-style:italic">" Remember you walk on our reputation"</p>
           </div>
         </div>
         <div class="about-float">
@@ -607,7 +675,7 @@
         </div>
         <div class="contact-detail">
           <div class="contact-icon">📧</div>
-          <div><strong>Email</strong><span>greenscarpetandupholsterycleaning.com</span></div>
+          <div><strong>Email</strong><span><a href="mailto:greenscarpetcleaning@yahoo.com" style="color:inherit;text-decoration:none">greenscarpetcleaning@yahoo.com</a></span></div>
         </div>
         <div class="contact-detail">
           <div class="contact-icon">⏰</div>
@@ -635,7 +703,7 @@
             <option>Carpet Restretching</option>
             <option>Carpet Repair</option>
             <option>Stain Removal</option>
-            <option>Wather Damage / Restoration</option>
+            <option>Water Damage / Restoration</option>
             <option>Other</option>
           </select>
         </div>
@@ -652,7 +720,7 @@
   <div class="footer-inner">
     <div class="footer-logo">
       <img src="imgen/logo.png" alt="Green's Carpet & Upholstery Cleaning">
-      <div class="footer-tagline">"Remember you walk on our reputation"</div>
+      <div class="footer-tagline">" Remember you walk on our reputation"</div>
     </div>
     <div class="footer-links">
       <a href="#home">Home</a>
@@ -680,11 +748,41 @@ function sendEmail() {
   const service = document.getElementById('service').value;
   const message = document.getElementById('message').value.trim();
   const msg = document.getElementById('form-msg');
-  if (!fname || !email || !message) { msg.className = 'error'; msg.textContent = 'Please fill in your name, email, and message.'; return; }
-  const subject = encodeURIComponent('Service Request - ' + (service || 'General'));
-  const body = encodeURIComponent('Name: ' + fname + ' ' + lname + '\nEmail: ' + email + '\n' + (phone ? 'Phone: ' + phone + '\n' : '') + 'Service: ' + (service || 'Not specified') + '\n\nMessage:\n' + message);
-  window.location.href = 'mailto:greens.carpetcleaning@email.com?subject=' + subject + '&body=' + body;
-  msg.className = 'success'; msg.textContent = '✅ Your email client has opened! Send the message to contact us.';
+
+  if (!fname || !email || !message) {
+    msg.className = 'error';
+    msg.textContent = 'Please fill in your name, email, and message.';
+    return;
+  }
+
+  const btn = document.querySelector('.contact-form-card .btn-primary');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  emailjs.send('alfombras', 'template_alfombras', {
+    fname: fname,
+    lname: lname,
+    email: email,
+    phone: phone || 'Not provided',
+    service: service || 'Not specified',
+    message: message
+  }).then(() => {
+    msg.className = 'success';
+    msg.textContent = '✅ Message sent! We will get back to you soon.';
+    btn.textContent = 'Send Message ✉️';
+    btn.disabled = false;
+    document.getElementById('fname').value = '';
+    document.getElementById('lname').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('service').value = '';
+    document.getElementById('message').value = '';
+  }).catch(() => {
+    msg.className = 'error';
+    msg.textContent = '❌ Something went wrong. Please try again or call us directly.';
+    btn.textContent = 'Send Message ✉️';
+    btn.disabled = false;
+  });
 }
 window.addEventListener('scroll', () => {
   const nav = document.querySelector('nav');
