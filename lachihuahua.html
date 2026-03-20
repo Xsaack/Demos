@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaChihuahua Snack & Sweets</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Satisfy&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FF3DA8;
+    --hot-pink: #FF006E;
+    --peach: #FFB347;
+    --cream: #FFF8F0;
+    --choco: #3E1C00;
+    --brown: #7B3F00;
+    --soft-pink: #FFD6EC;
+    --mint: #A8F0D8;
+    --lavender: #C9B8FF;
+    --yellow: #FFE566;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--choco);
+    overflow-x: hidden;
+  }
+
+  /* ---- CURSOR ---- */
+  body { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ctext y='28' font-size='28'%3E🍪%3C/text%3E%3C/svg%3E") 16 16, auto; }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    background: rgba(255,248,240,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 3px solid var(--pink);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 40px;
+    box-shadow: 0 4px 24px rgba(255,61,168,0.12);
+  }
+  .nav-logo {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.6rem;
+    color: var(--hot-pink);
+    text-shadow: 2px 2px 0 var(--peach);
+    letter-spacing: 1px;
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-weight: 700; font-size: 0.95rem;
+    color: var(--choco); letter-spacing: 0.5px;
+    position: relative; padding-bottom: 3px;
+    transition: color 0.2s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 3px; background: var(--pink);
+    border-radius: 2px; transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--hot-pink); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--pink); color: white !important;
+    padding: 8px 22px; border-radius: 50px;
+    box-shadow: 0 4px 14px rgba(255,61,168,0.35);
+    transition: transform 0.2s, box-shadow 0.2s !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,61,168,0.45) !important; color: white !important; }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #FFD6EC 0%, #FFF0FB 40%, #FFF8E7 70%, #FFE8CC 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 40px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-dots {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255,61,168,0.12) 2px, transparent 2px);
+    background-size: 32px 32px;
+  }
+  .hero-blob {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.35;
+  }
+  .blob1 { width: 500px; height: 500px; background: var(--pink); top: -100px; left: -150px; }
+  .blob2 { width: 400px; height: 400px; background: var(--peach); bottom: -100px; right: -100px; }
+  .blob3 { width: 300px; height: 300px; background: var(--lavender); top: 40%; left: 60%; }
+
+  .hero-inner { position: relative; z-index: 2; max-width: 800px; }
+  .hero-badge {
+    display: inline-block; background: var(--yellow);
+    color: var(--choco); font-weight: 800; font-size: 0.85rem;
+    padding: 6px 20px; border-radius: 50px; margin-bottom: 20px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    box-shadow: 0 3px 12px rgba(255,229,102,0.5);
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900; line-height: 1.05;
+    color: var(--choco);
+    margin-bottom: 16px;
+  }
+  .hero h1 span {
+    color: var(--hot-pink);
+    font-style: italic;
+    display: block;
+  }
+  .hero-sub {
+    font-size: 1.2rem; color: var(--brown);
+    font-weight: 600; margin-bottom: 40px; line-height: 1.6;
+  }
+  .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+    color: white; padding: 16px 38px; border-radius: 50px;
+    font-size: 1rem; font-weight: 800; text-decoration: none;
+    box-shadow: 0 8px 28px rgba(255,0,110,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(255,0,110,0.5); }
+  .btn-outline {
+    background: white; color: var(--hot-pink);
+    border: 2.5px solid var(--pink); padding: 14px 36px; border-radius: 50px;
+    font-size: 1rem; font-weight: 800; text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .btn-outline:hover { background: var(--soft-pink); transform: translateY(-3px); }
+
+  .hero-emojis {
+    position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  }
+  .floating-emoji {
+    position: absolute; font-size: 2.5rem;
+    animation: floatEmoji 6s ease-in-out infinite;
+    opacity: 0.7;
+  }
+  .floating-emoji:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+  .floating-emoji:nth-child(2) { top: 25%; right: 10%; animation-delay: 1s; }
+  .floating-emoji:nth-child(3) { top: 65%; left: 5%; animation-delay: 2s; }
+  .floating-emoji:nth-child(4) { top: 70%; right: 8%; animation-delay: 0.5s; }
+  .floating-emoji:nth-child(5) { top: 10%; left: 45%; animation-delay: 1.5s; }
+  .floating-emoji:nth-child(6) { bottom: 15%; left: 35%; animation-delay: 2.5s; }
+  @keyframes floatEmoji {
+    0%,100%{transform:translateY(0) rotate(-5deg)}
+    50%{transform:translateY(-20px) rotate(5deg)}
+  }
+
+  /* ---- SECTION GENERAL ---- */
+  section { padding: 90px 40px; }
+  .section-tag {
+    display: inline-block; font-size: 0.8rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 2.5px;
+    color: var(--hot-pink); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900; line-height: 1.15; margin-bottom: 16px;
+  }
+  .section-sub { font-size: 1.05rem; color: var(--brown); font-weight: 600; max-width: 520px; line-height: 1.7; }
+
+  /* ---- MARQUEE ---- */
+  .marquee-wrap {
+    background: var(--hot-pink); padding: 14px 0;
+    overflow: hidden; white-space: nowrap;
+    border-top: 3px solid var(--choco);
+    border-bottom: 3px solid var(--choco);
+  }
+  .marquee-inner {
+    display: inline-flex; gap: 0;
+    animation: marquee 22s linear infinite;
+  }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .marquee-item {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-weight: 800; font-size: 1rem; color: white;
+    padding: 0 32px; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .marquee-item span { font-size: 1.3rem; }
+
+  /* ---- MENU / PRODUCTS ---- */
+  #menu { background: white; }
+  .menu-header { text-align: center; margin-bottom: 60px; }
+  .menu-tabs {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .tab-btn {
+    padding: 10px 28px; border-radius: 50px; border: 2.5px solid transparent;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem;
+    cursor: pointer; transition: all 0.25s; background: var(--cream);
+    color: var(--choco);
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--pink); color: white;
+    border-color: var(--pink);
+    box-shadow: 0 6px 18px rgba(255,61,168,0.35);
+    transform: translateY(-2px);
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 32px; max-width: 1200px; margin: 0 auto;
+  }
+  .product-card {
+    background: var(--cream); border-radius: 24px;
+    overflow: hidden; position: relative;
+    box-shadow: 0 6px 28px rgba(62,28,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  .product-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(255,61,168,0.2);
+    border-color: var(--pink);
+  }
+  .product-img-wrap {
+    height: 260px; overflow: hidden; position: relative;
+  }
+  .product-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s;
+  }
+  .product-card:hover .product-img-wrap img { transform: scale(1.08); }
+  .product-badge {
+    position: absolute; top: 14px; right: 14px;
+    background: var(--yellow); color: var(--choco);
+    font-weight: 800; font-size: 0.75rem; padding: 5px 14px;
+    border-radius: 50px; text-transform: uppercase; letter-spacing: 1px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  }
+  .product-info { padding: 24px; }
+  .product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700; margin-bottom: 10px;
+    color: var(--choco);
+  }
+  .product-feats { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .product-feats li {
+    font-size: 0.9rem; color: var(--brown); font-weight: 600;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .product-feats li::before { content: '✦'; color: var(--pink); font-size: 0.75rem; }
+
+  /* ---- ABOUT ---- */
+  #nosotros {
+    background: linear-gradient(135deg, #FFF0FB, #FFF8F0);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center;
+  }
+  .about-img-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    position: relative;
+  }
+  .about-img-grid img {
+    width: 100%; border-radius: 20px; object-fit: cover;
+    box-shadow: 0 8px 28px rgba(62,28,0,0.12);
+    transition: transform 0.3s;
+  }
+  .about-img-grid img:hover { transform: scale(1.04) rotate(-1deg); }
+  .about-img-grid img:nth-child(1) { height: 220px; }
+  .about-img-grid img:nth-child(2) { height: 160px; margin-top: 60px; }
+  .about-img-grid img:nth-child(3) { height: 160px; }
+  .about-img-grid img:nth-child(4) { height: 220px; margin-top: -60px; }
+  .about-text .section-sub { max-width: 100%; }
+  .features-list { margin-top: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .feature-item {
+    display: flex; align-items: center; gap: 16px;
+    background: white; padding: 16px 20px; border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(62,28,0,0.06);
+    transition: transform 0.2s;
+  }
+  .feature-item:hover { transform: translateX(6px); }
+  .feature-icon {
+    font-size: 2rem; min-width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--soft-pink); border-radius: 14px;
+  }
+  .feature-text strong { display: block; font-weight: 800; font-size: 0.95rem; color: var(--choco); }
+  .feature-text span { font-size: 0.85rem; color: var(--brown); }
+
+  /* ---- TESTIMONIALS ---- */
+  #reviews { background: var(--choco); color: white; text-align: center; }
+  #reviews .section-title { color: white; }
+  #reviews .section-tag { color: var(--yellow); }
+  .stars-row { color: var(--yellow); font-size: 1.4rem; margin-bottom: 8px; }
+  .reviews-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px; max-width: 1100px; margin: 48px auto 0;
+  }
+  .review-card {
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px; padding: 28px; text-align: left;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .review-card:hover { transform: translateY(-6px); background: rgba(255,255,255,0.12); }
+  .review-text { font-size: 0.95rem; line-height: 1.7; opacity: 0.9; margin-bottom: 20px; }
+  .review-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .review-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--peach));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+  }
+  .review-name { font-weight: 800; font-size: 0.9rem; }
+  .review-handle { font-size: 0.78rem; opacity: 0.6; }
+
+  /* ---- CONTACT ---- */
+  #contacto {
+    background: linear-gradient(135deg, #FFD6EC, #FFF0E0);
+    text-align: center;
+  }
+  .contact-inner { max-width: 900px; margin: 0 auto; }
+  .contact-cards {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px; margin: 52px auto 0;
+  }
+  .contact-card {
+    background: white; border-radius: 22px; padding: 36px 28px;
+    box-shadow: 0 6px 28px rgba(255,61,168,0.12);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center; text-decoration: none; color: var(--choco);
+    display: block;
+    border: 2px solid transparent;
+  }
+  .contact-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 44px rgba(255,61,168,0.22);
+    border-color: var(--pink);
+  }
+  .contact-icon {
+    font-size: 2.8rem; margin-bottom: 16px; display: block;
+  }
+  .contact-label {
+    font-size: 0.78rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--hot-pink); margin-bottom: 8px;
+  }
+  .contact-value {
+    font-weight: 700; font-size: 1rem; line-height: 1.5;
+    color: var(--choco);
+  }
+  .map-section { margin-top: 56px; }
+  .map-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 700; margin-bottom: 24px;
+  }
+  .map-container {
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 12px 40px rgba(62,28,0,0.15);
+    border: 3px solid white;
+  }
+  .map-container iframe { width: 100%; height: 380px; border: none; display: block; }
+  .map-placeholder {
+    width: 100%; height: 380px;
+    background: linear-gradient(135deg, #f5d0e8, #ffe8cc);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px;
+  }
+  .map-placeholder .map-icon { font-size: 4rem; }
+  .map-placeholder p { font-weight: 700; font-size: 1.1rem; color: var(--choco); }
+  .map-placeholder span { font-size: 0.9rem; color: var(--brown); }
+
+  /* ---- FOOTER ---- */
+  footer {
+    background: var(--choco); color: white;
+    padding: 50px 40px 30px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Satisfy', cursive;
+    font-size: 2.2rem; color: var(--pink);
+    text-shadow: 2px 2px 0 var(--peach);
+    margin-bottom: 12px;
+  }
+  .footer-tagline { opacity: 0.7; font-size: 0.95rem; margin-bottom: 28px; }
+  .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--pink); }
+  .footer-copy { font-size: 0.82rem; opacity: 0.45; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; margin-top: 8px; }
+
+  /* ---- SCROLL REVEAL ---- */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ---- BACK TO TOP ---- */
+  #back-top {
+    position: fixed; bottom: 32px; right: 32px; z-index: 999;
+    background: var(--pink); color: white;
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; box-shadow: 0 8px 24px rgba(255,61,168,0.4);
+    cursor: pointer; border: none;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s, transform 0.2s;
+    text-decoration: none;
+  }
+  #back-top.show { opacity: 1; pointer-events: all; }
+  #back-top:hover { transform: scale(1.12); }
+
+  /* ---- HIDDEN ITEMS FOR TABS ---- */
+  .product-card.hidden { display: none; }
+
+  @media(max-width: 900px) {
+    nav { padding: 12px 20px; }
+    .nav-links { display: none; }
+    section { padding: 70px 20px; }
+    .about-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero { padding: 110px 20px 70px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🍪 LaChihuahua</div>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#nosotros">About Us</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contacto" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-dots"></div>
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="hero-blob blob3"></div>
+  <div class="hero-emojis">
+    <span class="floating-emoji">🍪</span>
+    <span class="floating-emoji">🎂</span>
+    <span class="floating-emoji">🍓</span>
+    <span class="floating-emoji">🍫</span>
+    <span class="floating-emoji">✨</span>
+    <span class="floating-emoji">🧁</span>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-badge">✦ Artisan Bakery ✦ Freshly Baked</div>
+    <h1>
+      Sweets Made
+      <span>With Love</span>
+    </h1>
+    <p class="hero-sub">Jumbo cookies, cheesecake parfaits and unique handmade desserts,<br>crafted with the finest ingredients for every sweet craving.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">🍪 View Our Menu</a>
+      <a href="#contacto" class="btn-outline">📞 Order Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="marquee-item"><span>🍪</span> Double Chocolate Cookie</span>
+    <span class="marquee-item"><span>🍓</span> Strawberry Crunch Cookie</span>
+    <span class="marquee-item"><span>🫐</span> Blueberry Cheesecake Parfait</span>
+    <span class="marquee-item"><span>🟢</span> Pistachio Cookie</span>
+    <span class="marquee-item"><span>🖤</span> Oreo Creme Cookie</span>
+    <span class="marquee-item"><span>❤️</span> Red Velvet Oreo Cookie</span>
+    <span class="marquee-item"><span>🍪</span> Biscoff Cookies</span>
+    <span class="marquee-item"><span>🍰</span> New York Cheesecake Cup</span>
+    <span class="marquee-item"><span>🍫</span> Chocolate Chunk Cookies</span>
+    <!-- duplicate -->
+    <span class="marquee-item"><span>🍪</span> Double Chocolate Cookie</span>
+    <span class="marquee-item"><span>🍓</span> Strawberry Crunch Cookie</span>
+    <span class="marquee-item"><span>🫐</span> Blueberry Cheesecake Parfait</span>
+    <span class="marquee-item"><span>🟢</span> Pistachio Cookie</span>
+    <span class="marquee-item"><span>🖤</span> Oreo Creme Cookie</span>
+    <span class="marquee-item"><span>❤️</span> Red Velvet Oreo Cookie</span>
+    <span class="marquee-item"><span>🍪</span> Biscoff Cookies</span>
+    <span class="marquee-item"><span>🍰</span> New York Cheesecake Cup</span>
+    <span class="marquee-item"><span>🍫</span> Chocolate Chunk Cookies</span>
+  </div>
+</div>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-header reveal">
+    <span class="section-tag">✦ What we bake</span>
+    <h2 class="section-title">Our Menu</h2>
+    <p class="section-sub" style="margin:0 auto;">Every piece is made fresh, with top-quality ingredients and all the love from our kitchen.</p>
+  </div>
+
+  <div class="menu-tabs">
+    <button class="tab-btn active" data-cat="all">All</button>
+    <button class="tab-btn" data-cat="cookie">Cookies</button>
+    <button class="tab-btn" data-cat="parfait">Parfaits</button>
+  </div>
+
+  <div class="products-grid">
+    <!-- 1 -->
+    <div class="product-card reveal" data-cat="cookie">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170510.png" alt="Double Chocolate Marshmallow Cookie" loading="lazy">
+        <div class="product-badge">🔥 Popular</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Double Chocolate Marshmallow Cookie</h3>
+        <ul class="product-feats">
+          <li>Soft & chewy</li>
+          <li>Loaded with chocolate</li>
+          <li>Stuffed with marshmallow</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 2 -->
+    <div class="product-card reveal" data-cat="cookie">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170513.png" alt="Pistachio Cookie" loading="lazy">
+        <div class="product-badge">✨ Special</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Pistachio Cookie</h3>
+        <ul class="product-feats">
+          <li>Soft & chewy</li>
+          <li>Real pistachios</li>
+          <li>Cream cheese drizzle</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 3 -->
+    <div class="product-card reveal" data-cat="parfait">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170516.png" alt="Blueberry Cheesecake Parfait" loading="lazy">
+        <div class="product-badge">💜 Favorite</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Blueberry Cheesecake Parfait</h3>
+        <ul class="product-feats">
+          <li>Creamy cheesecake filling</li>
+          <li>Homemade blueberry jam</li>
+          <li>Topped with purple crumb cake</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 4 -->
+    <div class="product-card reveal" data-cat="cookie">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170518.png" alt="Strawberry Crunch Cookie" loading="lazy">
+        <div class="product-badge">🍓 New</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Strawberry Crunch Cookie</h3>
+        <ul class="product-feats">
+          <li>Soft & chewy</li>
+          <li>Crunchy strawberries</li>
+          <li>Cream cheese frosting</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 5 -->
+    <div class="product-card reveal" data-cat="cookie">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170521.png" alt="Oreo Creme Cookie" loading="lazy">
+        <div class="product-badge">🖤 Classic</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Oreo Creme Cookie</h3>
+        <ul class="product-feats">
+          <li>Soft & chewy</li>
+          <li>Topped with Oreo pieces</li>
+          <li>Cream cheese frosting</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 6 -->
+    <div class="product-card reveal" data-cat="cookie">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170524.png" alt="Biscoff Cookies" loading="lazy">
+        <div class="product-badge">🍯 Artisan</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Biscoff Cookies</h3>
+        <ul class="product-feats">
+          <li>Thick & chewy</li>
+          <li>Loaded with Biscoff flavor</li>
+          <li>Homemade style</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 7 -->
+    <div class="product-card reveal" data-cat="cookie">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170526.png" alt="Red Velvet Oreo Cookie" loading="lazy">
+        <div class="product-badge">❤️ Must Try</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Red Velvet Oreo Cookie</h3>
+        <ul class="product-feats">
+          <li>Soft red velvet cookie</li>
+          <li>Loaded with Oreo pieces</li>
+          <li>Cream cheese drizzle</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 8 -->
+    <div class="product-card reveal" data-cat="parfait">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170528.png" alt="New York Cheesecake Cup" loading="lazy">
+        <div class="product-badge">🗽 Premium</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">New York Cheesecake Cup</h3>
+        <ul class="product-feats">
+          <li>Creamy cheesecake</li>
+          <li>Fresh strawberries</li>
+          <li>Whipped cream & crust</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 9 -->
+    <div class="product-card reveal" data-cat="cookie">
+      <div class="product-img-wrap">
+        <img src="imagen/IMG_20260312_170531.png" alt="Chocolate Chunk Cookies" loading="lazy">
+        <div class="product-badge">🍫 Bestseller</div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Chocolate Chunk Cookies</h3>
+        <ul class="product-feats">
+          <li>Soft & chewy</li>
+          <li>Loaded with chocolate chips</li>
+          <li>Topped with chocolate chunks</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="nosotros">
+  <div class="about-inner">
+    <div class="about-img-grid reveal">
+      <img src="imagen/IMG_20260312_170518.png" alt="Strawberry Cookie" loading="lazy">
+      <img src="imagen/IMG_20260312_170516.png" alt="Blueberry Parfait" loading="lazy">
+      <img src="imagen/IMG_20260312_170528.png" alt="Cheesecake Cup" loading="lazy">
+      <img src="imagen/IMG_20260312_170526.png" alt="Red Velvet Cookie" loading="lazy">
+    </div>
+    <div class="about-text reveal">
+      <span class="section-tag">✦ Our story</span>
+      <h2 class="section-title">Made with love, straight from the oven</h2>
+      <p class="section-sub">At LaChihuahua Snack & Sweets we believe every dessert should be an experience. We use fresh, top-quality ingredients to create jumbo cookies, parfaits and more — all ready to sweeten your day.</p>
+      <div class="features-list">
+        <div class="feature-item">
+          <div class="feature-icon">🧁</div>
+          <div class="feature-text">
+            <strong>Freshly baked</strong>
+            <span>Every order is prepared to order for maximum freshness</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🫶</div>
+          <div class="feature-text">
+            <strong>Handmade</strong>
+            <span>Artisan, no shortcuts — just love and great baking</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🌟</div>
+          <div class="feature-text">
+            <strong>Premium ingredients</strong>
+            <span>Real pistachios, authentic Biscoff, fresh strawberries and more</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <span class="section-tag">✦ What our customers say</span>
+  <h2 class="section-title">Reviews</h2>
+  <div class="stars-row">★★★★★</div>
+
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="stars-row" style="font-size:1rem;">★★★★★</div>
+      <p class="review-text">"The Double Chocolate Marshmallow cookie is the best thing I've ever eaten. Huge, soft and with the marshmallow melted inside. 100% would order again."</p>
+      <div class="review-author">
+        <div class="review-avatar">👩</div>
+        <div>
+          <div class="review-name">María G.</div>
+          <div class="review-handle">Loyal customer ✦</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="stars-row" style="font-size:1rem;">★★★★★</div>
+      <p class="review-text">"The Blueberry Cheesecake Parfait is a work of art. The flavor is incredible, the presentation is beautiful. I've already recommended it to my whole family."</p>
+      <div class="review-author">
+        <div class="review-avatar">👨</div>
+        <div>
+          <div class="review-name">Carlos R.</div>
+          <div class="review-handle">Frequent customer ✦</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="stars-row" style="font-size:1rem;">★★★★★</div>
+      <p class="review-text">"I ordered for a birthday and everyone fell in love. The Red Velvet Oreo Cookie was the star of the night. Thank you LaChihuahua!"</p>
+      <div class="review-author">
+        <div class="review-avatar">👩</div>
+        <div>
+          <div class="review-name">Sandra M.</div>
+          <div class="review-handle">New customer ✦</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="contact-inner">
+    <span class="section-tag reveal">✦ Find us</span>
+    <h2 class="section-title reveal">Get in Touch!</h2>
+    <p class="section-sub reveal" style="margin:0 auto 0;">Craving something sweet? Special order for an event? We're here to make your day sweeter.</p>
+
+    <div class="contact-cards">
+      <a href="tel:+1234567890" class="contact-card reveal">
+        <span class="contact-icon">📞</span>
+        <div class="contact-label">Phone</div>
+        <div class="contact-value">(123) 456-7890</div>
+      </a>
+      <a href="mailto:hello@lachihuahua.com" class="contact-card reveal">
+        <span class="contact-icon">✉️</span>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">hello@lachihuahua.com</div>
+      </a>
+      <a href="https://wa.me/1234567890" target="_blank" class="contact-card reveal">
+        <span class="contact-icon">💬</span>
+        <div class="contact-label">WhatsApp</div>
+        <div class="contact-value">Message us here</div>
+      </a>
+      <div class="contact-card reveal">
+        <span class="contact-icon">📍</span>
+        <div class="contact-label">Address</div>
+        <div class="contact-value">123 Sweet Street<br>Your City, State</div>
+      </div>
+    </div>
+
+    <div class="map-section reveal">
+      <h3>How to find us?</h3>
+      <div class="map-container">
+        <div class="map-placeholder">
+          <div class="map-icon">🗺️</div>
+          <p>LaChihuahua Snack & Sweets</p>
+          <span>123 Sweet Street · Your City, State</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🍪 LaChihuahua Snack & Sweets</div>
+  <p class="footer-tagline">Sweets made with love · Freshly baked</p>
+  <div class="footer-links">
+    <a href="#inicio">Home</a>
+    <a href="#menu">Menu</a>
+    <a href="#nosotros">About Us</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contacto">Contact</a>
+  </div>
+  <p class="footer-copy">© 2026 LaChihuahua Snack & Sweets · All rights reserved</p>
+</footer>
+
+<!-- BACK TO TOP -->
+<a href="#inicio" id="back-top" title="Back to top">↑</a>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Back to top
+  const btn = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('show', window.scrollY > 400);
+  });
+
+  // Tabs
+  const tabs = document.querySelectorAll('.tab-btn');
+  const cards = document.querySelectorAll('.product-card');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const cat = tab.dataset.cat;
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
