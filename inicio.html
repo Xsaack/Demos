@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green's Carpet & Upholstery Cleaning | Bonner Springs, KS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('olFi0GxDR4FXZj0K2');</script>
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-light: #243560;
+    --gold: #c9a227;
+    --gold-light: #e8c44a;
+    --white: #ffffff;
+    --gray-light: #f0f2f5;
+    --gray-mid: #dde2ea;
+    --text-dark: #1a2744;
+    --text-mid: #4a5568;
+    --teal: #2a9d8f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lato', sans-serif; color: var(--text-dark); background: var(--white); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 80px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    overflow: visible;
+  }
+  .nav-logo { display: flex; align-items: center; text-decoration: none; }
+  .nav-logo img { height: 180px; width: auto; filter: brightness(0) invert(1); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem;
+    letter-spacing: 1px; text-transform: uppercase;
+    position: relative; padding-bottom: 4px;
+    transition: color .25s ease, letter-spacing .25s ease;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 50%; right: 50%;
+    height: 2px; background: var(--gold);
+    transition: left .25s ease, right .25s ease;
+    border-radius: 2px;
+  }
+  .nav-links a:hover { color: var(--gold-light); letter-spacing: 2px; }
+  .nav-links a:hover::after { left: 0; right: 0; }
+  .nav-cta {
+    background: var(--gold); color: var(--navy) !important; padding: 8px 20px;
+    border-radius: 4px; font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(201,162,39,0.35);
+    transition: background .25s, transform .25s, box-shadow .25s !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover {
+    background: var(--gold-light) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(201,162,39,0.55) !important;
+    letter-spacing: 1px !important;
+  }
+  .nav-phone {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--gold-light) !important; font-weight: 700 !important;
+    font-size: 1rem; text-decoration: none; letter-spacing: 0.5px;
+    border: 1.5px solid rgba(201,162,39,0.4); border-radius: 4px;
+    padding: 7px 16px; transition: all .25s;
+  }
+  .nav-phone::after { display: none !important; }
+  .nav-phone:hover { background: rgba(201,162,39,0.12) !important; border-color: var(--gold) !important; letter-spacing: 0.5px !important; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 26px; height: 2px; background: white; border-radius: 2px; }
+
+  /* HERO */
+  .hero {
+    margin-top: 116px; min-height: calc(100vh - 116px);
+    background: url("imgen/imagen3.png") center center / cover no-repeat;
+    display: flex; align-items: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(26,39,68,0.82) 0%, rgba(36,53,96,0.75) 50%, rgba(15,26,51,0.85) 100%);
+  }
+  .hero-glow { position: absolute; right: -100px; top: 50%; transform: translateY(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,162,39,0.15) 0%, transparent 70%); border-radius: 50%; }
+  .hero-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,162,39,0.15); border: 1px solid rgba(201,162,39,0.4); color: var(--gold-light); padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; animation: fadeUp .6s ease both; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 900; color: var(--white); line-height: 1.15; margin-bottom: 20px; animation: fadeUp .7s .1s ease both; }
+  .hero-title em { color: var(--gold); font-style: normal; }
+  .hero-tagline { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 32px; animation: fadeUp .7s .2s ease both; }
+  .hero-slogan {
+    display: inline-block;
+    margin-bottom: 32px;
+    padding: 14px 28px;
+    border-left: 4px solid var(--gold);
+    background: rgba(201,162,39,0.1);
+    border-radius: 0 8px 8px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    font-style: italic;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+    animation: fadeUp .7s .25s ease both;
+    position: relative;
+  }
+  .slogan-quote {
+    font-size: 1.8em;
+    line-height: 0;
+    vertical-align: -0.4em;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+  .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp .7s .3s ease both; }
+  .btn-primary { background: var(--gold); color: var(--navy); padding: 14px 32px; border-radius: 4px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: all .25s; display: inline-block; }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,162,39,0.4); }
+  .btn-outline { background: transparent; color: var(--white); padding: 14px 32px; border-radius: 4px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border: 2px solid rgba(255,255,255,0.35); transition: all .25s; cursor: pointer; display: inline-block; }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-stats { display: flex; gap: 32px; margin-top: 40px; animation: fadeUp .7s .4s ease both; }
+  .hero-stat { text-align: center; }
+  .hero-stat strong { display: block; font-size: 1.8rem; color: var(--gold); font-family: 'Playfair Display', serif; }
+  .hero-stat span { font-size: 0.75rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
+  .hero-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 32px; backdrop-filter: blur(10px); animation: fadeIn 1s .3s ease both; }
+  .hero-card-title { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.1rem; margin-bottom: 20px; }
+  .service-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: white; padding: 8px 14px; border-radius: 24px; font-size: 0.8rem; margin: 4px; text-decoration: none; transition: all .2s; }
+  .service-pill:hover { background: rgba(201,162,39,0.2); border-color: var(--gold); }
+  .cert-badge { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; }
+  .cert-badge .dot { width: 10px; height: 10px; background: var(--teal); border-radius: 50%; }
+  .cert-badge span { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+  .cert-badge strong { color: var(--teal); }
+
+  /* SECTIONS */
+  section { padding: 90px 5%; }
+  .section-label { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 12px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900; color: var(--navy); line-height: 1.2; margin-bottom: 16px; }
+  .section-subtitle { font-size: 1rem; color: var(--text-mid); line-height: 1.7; max-width: 540px; }
+  .max-w { max-width: 1200px; margin: 0 auto; }
+
+  /* SERVICES */
+  .services { background: var(--gray-light); }
+  .services-header { text-align: center; margin-bottom: 56px; }
+  .services-header .section-subtitle { margin: 0 auto; }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+  /* Base card */
+  .service-card {
+    border-radius: 12px; overflow: hidden;
+    position: relative; display: block;
+    text-decoration: none; color: inherit;
+    height: 320px;
+    box-shadow: 0 4px 20px rgba(26,39,68,0.15);
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(26,39,68,0.25); }
+
+  /* Overlay — hidden by default, fades in on hover */
+  .service-card::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top, rgba(5,12,35,0.97) 0%, rgba(5,12,35,0.82) 50%, rgba(5,12,35,0.45) 100%);
+    opacity: 0;
+    transition: opacity .4s ease;
+  }
+  .service-card:hover::before { opacity: 1; }
+
+  /* Permanent dark gradient just for the title at the bottom */
+  .service-card::after {
+    content: '';
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top, rgba(5,12,35,0.88) 0%, rgba(5,12,35,0.3) 45%, transparent 70%);
+    transition: opacity .4s ease;
+  }
+  .service-card:hover::after { opacity: 0; }
+
+  /* Icon hidden */
+  .service-icon { display: none; }
+
+  /* All card content sits above overlays */
+  .service-card > *:not(.service-icon):not(.service-card--water-bg) { position: relative; z-index: 2; }
+
+  /* Title always visible at bottom */
+  .service-card h3 {
+    position: absolute !important; bottom: 24px; left: 24px; right: 24px;
+    font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700;
+    color: white !important; margin: 0;
+    transition: opacity .3s ease, transform .4s ease;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    transform: translateY(0);
+  }
+  .service-card:hover h3 {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  /* Content block — title + text together, centered, shown on hover */
+  .service-card .card-hover-content {
+    position: absolute !important;
+    inset: 0; z-index: 2;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 28px;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity .4s ease .05s, transform .4s ease .05s;
+  }
+  .service-card:hover .card-hover-content {
+    opacity: 1; transform: translateY(0);
+  }
+  .service-card .card-hover-content h4 {
+    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+    color: var(--gold-light) !important; margin: 0 0 12px 0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .service-card .card-hover-content p {
+    position: static !important;
+    font-size: 0.88rem !important; color: rgba(255,255,255,0.9) !important;
+    line-height: 1.7; margin: 0 !important;
+    opacity: 1 !important; transform: none !important;
+  }
+
+  /* Description text — only used if NOT wrapped in card-hover-content */
+  .service-card > p {
+    position: absolute !important; top: 80px; left: 24px; right: 24px;
+    font-size: 0.88rem !important; color: rgba(255,255,255,0.88) !important;
+    line-height: 1.65; margin: 0;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity .4s ease .1s, transform .4s ease .1s;
+  }
+  .service-card:hover > p { opacity: 1; transform: translateY(0); }
+
+  /* Individual background images */
+  .service-card--carpet     { background: url("imgen/imagen4.png")  center center / cover no-repeat; }
+  .service-card--upholstery { background: url("imgen/imagen8.png")  center center / cover no-repeat; }
+  .service-card--restretch  { background: url("imgen/imagen5.png")  center center / cover no-repeat; }
+  .service-card--repair     { background: url("imgen/imagen9.png")  center center / cover no-repeat; }
+  .service-card--stain      { background: url("imgen/imagen10.png") center center / cover no-repeat; }
+  .service-card--water      { background: url("imgen/imagen1.png")  center center / cover no-repeat; }
+  .service-card--residential{ background: url("imgen/imagen11.png") center center / cover no-repeat; }
+  .service-card--military   { background: url("imgen/imagen12.png") center center / cover no-repeat; }
+  .service-card--water-bg   { display: none; }
+
+  /* ABOUT */
+  .about { background: var(--white); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+  .about-visual { position: relative; }
+  .about-main-card { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: 16px; padding: 48px 40px; color: white; text-align: center; box-shadow: 0 20px 60px rgba(26,39,68,0.25); }
+  .about-main-card .big-text { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .about-main-card p { color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-top: 8px; }
+  .about-float { position: absolute; bottom: -20px; right: -20px; background: var(--gold); color: var(--navy); border-radius: 12px; padding: 20px 24px; text-align: center; box-shadow: 0 8px 24px rgba(201,162,39,0.4); }
+  .about-float strong { font-size: 1.5rem; font-family: 'Playfair Display', serif; display: block; }
+  .about-float span { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .about-list { list-style: none; margin: 28px 0; }
+  .about-list li { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--gray-mid); font-size: 0.92rem; color: var(--text-mid); line-height: 1.5; }
+  .about-list li:last-child { border-bottom: none; }
+  .about-list .check { color: var(--gold); font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+
+  /* PROCESS */
+  .process { background: var(--navy); }
+  .process .section-title { color: var(--white); }
+  .process .section-subtitle { color: rgba(255,255,255,0.65); }
+  .process-header { margin-bottom: 56px; }
+  .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; }
+  .process-step { text-align: center; position: relative; }
+  .process-step:not(:last-child)::after { content: '→'; position: absolute; top: 20px; right: -16px; color: var(--gold); font-size: 1.2rem; }
+  .step-num { width: 48px; height: 48px; background: var(--gold); color: var(--navy); border-radius: 50%; font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .process-step h4 { color: var(--white); font-size: 1rem; margin-bottom: 8px; }
+  .process-step p { color: rgba(255,255,255,0.55); font-size: 0.82rem; line-height: 1.55; }
+
+  /* REVIEWS */
+  .trust { background: var(--gray-light); }
+  .trust-header { text-align: center; margin-bottom: 56px; }
+  .trust-header .section-subtitle { margin: 0 auto; }
+  .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .trust-card { background: var(--white); border-radius: 12px; padding: 32px; box-shadow: 0 2px 16px rgba(26,39,68,0.07); }
+  .stars { color: var(--gold); font-size: 1rem; margin-bottom: 14px; letter-spacing: 2px; }
+  .trust-card p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+  .reviewer { display: flex; align-items: center; gap: 12px; }
+  .reviewer-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--teal)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem; }
+  .reviewer-name { font-weight: 700; font-size: 0.9rem; color: var(--navy); }
+  .reviewer-loc { font-size: 0.75rem; color: var(--text-mid); }
+
+  /* BANNER */
+  .discount-banner { background: linear-gradient(135deg, var(--navy) 0%, #0f1a33 100%); padding: 70px 5%; text-align: center; position: relative; overflow: hidden; }
+  .discount-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(201,162,39,0.12) 0%, transparent 70%); }
+  .discount-banner .section-label { color: var(--gold-light); }
+  .discount-banner .section-title { color: var(--white); margin: 0 auto 16px; }
+  .discount-banner p { color: rgba(255,255,255,0.7); margin-bottom: 32px; font-size: 1rem; }
+
+  /* PAYMENT */
+  .payment { background: var(--white); text-align: center; }
+  .payment-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 32px; }
+  .payment-chip { background: var(--gray-light); border: 1px solid var(--gray-mid); border-radius: 8px; padding: 10px 20px; font-size: 0.85rem; font-weight: 700; color: var(--text-mid); }
+
+  /* CONTACT */
+  .contact { background: var(--gray-light); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .contact-detail { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--gray-mid); }
+  .contact-detail:last-of-type { border-bottom: none; }
+  .contact-icon { width: 44px; height: 44px; flex-shrink: 0; background: var(--navy); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .contact-detail strong { display: block; font-size: 0.85rem; color: var(--navy); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; }
+  .contact-detail span { font-size: 0.92rem; color: var(--text-mid); }
+  .contact-form-card { background: var(--white); border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(26,39,68,0.1); }
+  .contact-form-card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 24px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 16px; border: 2px solid var(--gray-mid); border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 0.9rem; color: var(--text-dark); background: var(--gray-light); transition: border-color .2s; outline: none; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--navy); background: white; }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  #form-msg { display: none; padding: 12px 16px; border-radius: 8px; margin-top: 14px; font-size: 0.9rem; font-weight: 700; }
+  #form-msg.success { background: #d1fae5; color: #065f46; display: block; }
+  #form-msg.error { background: #fee2e2; color: #991b1b; display: block; }
+
+  /* FOOTER */
+  footer { background: var(--navy); padding: 48px 5% 24px; color: rgba(255,255,255,0.6); }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 24px; }
+  .footer-logo img { height: 100px; width: auto; filter: brightness(0) invert(1); }
+  .footer-tagline { font-size: 0.9rem; color: var(--gold-light); font-style: italic; font-family: 'Playfair Display', serif; margin-top: 8px; letter-spacing: 0.5px; }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.8rem; transition: color .2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom { max-width: 1200px; margin: 0 auto; text-align: center; font-size: 0.78rem; }
+
+  /* FLOAT */
+  .float-cta { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: var(--gold); color: var(--navy); border: none; border-radius: 50px; padding: 14px 24px; font-weight: 700; font-size: 0.85rem; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; transition: all .25s; text-decoration: none; letter-spacing: 0.5px; }
+  .float-cta:hover { background: var(--gold-light); transform: translateY(-3px); }
+
+  /* HERITAGE BAR */
+  .heritage-bar {
+    position: fixed; top: 80px; left: 0; right: 0; z-index: 999;
+    background: var(--gold);
+    padding: 6px 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .heritage-bar-inner {
+    display: flex; align-items: center; gap: 40px;
+    white-space: nowrap;
+    animation: marquee 28s linear infinite;
+  }
+  .heritage-bar-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--navy);
+  }
+  .heritage-bar-dot { width: 4px; height: 4px; background: var(--navy); border-radius: 50%; opacity: 0.5; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .reveal { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
+  .reveal.hidden { opacity: 0; transform: translateY(30px); }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* MOBILE */
+  @media(max-width: 768px) {
+    .nav-links { display: none; position: fixed; top: 116px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 998; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .hero-content { grid-template-columns: 1fr; }
+    .hero-card { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-float { position: static; margin-top: 16px; display: inline-block; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .process-step::after { display: none; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#home">
+    <img src="imgen/logo.png" alt="Green's Carpet & Upholstery Cleaning">
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#process">Our Process</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="tel:+19132072033" class="nav-phone">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+      </svg>
+      (913) 207-2033
+    </a>
+    <div class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERITAGE BAR -->
+<div class="heritage-bar">
+  <div class="heritage-bar-inner">
+    <span class="heritage-bar-item">🏅 Established 1993</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Over 30 Years of Excellence</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Bonner Springs, KS</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Bridgepoint Certified</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Trusted Since 1993</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Family Business · Greater Kansas City Area</span>
+    <span class="heritage-bar-dot"></span>
+    <!-- duplicate for seamless loop -->
+    <span class="heritage-bar-item">🏅 Established 1993</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Over 30 Years of Excellence</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Bonner Springs, KS</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Bridgepoint Certified</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Trusted Since 1993</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Family Business · Greater Kansas City Area</span>
+    <span class="heritage-bar-dot"></span>
+  </div>
+</div>
+<section class="hero" id="home">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-badge">🏅 Est. 1993 · Bridgepoint Certified Technician</div>
+      <h1 class="hero-title">
+        Cleaning That<br><em>Restores</em><br>Your Home
+      </h1>
+      <p class="hero-tagline">
+        Green's Carpet &amp; Upholstery Cleaning in Bonner Springs, KS — trusted since 1993. Professional carpet cleaning, upholstery care, water damage restoration, and more.
+      </p>
+      <div class="hero-slogan">
+        <span class="slogan-quote">"</span> Remember you walk on our reputation<span class="slogan-quote">"</span>
+      </div>
+      <div class="hero-buttons">
+        <a href="tel:+19132072033" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:6px">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          Call (913) 207-2033
+        </a>
+        <a href="#contact" class="btn-outline">Request Service</a>
+        <a href="#services" class="btn-outline">View Services</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>1993</strong><span>Est.</span></div>
+        <div class="hero-stat"><strong>30+</strong><span>Years Exp.</span></div>
+        <div class="hero-stat"><strong>5★</strong><span>Rated</span></div>
+        <div class="hero-stat"><strong>100%</strong><span>Guaranteed</span></div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <p class="hero-card-title">Our Services</p>
+      <div>
+        <a href="#services" class="service-pill">🧹 Carpet Cleaning</a>
+        <a href="#services" class="service-pill">🛋️ Upholstery Cleaning</a>
+        <a href="#services" class="service-pill">💧 Water Damage / Restoration</a>
+        <a href="#services" class="service-pill">↔️ Carpet Restretching</a>
+        <a href="#services" class="service-pill">🔧 Carpet Repair</a>
+        <a href="#services" class="service-pill">🧼 Stain Removal</a>
+        <a href="#services" class="service-pill">🏠 Residential Service</a>
+        <a href="#services" class="service-pill">🎖️ Military Discounts</a>
+      </div>
+      <div class="cert-badge">
+        <div class="dot"></div>
+        <span>Bridgepoint <strong>Certified Technician</strong> · Upholstery & Carpet Cleaning</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="max-w">
+    <div class="services-header reveal">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Professional Services</h2>
+      <p class="section-subtitle">We offer complete solutions to make your carpets and upholstery look and feel like new again.</p>
+    </div>
+    <div class="services-grid">
+      <a href="#contact" class="service-card service-card--carpet reveal">
+        <h3>Carpet Cleaning</h3>
+        <div class="card-hover-content">
+          <h4>Carpet Cleaning</h4>
+          <p>We remove deep dirt, stains, and allergens using a high-powered truck-mounted steam unit. Visible results, fast drying.</p>
+        </div>
+      </a>
+      <a href="#contact" class="service-card service-card--upholstery reveal">
+        <h3>Upholstery Cleaning</h3>
+        <div class="card-hover-content">
+          <h4>Upholstery Cleaning</h4>
+          <p>Sofas, chairs, headboards and more. We remove stains, odors, and bacteria without damaging fabrics, leaving your furniture fresh and renewed.</p>
+        </div>
+      </a>
+      <a href="#contact" class="service-card service-card--restretch reveal">
+        <h3>Carpet Restretching</h3>
+        <div class="card-hover-content">
+          <h4>Carpet Restretching</h4>
+          <p>Ripples, bubbles, or wrinkles? We use power stretchers to eliminate looseness, reinstall tack strips and trim excess carpet for a perfect finish.</p>
+        </div>
+      </a>
+      <a href="#contact" class="service-card service-card--repair reveal">
+        <h3>Carpet Repair</h3>
+        <div class="card-hover-content">
+          <h4>Carpet Repair</h4>
+          <p>Tears, burns, seams coming apart, or damaged sections? We patch and repair your carpet to restore its look and extend its life.</p>
+        </div>
+      </a>
+      <a href="#contact" class="service-card service-card--stain reveal">
+        <h3>Stain Removal</h3>
+        <div class="card-hover-content">
+          <h4>Stain Removal</h4>
+          <p>Pet stains, rust, red stains, blood, ink and more. Specialized treatments to eliminate even the toughest stains from carpets and upholstery.</p>
+        </div>
+      </a>
+      <a href="#contact" class="service-card service-card--water reveal">
+        <h3>Water Damage / Restoration</h3>
+        <div class="card-hover-content">
+          <h4>Water Damage / Restoration</h4>
+          <p>Burst pipes, floods, storm damage. We extract water fast and fully dry the space using air movers, scrubbers and dehumidifiers to prevent mold.</p>
+        </div>
+      </a>
+      <a href="#contact" class="service-card service-card--residential reveal">
+        <h3>Residential & Commercial</h3>
+        <div class="card-hover-content">
+          <h4>Residential & Commercial</h4>
+          <p>Serving Bonner Springs, KS and the Greater Kansas City area. Punctuality and professionalism guaranteed on every visit.</p>
+        </div>
+      </a>
+      <a href="#contact" class="service-card service-card--military reveal">
+        <h3>Military Discounts</h3>
+        <div class="card-hover-content">
+          <h4>Military Discounts</h4>
+          <p>We appreciate your service. Special discounts available for active military personnel and veterans on all our services.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="max-w">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-main-card">
+          <div class="big-text">Since</div>
+          <div class="big-text" style="font-size:3rem; color:var(--gold-light); margin-top:-8px;">1993</div>
+          <p>Over 30 years serving Bonner Springs and the Greater Kansas City Area</p>
+          <div style="margin-top:28px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.15)">
+            <p style="font-size:1.1rem; color:var(--gold); font-family:'Playfair Display',serif; font-style:italic">" Remember you walk on our reputation"</p>
+          </div>
+        </div>
+        <div class="about-float">
+          <strong>🏆</strong>
+          <span>Bridgepoint<br>Certified</span>
+        </div>
+      </div>
+      <div class="about-content reveal">
+        <p class="section-label">About Us</p>
+        <h2 class="section-title">30+ Years of Expert Cleaning You Can Trust</h2>
+        <p class="section-subtitle">Green's Carpet & Upholstery Cleaning has been a trusted local business in Bonner Springs, KS since 1993 — over 30 years of excellence. Our Bridgepoint-certified technician delivers first-class service with professional, state-of-the-art equipment.</p>
+        <ul class="about-list">
+          <li><span class="check">✦</span> Family business proudly serving the community since 1993</li>
+          <li><span class="check">✦</span> Bridgepoint Certified Technician in carpet and upholstery cleaning</li>
+          <li><span class="check">✦</span> High-powered truck-mounted extraction equipment</li>
+          <li><span class="check">✦</span> Serving Bonner Springs, KS and the Greater Kansas City Area</li>
+          <li><span class="check">✦</span> Special discounts for military personnel and veterans</li>
+          <li><span class="check">✦</span> All major forms of payment accepted</li>
+        </ul>
+        <a href="#contact" class="btn-primary">Schedule an Appointment</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="max-w">
+    <div class="process-header reveal">
+      <p class="section-label" style="color:var(--gold)">How We Work</p>
+      <h2 class="section-title">Our Process</h2>
+      <p class="section-subtitle">Simple, efficient, and with guaranteed results at every step.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-num">1</div>
+        <h4>Contact Us</h4>
+        <p>Call or send us an email describing your needs. We respond quickly.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">2</div>
+        <h4>Assessment</h4>
+        <p>We inspect the area and determine the best treatment for your situation.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">3</div>
+        <h4>Treatment</h4>
+        <p>We apply the service using professional equipment and high-quality products.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">4</div>
+        <h4>Results</h4>
+        <p>Clean, restored carpets and upholstery — ready to enjoy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="trust">
+  <div class="max-w">
+    <div class="trust-header reveal">
+      <p class="section-label">Happy Customers</p>
+      <h2 class="section-title">What Our Clients Say</h2>
+      <p class="section-subtitle">Trusted service in Bonner Springs and the entire Kansas City area.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"They did an incredible job on my carpets. The waves and wrinkles disappeared completely. Very professional and on time."</p>
+        <div class="reviewer"><div class="reviewer-avatar">MR</div><div><div class="reviewer-name">Maria R.</div><div class="reviewer-loc">Bonner Springs, KS</div></div></div>
+      </div>
+      <div class="trust-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"We had a water leak and Green's came out quickly. They extracted the water and dried everything perfectly. They saved our home."</p>
+        <div class="reviewer"><div class="reviewer-avatar">JL</div><div><div class="reviewer-name">James L.</div><div class="reviewer-loc">Kansas City Area</div></div></div>
+      </div>
+      <div class="trust-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"The sofa looks brand new. They are certified and it shows — they know exactly what to do with every type of fabric. Highly recommended."</p>
+        <div class="reviewer"><div class="reviewer-avatar">SP</div><div><div class="reviewer-name">Sandra P.</div><div class="reviewer-loc">Bonner Springs, KS</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MILITARY BANNER -->
+<div class="discount-banner reveal">
+  <div style="position:relative;z-index:1">
+    <p class="section-label">Special Offer</p>
+    <h2 class="section-title" style="max-width:600px;margin:0 auto 16px">Military Discounts Available</h2>
+    <p>Thank you for your service. We offer special discounts for active military and veterans on all our services.</p>
+    <a href="#contact" class="btn-primary">Contact Us Today</a>
+  </div>
+</div>
+
+<!-- PAYMENT -->
+<section class="payment reveal">
+  <div class="max-w">
+    <p class="section-label">Convenience</p>
+    <h2 class="section-title">We Accept the Following Forms of Payment</h2>
+    <div class="payment-icons">
+      <div class="payment-chip">VISA</div>
+      <div class="payment-chip">Mastercard</div>
+      <div class="payment-chip">American Express</div>
+      <div class="payment-chip">Discover</div>
+      <div class="payment-chip">PayPal</div>
+      <div class="payment-chip">Venmo</div>
+      <div class="payment-chip">Apple Pay</div>
+      <div class="payment-chip">Google Pay</div>
+      <div class="payment-chip">Samsung Pay</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="max-w">
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <p class="section-label">Get In Touch</p>
+        <h2 class="section-title">Let's Talk About Your Project</h2>
+        <p class="section-subtitle" style="margin-bottom:32px">We're ready to help. We respond quickly to all inquiries.</p>
+        <div class="contact-detail">
+          <div class="contact-icon">📞</div>
+          <div><strong>Phone</strong><span><a href="tel:+19132072033" style="color:var(--gold);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a></span></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📍</div>
+          <div><strong>Location</strong><span>Bonner Springs, KS 66012<br>Greater Kansas City Area</span></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📧</div>
+          <div><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection#0d6a7f6868637e6e6c7f7d68796e61686c6364636a4d746c656262236e6260" style="color:inherit;text-decoration:none"><span class="__cf_email__" data-cfemail="492e3b2c2c273a2a283b392c3d2a252c282720272e093028212626672a2624">[email&#160;protected]</span></a></span></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">⏰</div>
+          <div><strong>Service Hours</strong><span>Mon–Sat: 7:00 AM – 7:00 PM<br>Sun: By appointment</span></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">🎖️</div>
+          <div><strong>Military Discounts</strong><span>Available for active military and veterans</span></div>
+        </div>
+      </div>
+      <div class="contact-form-card reveal">
+        <h3>Send Us a Message</h3>
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" id="fname" placeholder="Your first name"></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="lname" placeholder="Your last name"></div>
+        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="email" placeholder="you@email.com"></div>
+        <div class="form-group"><label>Phone (optional)</label><input type="tel" id="phone" placeholder="(913) 000-0000"></div>
+        <div class="form-group">
+          <label>Service of Interest</label>
+          <select id="service">
+            <option value="">Select a service...</option>
+            <option>Carpet Cleaning</option>
+            <option>Upholstery Cleaning</option>
+            <option>Carpet Restretching</option>
+            <option>Carpet Repair</option>
+            <option>Stain Removal</option>
+            <option>Water Damage / Restoration</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Message</label><textarea id="message" placeholder="Tell us about your project, approximate area, etc."></textarea></div>
+        <button class="btn-primary" onclick="sendEmail()" style="width:100%">Send Message ✉️</button>
+        <div id="form-msg"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="imgen/logo.png" alt="Green's Carpet & Upholstery Cleaning">
+      <div class="footer-tagline">" Remember you walk on our reputation"</div>
+    </div>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About Us</a>
+      <a href="#process">Our Process</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Copyright © 2025 Greens Carpet & Upholstery Cleaning, all rights reserved. · Est. 1993 · Bonner Springs, KS 66012</div>
+</footer>
+
+<a href="tel:+19132072033" class="float-cta">📞 (913) 207-2033</a>
+
+<script>
+function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+document.querySelectorAll('.reveal').forEach(el => el.classList.add('hidden'));
+const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('hidden'); e.target.classList.add('visible'); } }), { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+function sendEmail() {
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const service = document.getElementById('service').value;
+  const message = document.getElementById('message').value.trim();
+  const msg = document.getElementById('form-msg');
+  if (!fname || !email || !message) {
+    msg.className = 'error';
+    msg.textContent = 'Please fill in your name, email, and message.';
+    return;
+  }
+  const btn = document.querySelector('.contact-form-card .btn-primary');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  emailjs.send('alfombras', 'template_alfombras', {
+    fname, lname, email,
+    phone: phone || 'Not provided',
+    service: service || 'Not specified',
+    message
+  }).then(() => {
+    msg.className = 'success';
+    msg.textContent = '✅ Message sent! We will get back to you soon.';
+    btn.textContent = 'Send Message ✉️';
+    btn.disabled = false;
+    ['fname','lname','email','phone','service','message'].forEach(id => document.getElementById(id).value = '');
+  }).catch(() => {
+    msg.className = 'error';
+    msg.textContent = '❌ Something went wrong. Please try again or call us directly.';
+    btn.textContent = 'Send Message ✉️';
+    btn.disabled = false;
+  });
+}
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 30) {
+    nav.style.background = 'rgba(26,39,68,0.92)';
+    nav.style.backdropFilter = 'blur(12px)';
+    nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
+  } else {
+    nav.style.background = 'var(--navy)';
+    nav.style.backdropFilter = 'none';
+    nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
+  }
+});
+</script>
+</body>
+</html>
