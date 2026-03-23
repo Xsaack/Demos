@@ -1012,57 +1012,105 @@ renderWheel('ampm');
 updateTimeDisplay();
 }
 const WHEEL_ITEM_H = 44;
-const WHEEL_VISIBLE = 5; // items visible (2 above + selected + 2 below)
-
-const wheelState = {
-  hour: { items: [], idx: 0 },
-  min:  { items: [], idx: 0 },
-  ampm: { items: ['AM', 'PM'], idx: 0 },
-};
-
-// Per-wheel drag state with velocity tracking
+const WHEEL_REPEATS = 80; // number of times items are repeated for infinite feel
 const wheelDrag = {};
 
+// ── STATE ────────────────────────────────────────────────────
+// For hour/min: infinite=true, items are original list, virtualIdx tracks position
+// in the big repeated array. ampm stays finite (only 2 items, no infinite needed).
+const wheelState = {
+  hour: { items: [], idx: 0, infinite: true  },
+  min:  { items: [], idx: 0, infinite: true  },
+  ampm: { items: ['AM','PM'], idx: 0, infinite: true  },
+};
+
+// ── HELPERS ──────────────────────────────────────────────────
+// Wrap idx into [0, len)
+function wrapIdx(idx, len) {
+  return ((idx % len) + len) % len;
+}
+
+// For infinite wheels, virtualIdx is in [0, len*REPEATS).
+// The "real" value index is virtualIdx % len.
+// We keep virtualIdx near the center of the repeated array.
+function getVirtualIdx(key) {
+  return wheelState[key].idx;
+}
+
+function getRealIdx(key) {
+  const st = wheelState[key];
+  return wrapIdx(st.idx, st.items.length);
+}
+
+// ── RENDER ───────────────────────────────────────────────────
 function renderWheel(key) {
   const st = wheelState[key];
   const inner = document.getElementById('wheel-' + key + '-inner');
   if (!inner) return;
-  const pad = '<div class="time-wheel-item" style="pointer-events:none"></div>';
-  inner.innerHTML = pad + pad +
-    st.items.map((v, i) => `<div class="time-wheel-item" data-i="${i}">${v}</div>`).join('') +
-    pad + pad;
+
+  if (st.infinite) {
+    // Fill with WHEEL_REPEATS copies of items
+    const len = st.items.length;
+    const total = len * WHEEL_REPEATS;
+    // Start virtualIdx at center so equal scroll room in both directions
+    st.idx = Math.floor(WHEEL_REPEATS / 2) * len + getRealIdx(key);
+    inner.innerHTML = Array.from({ length: total }, (_, i) =>
+      `<div class="time-wheel-item" data-vi="${i}">${st.items[i % len]}</div>`
+    ).join('');
+  } else {
+    const pad = '<div class="time-wheel-item" style="pointer-events:none"></div>';
+    inner.innerHTML = pad + pad +
+      st.items.map((v, i) => `<div class="time-wheel-item" data-vi="${i + 2}">${v}</div>`).join('') +
+      pad + pad;
+    // For finite, virtualIdx maps directly (offset by 2 padding items)
+  }
+
   scrollWheelTo(key, st.idx, false);
   styleWheelItems(key);
 }
 
-function scrollWheelTo(key, idx, animate) {
+// ── SCROLL ───────────────────────────────────────────────────
+// For infinite: transform based on virtualIdx directly.
+// For finite: same but offset by 2 pads.
+function getTranslateY(key, vIdx) {
+  const st = wheelState[key];
+  if (st.infinite) {
+    return -vIdx * WHEEL_ITEM_H;
+  } else {
+    // finite: pads shift by 2
+    return -(vIdx + 2) * WHEEL_ITEM_H;
+  }
+}
+
+function scrollWheelTo(key, vIdx, animate) {
   const inner = document.getElementById('wheel-' + key + '-inner');
   if (!inner) return;
   if (animate) {
     inner.style.transition = 'transform 0.32s cubic-bezier(0.25, 1, 0.35, 1)';
   } else {
     inner.style.transition = 'none';
-    inner.offsetHeight; // force reflow
+    inner.offsetHeight;
   }
-  inner.style.transform = `translateY(${-idx * WHEEL_ITEM_H}px)`;
+  inner.style.transform = `translateY(${getTranslateY(key, vIdx)}px)`;
 }
 
 function scrollWheelFree(key, offsetPx) {
-  // Move wheel freely (no snapping) during drag — no transition
   const inner = document.getElementById('wheel-' + key + '-inner');
   if (!inner) return;
   inner.style.transition = 'none';
-  const baseOffset = -wheelDrag[key].startIdx * WHEEL_ITEM_H;
-  inner.style.transform = `translateY(${baseOffset - offsetPx}px)`;
+  const base = getTranslateY(key, wheelDrag[key].startIdx);
+  inner.style.transform = `translateY(${base - offsetPx}px)`;
 }
 
+// ── STYLE ITEMS ──────────────────────────────────────────────
 function styleWheelItems(key) {
   const st = wheelState[key];
   const inner = document.getElementById('wheel-' + key + '-inner');
   if (!inner) return;
-  inner.querySelectorAll('.time-wheel-item[data-i]').forEach(el => {
-    const i = parseInt(el.dataset.i);
-    const dist = Math.abs(i - st.idx);
+  const curVI = st.idx;
+  inner.querySelectorAll('.time-wheel-item[data-vi]').forEach(el => {
+    const vi = parseInt(el.dataset.vi);
+    const dist = Math.abs(vi - curVI);
     el.classList.remove('selected', 'near', 'far');
     if (dist === 0) el.classList.add('selected');
     else if (dist === 1) el.classList.add('near');
@@ -1070,18 +1118,51 @@ function styleWheelItems(key) {
   });
 }
 
-function setWheelIdx(key, idx, animate = true) {
+// ── SET INDEX ────────────────────────────────────────────────
+function setWheelIdx(key, vIdx, animate = true) {
   const st = wheelState[key];
-  idx = Math.max(0, Math.min(st.items.length - 1, idx));
-  st.idx = idx;
-  scrollWheelTo(key, idx, animate);
-  styleWheelItems(key);
+  if (st.infinite) {
+    // Clamp to valid virtual range
+    const total = st.items.length * WHEEL_REPEATS;
+    vIdx = Math.max(0, Math.min(total - 1, vIdx));
+    st.idx = vIdx;
+    scrollWheelTo(key, vIdx, animate);
+    styleWheelItems(key);
+    // Re-center silently after animation to keep equal room in both directions
+    if (animate) {
+      setTimeout(() => recenterWheel(key), 340);
+    }
+  } else {
+    vIdx = Math.max(0, Math.min(st.items.length - 1, vIdx));
+    st.idx = vIdx;
+    scrollWheelTo(key, vIdx, animate);
+    styleWheelItems(key);
+  }
   updateTimeDisplay();
 }
 
+// Silently re-center the infinite wheel (teleport without visible jump)
+function recenterWheel(key) {
+  const st = wheelState[key];
+  if (!st.infinite) return;
+  const len = st.items.length;
+  const realIdx = wrapIdx(st.idx, len);
+  const newVI = Math.floor(WHEEL_REPEATS / 2) * len + realIdx;
+  if (newVI === st.idx) return;
+  st.idx = newVI;
+  // Move without animation
+  const inner = document.getElementById('wheel-' + key + '-inner');
+  if (!inner) return;
+  inner.style.transition = 'none';
+  inner.style.transform = `translateY(${getTranslateY(key, newVI)}px)`;
+  inner.offsetHeight;
+  styleWheelItems(key);
+}
+
+// ── DISPLAY ──────────────────────────────────────────────────
 function updateTimeDisplay() {
-  const h  = wheelState.hour.items[wheelState.hour.idx] || '—';
-  const m  = wheelState.min.items[wheelState.min.idx]   || '—';
+  const h  = wheelState.hour.items[getRealIdx('hour')] || '—';
+  const m  = wheelState.min.items[getRealIdx('min')]   || '—';
   const ap = wheelState.ampm.items[wheelState.ampm.idx] || '';
   const disp = document.getElementById('time-wheel-display');
   if (disp) {
@@ -1100,127 +1181,87 @@ function clearTimeWheel() {
   if (disp) { disp.textContent = '— : —'; disp.classList.remove('has-time'); }
 }
 
-// ── TOUCH HANDLERS (momentum + snap) ─────────────────────────
-function wheelTouchStart(e, key) {
-  e.preventDefault();
-  const t = e.touches[0];
+// ── DRAG HELPERS (shared by touch & mouse) ───────────────────
+function dragStart(key, clientY) {
+  // Cancel any pending re-center
   wheelDrag[key] = {
-    startY: t.clientY,
-    lastY: t.clientY,
+    startY: clientY,
+    lastY: clientY,
     startIdx: wheelState[key].idx,
     dragging: true,
     velocity: 0,
     lastTime: Date.now(),
-    momentumId: null,
   };
-  // Stop any running momentum animation
-  if (wheelDrag[key].momentumId) cancelAnimationFrame(wheelDrag[key].momentumId);
 }
 
-function wheelTouchMove(e, key) {
-  e.preventDefault();
+function dragMove(key, clientY) {
   const d = wheelDrag[key];
   if (!d?.dragging) return;
-  const t = e.touches[0];
   const now = Date.now();
-  const dt = now - d.lastTime || 16;
-
-  // Velocity in px/ms (smoothed)
-  const rawVel = (d.lastY - t.clientY) / dt;
-  d.velocity = d.velocity * 0.6 + rawVel * 0.4;
-  d.lastY = t.clientY;
+  const dt  = now - d.lastTime || 16;
+  const rawVel = (d.lastY - clientY) / dt;
+  d.velocity  = d.velocity * 0.6 + rawVel * 0.4;
+  d.lastY    = clientY;
   d.lastTime = now;
 
-  const totalDy = d.startY - t.clientY;
+  const totalDy = d.startY - clientY;
   scrollWheelFree(key, totalDy);
 
-  // Live style update based on approximate index
-  const approxIdx = Math.round(d.startIdx + totalDy / WHEEL_ITEM_H);
+  // Live value update
   const st = wheelState[key];
-  const clampedIdx = Math.max(0, Math.min(st.items.length - 1, approxIdx));
-  if (clampedIdx !== st.idx) {
-    st.idx = clampedIdx;
+  const approxVI = d.startIdx + Math.round(totalDy / WHEEL_ITEM_H);
+  const total = st.infinite ? st.items.length * WHEEL_REPEATS : st.items.length;
+  const clampedVI = Math.max(0, Math.min(total - 1, approxVI));
+  if (clampedVI !== st.idx) {
+    st.idx = clampedVI;
     styleWheelItems(key);
     updateTimeDisplay();
   }
 }
 
-function wheelTouchEnd(e, key) {
+function dragEnd(key) {
   const d = wheelDrag[key];
   if (!d) return;
   d.dragging = false;
 
   const st = wheelState[key];
-  const vel = d.velocity; // px/ms
+  const momentum  = d.velocity * 180;
+  const totalDy   = (d.startY - d.lastY) + momentum;
+  const targetVI  = d.startIdx + Math.round(totalDy / WHEEL_ITEM_H);
+  const total     = st.infinite ? st.items.length * WHEEL_REPEATS : st.items.length;
+  const finalVI   = Math.max(0, Math.min(total - 1, targetVI));
 
-  // Momentum: project final position
-  // Distance = velocity * time / deceleration
-  const momentum = vel * 180; // tuned constant
-  const totalDy = (d.startY - d.lastY) + momentum;
-  const targetIdx = Math.round(d.startIdx + totalDy / WHEEL_ITEM_H);
-  const finalIdx = Math.max(0, Math.min(st.items.length - 1, targetIdx));
-
-  // Snap with spring animation
-  setWheelIdx(key, finalIdx, true);
+  setWheelIdx(key, finalVI, true);
 }
 
-// ── MOUSE HANDLERS (with momentum) ───────────────────────────
+// ── TOUCH HANDLERS ───────────────────────────────────────────
+function wheelTouchStart(e, key) {
+  e.preventDefault();
+  dragStart(key, e.touches[0].clientY);
+}
+function wheelTouchMove(e, key) {
+  e.preventDefault();
+  dragMove(key, e.touches[0].clientY);
+}
+function wheelTouchEnd(e, key) {
+  dragEnd(key);
+}
+
+// ── MOUSE HANDLERS ───────────────────────────────────────────
 function wheelMouseDown(e, key) {
   e.preventDefault();
-  wheelDrag[key] = {
-    startY: e.clientY,
-    lastY: e.clientY,
-    startIdx: wheelState[key].idx,
-    dragging: true,
-    velocity: 0,
-    lastTime: Date.now(),
-  };
-
-  const onMove = ev => {
-    const d = wheelDrag[key];
-    if (!d?.dragging) return;
-    const now = Date.now();
-    const dt = now - d.lastTime || 16;
-    const rawVel = (d.lastY - ev.clientY) / dt;
-    d.velocity = d.velocity * 0.6 + rawVel * 0.4;
-    d.lastY = ev.clientY;
-    d.lastTime = now;
-
-    const totalDy = d.startY - ev.clientY;
-    scrollWheelFree(key, totalDy);
-
-    const approxIdx = Math.round(d.startIdx + totalDy / WHEEL_ITEM_H);
-    const st = wheelState[key];
-    const clampedIdx = Math.max(0, Math.min(st.items.length - 1, approxIdx));
-    if (clampedIdx !== st.idx) {
-      st.idx = clampedIdx;
-      styleWheelItems(key);
-      updateTimeDisplay();
-    }
-  };
-
-  const onUp = () => {
-    const d = wheelDrag[key];
-    if (!d) return;
-    d.dragging = false;
-
-    const st = wheelState[key];
-    const vel = d.velocity;
-    const momentum = vel * 180;
-    const totalDy = (d.startY - d.lastY) + momentum;
-    const targetIdx = Math.round(d.startIdx + totalDy / WHEEL_ITEM_H);
-    const finalIdx = Math.max(0, Math.min(st.items.length - 1, targetIdx));
-    setWheelIdx(key, finalIdx, true);
-
+  dragStart(key, e.clientY);
+  const onMove = ev => dragMove(key, ev.clientY);
+  const onUp   = () => {
+    dragEnd(key);
     document.removeEventListener('mousemove', onMove);
-    document.removeEventListener('mouseup', onUp);
+    document.removeEventListener('mouseup',   onUp);
   };
-
   document.addEventListener('mousemove', onMove);
-  document.addEventListener('mouseup', onUp);
+  document.addEventListener('mouseup',   onUp);
 }
 
-// ── SCROLL WHEEL (mouse wheel) ────────────────────────────────
+// ── SCROLL WHEEL ─────────────────────────────────────────────
 ['hour','min','ampm'].forEach(key => {
   document.addEventListener('wheel', e => {
     const col = document.getElementById('wheel-' + key);
@@ -1231,6 +1272,7 @@ function wheelMouseDown(e, key) {
     }
   }, { passive: false });
 });
+
 function selectTime(val, el) {
 orderTime = val;
 }
