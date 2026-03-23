@@ -259,6 +259,49 @@
     .reveal.hidden { opacity: 0; transform: translateY(30px); }
     .reveal.visible { opacity: 1; transform: none; }
 
+    /* ── COMPLETED WORKS ── */
+    .completed-section { background: var(--gray-light); }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .photo-card {
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 16px rgba(26,39,68,0.1);
+      background: var(--white);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .photo-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(26,39,68,0.16); }
+    .photo-card-img {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover; display: block;
+      background: linear-gradient(135deg, var(--gray-light), var(--gray-mid));
+    }
+    .photo-card-img-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px;
+    }
+    .photo-card-img-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.4; }
+    .photo-card-img-placeholder p { font-size: 0.82rem; color: rgba(255,255,255,0.45); font-style: italic; }
+    .photo-card-info { padding: 16px 20px; }
+    .photo-card-info h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .photo-card-info p { font-size: 0.8rem; color: var(--text-mid); line-height: 1.5; }
+    .photo-card-tag {
+      display: inline-block; margin-top: 8px;
+      background: var(--navy); color: var(--gold);
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 4px;
+    }
+    @media(max-width: 768px) {
+      .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    }
+    @media(max-width: 480px) {
+      .photo-grid { grid-template-columns: 1fr; }
+    }
+
     @media(max-width: 768px) {
       .nav-phone { display: none; }
       .nav-links { display: none; position: fixed; top: 116px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 998; }
@@ -281,6 +324,7 @@
     <li><a href="index.html#about">About Us</a></li>
     <li><a href="index.html#process">Our Process</a></li>
     <li><a href="gallery.html" class="active">Gallery</a></li>
+    <li><a href="#completed">Completed Works</a></li>
     <li><a href="index.html#contact" class="nav-cta">Contact Us</a></li>
   </ul>
   <div class="nav-right">
@@ -557,6 +601,98 @@
         <div class="video-info">
           <h4>Upholstery Restoration</h4>
           <p>A sofa that looked beyond saving — brought back to life in one visit.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPLETED WORKS -->
+<section class="section completed-section" id="completed">
+  <div class="max-w">
+    <p class="section-label">Completed Work</p>
+    <h2 class="section-title">Finished Results</h2>
+
+    <div class="photo-grid">
+
+      <!-- FOTO 1 -->
+      <div class="photo-card reveal">
+        <div style="background-image: url('imgen/done_1.jpg');" class="photo-card-img-bg">
+          <div class="photo-card-img-placeholder">
+            <div class="ph-icon">📸</div>
+            <p>Photo goes here</p>
+          </div>
+        </div>
+        <div class="photo-card-info">
+          <h4>Carpet Cleaning Completed</h4>
+          <p>Living room carpet fully restored and dried.</p>
+          <span class="photo-card-tag">Carpet Cleaning</span>
+        </div>
+      </div>
+
+      <!-- FOTO 2 -->
+      <div class="photo-card reveal">
+        <div class="photo-card-img-placeholder">
+          <div class="ph-icon">📸</div>
+          <p>Photo goes here</p>
+        </div>
+        <div class="photo-card-info">
+          <h4>Upholstery Restoration</h4>
+          <p>Sofa and chairs professionally cleaned and refreshed.</p>
+          <span class="photo-card-tag">Upholstery</span>
+        </div>
+      </div>
+
+      <!-- FOTO 3 -->
+      <div class="photo-card reveal">
+        <div class="photo-card-img-placeholder">
+          <div class="ph-icon">📸</div>
+          <p>Photo goes here</p>
+        </div>
+        <div class="photo-card-info">
+          <h4>Tile & Grout Finished</h4>
+          <p>Kitchen tile and grout looking brand new.</p>
+          <span class="photo-card-tag">Tile & Grout</span>
+        </div>
+      </div>
+
+      <!-- FOTO 4 -->
+      <div class="photo-card reveal">
+        <div class="photo-card-img-placeholder">
+          <div class="ph-icon">📸</div>
+          <p>Photo goes here</p>
+        </div>
+        <div class="photo-card-info">
+          <h4>Stain Removal — Done</h4>
+          <p>Tough pet stains fully eliminated, no trace left.</p>
+          <span class="photo-card-tag">Stain Removal</span>
+        </div>
+      </div>
+
+      <!-- FOTO 5 -->
+      <div class="photo-card reveal">
+        <div class="photo-card-img-placeholder">
+          <div class="ph-icon">📸</div>
+          <p>Photo goes here</p>
+        </div>
+        <div class="photo-card-info">
+          <h4>Carpet Restretch Complete</h4>
+          <p>All ripples removed — carpet flat and tight again.</p>
+          <span class="photo-card-tag">Restretching</span>
+        </div>
+      </div>
+
+      <!-- FOTO 6 -->
+      <div class="photo-card reveal">
+        <div class="photo-card-img-placeholder">
+          <div class="ph-icon">📸</div>
+          <p>Photo goes here</p>
+        </div>
+        <div class="photo-card-info">
+          <h4>Water Damage — Restored</h4>
+          <p>Full recovery after water damage — dry and fresh.</p>
+          <span class="photo-card-tag">Water Damage</span>
         </div>
       </div>
 
