@@ -215,6 +215,31 @@
   #cart-overlay { display: none !important; }
 }
 
+
+/* ── Per-item prep/pack toggles ── */
+.ci-toggles { margin: 5px 0 4px; display: flex; flex-direction: column; gap: 4px; }
+.ci-toggle-row { display: flex; gap: 4px; }
+.ci-tog {
+  flex: 1;
+  padding: 4px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--cream);
+  color: var(--gray-text);
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.ci-tog:hover { border-color: var(--brown-light); color: var(--brown-mid); }
+.ci-tog.active {
+  background: var(--brown-mid);
+  border-color: var(--brown-mid);
+  color: white;
+}
+
 </style>
 </head>
 <body>
@@ -342,22 +367,6 @@
               <button class="numpad-btn numpad-clear" onclick="numpadPress('clear')">CLR</button>
               <button class="numpad-btn" onclick="numpadPress('0')">0</button>
               <button class="numpad-btn numpad-del" onclick="numpadPress('del')">⌫</button>
-            </div>
-          </div>
-
-          <div class="order-field-group">
-            <div class="order-field-label">🌿 Preparación</div>
-            <div class="toggle-group">
-              <button class="toggle-btn active" id="tog-natural" onclick="setToggle('prep','Natural',this)">🌿 Natural</button>
-              <button class="toggle-btn" id="tog-prepared" onclick="setToggle('prep','Preparada',this)">🧂 Preparada</button>
-            </div>
-          </div>
-
-          <div class="order-field-group">
-            <div class="order-field-label">📦 Empaque</div>
-            <div class="toggle-group">
-              <button class="toggle-btn active" id="tog-bolsa" onclick="setToggle('pack','Bolsa',this)">🛍️ Bolsa</button>
-              <button class="toggle-btn" id="tog-charola" onclick="setToggle('pack','Charola',this)">🫙 Charola</button>
             </div>
           </div>
 
@@ -1180,7 +1189,7 @@ ${p.code ? `<div style="font-size:10px;color:var(--gray-text);margin-bottom:2px"
 function addToCart(pid) {
 const prod = PRODUCTS.find(p => p.id === pid);
 if (!prod) return;
-if (!cart[pid]) cart[pid] = { ...prod, qty: 0.25 };
+if (!cart[pid]) cart[pid] = { ...prod, qty: 0.25, prep: 'Natural', pack: 'Bolsa' };
 else cart[pid].qty = Math.round((cart[pid].qty + 0.25) * 100) / 100;
 renderCart();
 showToast(`${prod.icon} ${prod.name} añadido`);
@@ -1289,30 +1298,43 @@ if (item.price === 0) hasNoPriceItems = true;
 const priceDisplay = item.price > 0
 ? `<span class="ci-price">$${subtotal.toFixed(2)}</span>`
 : `<span class="ci-price" style="color:var(--gray-text)">—</span>`;
-return `<div class="cart-item" id="ci-${item.id}">
-<span class="ci-icon">${item.icon}</span>
-<div class="ci-info">
-<div class="ci-name">${item.name}</div>
-<div class="ci-qty-row">
-<button class="qty-display-btn" onclick="openQtyNumpad(${item.id})" title="Toca para cambiar cantidad">
-<span class="qty-display">${item.qty}</span>
-<span class="qty-unit">${item.unit}</span>
-<span style="font-size:10px;color:var(--brown-light);margin-left:3px">✏️</span>
-</button>
-</div>
-<input
-type="text"
-class="ci-note-input"
-placeholder="Nota: molida, sin hueso, en trozos…"
-value="${(item.note || '').replace(/"/g, '&quot;')}"
-oninput="cart[${item.id}].note = this.value"
-onfocus="this.style.borderColor='var(--brown-light)'"
-onblur="this.style.borderColor='var(--border)'"
->
-</div>
-${priceDisplay}
-<button class="ci-delete" onclick="removeItem(${item.id})">✕</button>
-</div>`;
+const itemPrep = item.prep || 'Natural';
+const itemPack = item.pack || 'Bolsa';
+const togPrepN = itemPrep === 'Natural' ? ' active' : '';
+const togPrepP = itemPrep === 'Preparada' ? ' active' : '';
+const togPackB = itemPack === 'Bolsa' ? ' active' : '';
+const togPackC = itemPack === 'Charola' ? ' active' : '';
+const noteVal = (item.note || '').replace(/"/g, '&quot;');
+return '<div class="cart-item" id="ci-' + item.id + '">' +
+  '<span class="ci-icon">' + item.icon + '</span>' +
+  '<div class="ci-info">' +
+    '<div class="ci-name">' + item.name + '</div>' +
+    '<div class="ci-qty-row">' +
+      '<button class="qty-display-btn" onclick="openQtyNumpad(' + item.id + ')" title="Toca para cambiar cantidad">' +
+        '<span class="qty-display">' + item.qty + '</span>' +
+        '<span class="qty-unit">' + item.unit + '</span>' +
+        '<span style="font-size:10px;color:var(--brown-light);margin-left:3px">✏️</span>' +
+      '</button>' +
+    '</div>' +
+    '<div class="ci-toggles">' +
+      '<div class="ci-toggle-row">' +
+        '<button class="ci-tog' + togPrepN + '" onclick="setItemProp(' + item.id + ',\'prep\',\'Natural\',this)">🌿 Natural</button>' +
+        '<button class="ci-tog' + togPrepP + '" onclick="setItemProp(' + item.id + ',\'prep\',\'Preparada\',this)">🧂 Preparada</button>' +
+      '</div>' +
+      '<div class="ci-toggle-row">' +
+        '<button class="ci-tog' + togPackB + '" onclick="setItemProp(' + item.id + ',\'pack\',\'Bolsa\',this)">🛍️ Bolsa</button>' +
+        '<button class="ci-tog' + togPackC + '" onclick="setItemProp(' + item.id + ',\'pack\',\'Charola\',this)">🫙 Charola</button>' +
+      '</div>' +
+    '</div>' +
+    '<input type="text" class="ci-note-input" placeholder="Nota: molida, sin hueso, en trozos…" ' +
+      'value="' + noteVal + '" ' +
+      'oninput="cart[' + item.id + '].note = this.value" ' +
+      'onfocus="this.style.borderColor=\'var(--brown-light)\'" ' +
+      'onblur="this.style.borderColor=\'var(--border)\'">' +
+  '</div>' +
+  priceDisplay +
+  '<button class="ci-delete" onclick="removeItem(' + item.id + ')">✕</button>' +
+'</div>';
 }).join('');
 const totalEl = document.getElementById('cart-total');
 if (hasNoPriceItems && total === 0) {
@@ -1394,13 +1416,12 @@ orders.unshift(order);
 saveOrders();
 cart = {};
 phoneNumber = '';
-orderPrep = 'Natural'; orderPack = 'Bolsa'; orderUse = 'Para Asar'; orderTime = '';
+orderTime = '';
 clearTimeWheel();
 document.getElementById('order-notes').value = '';
 document.getElementById('client-name').value = '';
 document.getElementById('phone-display').textContent = '—';
-document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-document.querySelectorAll('.toggle-group').forEach(g => g.querySelector('.toggle-btn').classList.add('active'));
+// per-item toggles reset on renderCart
 renderCart();
 showToast(`✅ Pedido ${order.id} creado`);
 }
@@ -1581,10 +1602,17 @@ ${o.printedBy ? `<div class="meta-item"><div class="meta-label">Impreso por</div
 ${o.notes ? `<div class="meta-item" style="grid-column:1/-1"><div class="meta-label">Notas</div><div class="meta-value" style="font-weight:400;font-size:13px">${o.notes}</div></div>` : ''}
 </div>
 <div class="modal-items">
-${o.items.map(i => `<div class="modal-item">
-<span class="modal-item-name">${i.icon} ${i.name} × ${i.qty} lb${i.note ? `<br><span style="font-size:11px;color:var(--gray-text);font-style:italic">↳ ${i.note}</span>` : ''}</span>
-<span class="modal-item-price">${i.price > 0 ? '$'+(i.price*i.qty).toFixed(2) : '—'}</span>
-</div>`).join('')}
+${o.items.map(i => {
+  const tags = [i.prep, i.pack].filter(Boolean).join(' · ');
+  const noteHtml = i.note ? '<br><span style="font-size:11px;color:var(--gray-text);font-style:italic">↳ ' + i.note + '</span>' : '';
+  const priceHtml = i.price > 0 ? '$' + (i.price * i.qty).toFixed(2) : '—';
+  return '<div class="modal-item">' +
+    '<span class="modal-item-name">' + i.icon + ' ' + i.name + ' × ' + i.qty + ' ' + (i.unit||'lb') +
+      (tags ? '<br><span style="font-size:11px;color:var(--brown-light);font-weight:700">' + tags + '</span>' : '') +
+      noteHtml + '</span>' +
+    '<span class="modal-item-price">' + priceHtml + '</span>' +
+  '</div>';
+}).join('')}
 </div>
 <div class="modal-total"><span>Total</span><span class="t-amt">${fmtTotal(o)}</span></div>
 <div class="modal-actions">
@@ -1943,36 +1971,45 @@ return `<div class="print-header">
 }
 function buildOrderTicketHTML(o) {
 const d = new Date(o.timestamp);
-const tags = [o.prep, o.pack].filter(Boolean);
-return `<div class="print-ticket">
-${ticketHeader()}
-<hr class="print-divider">
-<div class="print-meta">
-<div class="pm-row highlight"><span>PEDIDO</span><span>${o.id}</span></div>
-<div class="pm-row"><span>Cliente</span><span>${o.client}</span></div>
-${o.phone ? `<div class="pm-row"><span>Tel</span><span>${formatPhone(o.phone)}</span></div>` : ''}
-${o.pickupTime ? `<div class="pm-row highlight"><span>Recolecci\u00f3n</span><span>${formatTime12(o.pickupTime)}</span></div>` : ''}
-<div class="pm-row"><span>Fecha</span><span>${d.toLocaleDateString('es-ES')} ${d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</span></div>
-<div class="pm-row"><span>Tomado por</span><span>${o.userName}</span></div>
-<div class="pm-row"><span>Impreso por</span><span>${o.printedBy || o.userName}</span></div>
-</div>
-${tags.length ? `<div class="print-tags">${tags.map(t=>`<span class="print-tag">${t}</span>`).join('')}</div>` : ''}
-<hr class="print-divider">
-<div class="print-items">
-<div class="print-items-header"><span>Producto</span><span>Importe</span></div>
-${o.items.map(i=>`<div class="print-item">
-<span class="print-item-name">${i.icon} ${i.name} ${i.qty}lb${i.note ? `<br><span style="font-size:8px;color:#555;font-style:italic">↳ ${i.note}</span>` : ''}</span>
-<span class="print-item-price">${i.price > 0 ? '$'+(i.price*i.qty).toFixed(2) : '—'}</span>
-</div>`).join('')}
-</div>
-<hr class="print-divider-solid">
-<div class="print-total-row"><span>TOTAL</span><span>${fmtTotal(o)}</span></div>
-${o.notes ? `<hr class="print-divider"><div style="font-size:9px;color:#444"><strong>Notas:</strong> ${o.notes}</div>` : ''}
-<hr class="print-divider">
-<div class="print-footer">Gracias por su compra<br>El Torito — La Buena Carne</div>
-<div style="text-align:center;font-size:20px;letter-spacing:4px;margin:3mm 0;color:#bbb">* * * * * * * * * * *</div>
-</div>`;
+const itemsHtml = o.items.map(function(i) {
+  const tags = [i.prep, i.pack].filter(Boolean).join(' · ');
+  const tagsHtml = tags ? '<br><span style="font-size:8px;color:#555">' + tags + '</span>' : '';
+  const noteHtml = i.note ? '<br><span style="font-size:8px;color:#555;font-style:italic">\u21b3 ' + i.note + '</span>' : '';
+  const priceHtml = i.price > 0 ? '$' + (i.price * i.qty).toFixed(2) : '\u2014';
+  return '<div class="print-item">' +
+    '<span class="print-item-name">' + i.icon + ' ' + i.name + ' ' + i.qty + (i.unit||'lb') + tagsHtml + noteHtml + '</span>' +
+    '<span class="print-item-price">' + priceHtml + '</span>' +
+  '</div>';
+}).join('');
+const phoneHtml = o.phone ? '<div class="pm-row"><span>Tel</span><span>' + formatPhone(o.phone) + '</span></div>' : '';
+const pickupHtml = o.pickupTime ? '<div class="pm-row highlight"><span>Recolecci\u00f3n</span><span>' + formatTime12(o.pickupTime) + '</span></div>' : '';
+const notesHtml = o.notes ? '<hr class="print-divider"><div style="font-size:9px;color:#444"><strong>Notas:</strong> ' + o.notes + '</div>' : '';
+return '<div class="print-ticket">' +
+  ticketHeader() +
+  '<hr class="print-divider">' +
+  '<div class="print-meta">' +
+    '<div class="pm-row highlight"><span>PEDIDO</span><span>' + o.id + '</span></div>' +
+    '<div class="pm-row"><span>Cliente</span><span>' + o.client + '</span></div>' +
+    phoneHtml +
+    pickupHtml +
+    '<div class="pm-row"><span>Fecha</span><span>' + d.toLocaleDateString('es-ES') + ' ' + d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) + '</span></div>' +
+    '<div class="pm-row"><span>Tomado por</span><span>' + o.userName + '</span></div>' +
+    '<div class="pm-row"><span>Impreso por</span><span>' + (o.printedBy || o.userName) + '</span></div>' +
+  '</div>' +
+  '<hr class="print-divider">' +
+  '<div class="print-items">' +
+    '<div class="print-items-header"><span>Producto</span><span>Importe</span></div>' +
+    itemsHtml +
+  '</div>' +
+  '<hr class="print-divider-solid">' +
+  '<div class="print-total-row"><span>TOTAL</span><span>' + fmtTotal(o) + '</span></div>' +
+  notesHtml +
+  '<hr class="print-divider">' +
+  '<div class="print-footer">Gracias por su compra<br>El Torito \u2014 La Buena Carne</div>' +
+  '<div style="text-align:center;font-size:20px;letter-spacing:4px;margin:3mm 0;color:#bbb">* * * * * * * * * * *</div>' +
+'</div>';
 }
+
 function buildDayReportHTML(dayOrders, dateStr) {
 const total = dayOrders.length;
 const revenue = dayOrders.reduce((s, o) => s + o.total, 0);
@@ -2212,6 +2249,16 @@ document.getElementById('toast-msg').textContent = msg;
 t.classList.add('show');
 clearTimeout(toastTimer);
 toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── PER-ITEM PREP/PACK ──────────────────────────────────────
+function setItemProp(pid, prop, val, btn) {
+  if (!cart[pid]) return;
+  cart[pid][prop] = val;
+  // Toggle active state within the same row
+  const row = btn.closest('.ci-toggle-row');
+  if (row) row.querySelectorAll('.ci-tog').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 // ── MOBILE NAV ─────────────────────────────────
 function isMobile() { return window.innerWidth <= 768; }
