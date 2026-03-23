@@ -21,7 +21,7 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Lato', sans-serif; color: var(--text-dark); background: var(--white); overflow-x: hidden; }
+    body { font-family: 'Lato', sans-serif; color: var(--text-dark); background: var(--navy); overflow-x: hidden; }
 
     /* ── NAV ── */
     nav {
@@ -188,7 +188,9 @@
       background: linear-gradient(135deg, var(--gray-light), var(--gray-mid));
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 10px; color: var(--text-mid);
+      position: absolute; inset: 0; z-index: 1;
     }
+    .has-image .ba-placeholder { display: none; }
     .ba-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.4; }
     .ba-placeholder p { font-size: 0.82rem; opacity: 0.6; font-style: italic; }
 
@@ -347,6 +349,7 @@
       <button class="filter-tab" onclick="filterCards('restretch', this)">Restretching</button>
       <button class="filter-tab" onclick="filterCards('stain', this)">Stain Removal</button>
       <button class="filter-tab" onclick="filterCards('water', this)">Water Damage</button>
+      <button class="filter-tab" onclick="filterCards('tile', this)">Tile & Grout</button>
     </div>
 
     <div class="ba-grid" id="baGrid">
@@ -477,6 +480,27 @@
         </div>
       </div>
 
+      <!-- CARD 7 -->
+      <div class="ba-card reveal" data-category="tile">
+        <div class="ba-slider" id="slider-7">
+          <div class="ba-after"  style="background-image: url('imgen/after_tile_1.jpg');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_tile_1.jpg');" id="before-7">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-7"></div>
+          <div class="ba-handle"  id="handle-7">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Tile & Grout Cleaning</h4>
+          <p>Deep cleaning restores tile and grout to their original color — dirt and stains fully removed.</p>
+          <span class="ba-tag">Tile & Grout</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -574,6 +598,15 @@
 <script>
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 
+// Hide placeholders when background image loads
+document.querySelectorAll('.ba-after, .ba-before').forEach(el => {
+  const url = el.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/, '$1');
+  if (!url) return;
+  const img = new Image();
+  img.onload = () => el.classList.add('has-image');
+  img.src = url;
+});
+
 // Reveal animation
 document.querySelectorAll('.reveal').forEach(el => el.classList.add('hidden'));
 const observer = new IntersectionObserver(entries => entries.forEach(e => {
@@ -621,7 +654,7 @@ function initSlider(id) {
   window.addEventListener('touchend', () => dragging = false);
 }
 
-[1,2,3,4,5,6].forEach(initSlider);
+[1,2,3,4,5,6,7].forEach(initSlider);
 </script>
 </body>
 </html>
