@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Green's Carpet & Upholstery Cleaning | Bonner Springs, KS</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init('olFi0GxDR4FXZj0K2');</script>
 <style>
@@ -63,6 +65,16 @@
     box-shadow: 0 8px 24px rgba(201,162,39,0.55) !important;
     letter-spacing: 1px !important;
   }
+  .nav-phone {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--gold-light) !important; font-weight: 700 !important;
+    font-size: 1rem; text-decoration: none; letter-spacing: 0.5px;
+    border: 1.5px solid rgba(201,162,39,0.4); border-radius: 4px;
+    padding: 7px 16px; transition: all .25s;
+  }
+  .nav-phone::after { display: none !important; }
+  .nav-phone:hover { background: rgba(201,162,39,0.12) !important; border-color: var(--gold) !important; letter-spacing: 0.5px !important; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
   .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
   .hamburger span { width: 26px; height: 2px; background: white; border-radius: 2px; }
 
@@ -135,119 +147,102 @@
   .services-header { text-align: center; margin-bottom: 56px; }
   .services-header .section-subtitle { margin: 0 auto; }
   .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-  .service-card { background: var(--white); border-radius: 12px; padding: 36px 28px; box-shadow: 0 2px 16px rgba(26,39,68,0.07); transition: all .3s; position: relative; overflow: hidden; text-decoration: none; color: inherit; display: block; }
-  .service-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--gold); transform: scaleX(0); transition: transform .3s; transform-origin: left; }
-  .service-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(26,39,68,0.14); }
-  .service-card:hover::after { transform: scaleX(1); }
-  .service-icon { width: 56px; height: 56px; background: linear-gradient(135deg, var(--navy), var(--navy-light)); border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-  .service-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
-  .service-card p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.65; }
-  .service-card--carpet {
-    background: url("imgen/imagen4.png") center center / cover no-repeat !important;
+
+  /* Base card */
+  .service-card {
+    border-radius: 12px; overflow: hidden;
+    position: relative; display: block;
+    text-decoration: none; color: inherit;
+    height: 320px;
+    box-shadow: 0 4px 20px rgba(26,39,68,0.15);
+    transition: transform .35s ease, box-shadow .35s ease;
   }
-  .service-card--carpet::before {
+  .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(26,39,68,0.25); }
+
+  /* Overlay — hidden by default, fades in on hover */
+  .service-card::before {
     content: '';
-    position: absolute; inset: 0;
-    background: rgba(10, 20, 50, 0.65);
-    backdrop-filter: blur(1.8px);
-    z-index: 0;
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top, rgba(5,12,35,0.97) 0%, rgba(5,12,35,0.82) 50%, rgba(5,12,35,0.45) 100%);
+    opacity: 0;
+    transition: opacity .4s ease;
   }
-  .service-card--carpet > * { position: relative; z-index: 1; }
-  .service-card--carpet h3 { color: var(--white) !important; }
-  .service-card--carpet p { color: rgba(255,255,255,0.85) !important; }
-  .service-card--restretch {
-    background: url("imgen/imagen5.png") center center / cover no-repeat !important;
-  }
-  .service-card--restretch::before {
+  .service-card:hover::before { opacity: 1; }
+
+  /* Permanent dark gradient just for the title at the bottom */
+  .service-card::after {
     content: '';
-    position: absolute; inset: 0;
-    background: rgba(10, 20, 50, 0.65);
-    backdrop-filter: blur(1.8px);
-    z-index: 0;
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top, rgba(5,12,35,0.88) 0%, rgba(5,12,35,0.3) 45%, transparent 70%);
+    transition: opacity .4s ease;
   }
-  .service-card--restretch > * { position: relative; z-index: 1; }
-  .service-card--restretch h3 { color: var(--white) !important; }
-  .service-card--restretch p { color: rgba(255,255,255,0.85) !important; }
-  .service-card--water {
-    background: url("imgen/imagen1.png") center center / cover no-repeat !important;
+  .service-card:hover::after { opacity: 0; }
+
+  /* Icon hidden */
+  .service-icon { display: none; }
+
+  /* All card content sits above overlays */
+  .service-card > *:not(.service-icon):not(.service-card--water-bg) { position: relative; z-index: 2; }
+
+  /* Title always visible at bottom */
+  .service-card h3 {
+    position: absolute !important; bottom: 24px; left: 24px; right: 24px;
+    font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700;
+    color: white !important; margin: 0;
+    transition: opacity .3s ease, transform .4s ease;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    transform: translateY(0);
   }
-  .service-card--water-bg { display: none; }
-  .service-card--upholstery {
-    background: url("imgen/imagen8.png") center center / cover no-repeat !important;
+  .service-card:hover h3 {
+    opacity: 0;
+    transform: translateY(-8px);
   }
-  .service-card--upholstery::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: rgba(10, 20, 50, 0.65);
-    backdrop-filter: blur(1.8px);
-    z-index: 0;
+
+  /* Content block — title + text together, centered, shown on hover */
+  .service-card .card-hover-content {
+    position: absolute !important;
+    inset: 0; z-index: 2;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 28px;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity .4s ease .05s, transform .4s ease .05s;
   }
-  .service-card--upholstery > * { position: relative; z-index: 1; }
-  .service-card--upholstery h3 { color: var(--white) !important; }
-  .service-card--upholstery p { color: rgba(255,255,255,0.85) !important; }
-  .service-card--repair {
-    background: url("imgen/imagen9.png") center center / cover no-repeat !important;
+  .service-card:hover .card-hover-content {
+    opacity: 1; transform: translateY(0);
   }
-  .service-card--repair::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: rgba(10, 20, 50, 0.65);
-    backdrop-filter: blur(1.8px);
-    z-index: 0;
+  .service-card .card-hover-content h4 {
+    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+    color: var(--gold-light) !important; margin: 0 0 12px 0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
   }
-  .service-card--repair > * { position: relative; z-index: 1; }
-  .service-card--repair h3 { color: var(--white) !important; }
-  .service-card--repair p { color: rgba(255,255,255,0.85) !important; }
-  .service-card--stain {
-    background: url("imgen/imagen10.png") center center / cover no-repeat !important;
+  .service-card .card-hover-content p {
+    position: static !important;
+    font-size: 0.88rem !important; color: rgba(255,255,255,0.9) !important;
+    line-height: 1.7; margin: 0 !important;
+    opacity: 1 !important; transform: none !important;
   }
-  .service-card--stain::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: rgba(10, 20, 50, 0.65);
-    backdrop-filter: blur(1.8px);
-    z-index: 0;
+
+  /* Description text — only used if NOT wrapped in card-hover-content */
+  .service-card > p {
+    position: absolute !important; top: 80px; left: 24px; right: 24px;
+    font-size: 0.88rem !important; color: rgba(255,255,255,0.88) !important;
+    line-height: 1.65; margin: 0;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity .4s ease .1s, transform .4s ease .1s;
   }
-  .service-card--stain > * { position: relative; z-index: 1; }
-  .service-card--stain h3 { color: var(--white) !important; }
-  .service-card--stain p { color: rgba(255,255,255,0.85) !important; }
-  .service-card--stain li { color: rgba(255,255,255,0.85) !important; }
-  .service-card--residential {
-    background: url("imgen/imagen11.png") center center / cover no-repeat !important;
-  }
-  .service-card--residential::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: rgba(10, 20, 50, 0.65);
-    backdrop-filter: blur(1.8px);
-    z-index: 0;
-  }
-  .service-card--residential > * { position: relative; z-index: 1; }
-  .service-card--residential h3 { color: var(--white) !important; }
-  .service-card--residential p { color: rgba(255,255,255,0.85) !important; }
-  .service-card--military {
-    background: url("imgen/imagen12.png") center center / cover no-repeat !important;
-  }
-  .service-card--military::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: rgba(10, 20, 50, 0.65);
-    backdrop-filter: blur(1.8px);
-    z-index: 0;
-  }
-  .service-card--military > * { position: relative; z-index: 1; }
-  .service-card--military h3 { color: var(--white) !important; }
-  .service-card--military p { color: rgba(255,255,255,0.85) !important; }
-  .service-card--water::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: rgba(10, 20, 50, 0.65);
-    backdrop-filter: blur(1.8px);
-    z-index: 0;
-  }
-  .service-card--water > * { position: relative; z-index: 1; }
-  .service-card--water h3 { color: var(--white) !important; }
-  .service-card--water p { color: rgba(255,255,255,0.85) !important; }
+  .service-card:hover > p { opacity: 1; transform: translateY(0); }
+
+  /* Individual background images */
+  .service-card--carpet     { background: url("imgen/imagen4.png")  center center / cover no-repeat; }
+  .service-card--upholstery { background: url("imgen/imagen8.png")  center center / cover no-repeat; }
+  .service-card--restretch  { background: url("imgen/imagen5.png")  center center / cover no-repeat; }
+  .service-card--repair     { background: url("imgen/imagen9.png")  center center / cover no-repeat; }
+  .service-card--stain      { background: url("imgen/imagen10.png") center center / cover no-repeat; }
+  .service-card--water      { background: url("imgen/imagen1.png")  center center / cover no-repeat; }
+  .service-card--residential{ background: url("imgen/imagen11.png") center center / cover no-repeat; }
+  .service-card--military   { background: url("imgen/imagen12.png") center center / cover no-repeat; }
+  .service-card--water-bg   { display: none; }
 
   /* ABOUT */
   .about { background: var(--white); }
@@ -361,12 +356,14 @@
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
+  .reveal.hidden { opacity: 0; transform: translateY(30px); }
   .reveal.visible { opacity: 1; transform: none; }
 
   /* MOBILE */
   @media(max-width: 768px) {
-    .nav-links { display: none; position: absolute; top: 108px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .nav-phone { display: none; }
+    .nav-links { display: none; position: fixed; top: 116px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 998; }
     .nav-links.open { display: flex; }
     .hamburger { display: flex; }
     .hero-content { grid-template-columns: 1fr; }
@@ -392,10 +389,19 @@
     <li><a href="#services">Services</a></li>
     <li><a href="#about">About Us</a></li>
     <li><a href="#process">Our Process</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
     <li><a href="#contact" class="nav-cta">Contact Us</a></li>
   </ul>
-  <div class="hamburger" id="hamburger" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <div class="nav-right">
+    <a href="tel:+19132072033" class="nav-phone">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+      </svg>
+      (913) 207-2033
+    </a>
+    <div class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
 
@@ -444,7 +450,13 @@
         <span class="slogan-quote">"</span> Remember you walk on our reputation<span class="slogan-quote">"</span>
       </div>
       <div class="hero-buttons">
-        <a href="#contact" class="btn-primary">Request Service</a>
+        <a href="tel:+19132072033" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:6px">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          Call (913) 207-2033
+        </a>
+        <a href="#contact" class="btn-outline">Request Service</a>
         <a href="#services" class="btn-outline">View Services</a>
       </div>
       <div class="hero-stats">
@@ -484,52 +496,60 @@
     </div>
     <div class="services-grid">
       <a href="#contact" class="service-card service-card--carpet reveal">
-        <div class="service-icon">🧹</div>
         <h3>Carpet Cleaning</h3>
-        <p>We remove deep dirt, stains, and allergens using a high-powered truck-mounted steam unit. Visible results, fast drying.</p>
+        <div class="card-hover-content">
+          <h4>Carpet Cleaning</h4>
+          <p>We remove deep dirt, stains, and allergens using a high-powered truck-mounted steam unit. Visible results, fast drying.</p>
+        </div>
       </a>
       <a href="#contact" class="service-card service-card--upholstery reveal">
-        <div class="service-icon">🛋️</div>
         <h3>Upholstery Cleaning</h3>
-        <p>Sofas, chairs, headboards and more. We remove stains, odors, and bacteria without damaging fabrics, leaving your furniture fresh and renewed.</p>
+        <div class="card-hover-content">
+          <h4>Upholstery Cleaning</h4>
+          <p>Sofas, chairs, headboards and more. We remove stains, odors, and bacteria without damaging fabrics, leaving your furniture fresh and renewed.</p>
+        </div>
       </a>
       <a href="#contact" class="service-card service-card--restretch reveal">
-        <div class="service-icon">↔️</div>
         <h3>Carpet Restretching</h3>
-        <p>Ripples, bubbles, or wrinkles? We use power stretchers to eliminate looseness, reinstall tack strips and trim excess carpet for a perfect finish.</p>
+        <div class="card-hover-content">
+          <h4>Carpet Restretching</h4>
+          <p>Ripples, bubbles, or wrinkles? We use power stretchers to eliminate looseness, reinstall tack strips and trim excess carpet for a perfect finish.</p>
+        </div>
       </a>
       <a href="#contact" class="service-card service-card--repair reveal">
-        <div class="service-icon">🔧</div>
         <h3>Carpet Repair</h3>
-        <p>Tears, burns, seams coming apart, or damaged sections? We patch and repair your carpet to restore its look and extend its life — saving you the cost of full replacement.</p>
+        <div class="card-hover-content">
+          <h4>Carpet Repair</h4>
+          <p>Tears, burns, seams coming apart, or damaged sections? We patch and repair your carpet to restore its look and extend its life.</p>
+        </div>
       </a>
       <a href="#contact" class="service-card service-card--stain reveal">
-        <div class="service-icon">🧼</div>
         <h3>Stain Removal</h3>
-        <p>We specialize in removing the toughest stains from your carpets and upholstery:</p>
-        <ul style="margin-top:12px; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:6px;">
-          <li style="font-size:0.85rem; color:var(--text-mid); display:flex; align-items:center; gap:8px;"><span style="color:var(--gold); font-size:0.8rem;">✦</span> Pet Stains &amp; Odor</li>
-          <li style="font-size:0.85rem; color:var(--text-mid); display:flex; align-items:center; gap:8px;"><span style="color:var(--gold); font-size:0.8rem;">✦</span> Rust</li>
-          <li style="font-size:0.85rem; color:var(--text-mid); display:flex; align-items:center; gap:8px;"><span style="color:var(--gold); font-size:0.8rem;">✦</span> Red Stains</li>
-          <li style="font-size:0.85rem; color:var(--text-mid); display:flex; align-items:center; gap:8px;"><span style="color:var(--gold); font-size:0.8rem;">✦</span> Blood</li>
-          <li style="font-size:0.85rem; color:var(--text-mid); display:flex; align-items:center; gap:8px;"><span style="color:var(--gold); font-size:0.8rem;">✦</span> Ink &amp; More</li>
-        </ul>
+        <div class="card-hover-content">
+          <h4>Stain Removal</h4>
+          <p>Pet stains, rust, red stains, blood, ink and more. Specialized treatments to eliminate even the toughest stains from carpets and upholstery.</p>
+        </div>
       </a>
       <a href="#contact" class="service-card service-card--water reveal">
-        <div class="service-card--water-bg"></div>
-        <div class="service-icon">💧</div>
         <h3>Water Damage / Restoration</h3>
-        <p>Burst pipes, flood jobs, and storm damage: we extract standing water fast and fully dry the space to prevent mold and structural damage. Our equipment includes air movers, air scrubbers, and dehumidifiers — everything needed to restore your home or business.</p>
+        <div class="card-hover-content">
+          <h4>Water Damage / Restoration</h4>
+          <p>Burst pipes, floods, storm damage. We extract water fast and fully dry the space using air movers, scrubbers and dehumidifiers to prevent mold.</p>
+        </div>
       </a>
       <a href="#contact" class="service-card service-card--residential reveal">
-        <div class="service-icon">🏠</div>
         <h3>Residential & Commercial</h3>
-        <p>Serving Bonner Springs, KS and the Greater Kansas City area. Punctuality and professionalism guaranteed on every visit.</p>
+        <div class="card-hover-content">
+          <h4>Residential & Commercial</h4>
+          <p>Serving Bonner Springs, KS and the Greater Kansas City area. Punctuality and professionalism guaranteed on every visit.</p>
+        </div>
       </a>
       <a href="#contact" class="service-card service-card--military reveal">
-        <div class="service-icon">🎖️</div>
         <h3>Military Discounts</h3>
-        <p>We appreciate your service to our nation. Special discounts available for active military personnel and veterans on all our services.</p>
+        <div class="card-hover-content">
+          <h4>Military Discounts</h4>
+          <p>We appreciate your service. Special discounts available for active military personnel and veterans on all our services.</p>
+        </div>
       </a>
     </div>
   </div>
@@ -670,12 +690,32 @@
         <h2 class="section-title">Let's Talk About Your Project</h2>
         <p class="section-subtitle" style="margin-bottom:32px">We're ready to help. We respond quickly to all inquiries.</p>
         <div class="contact-detail">
+          <div class="contact-icon">📞</div>
+          <div>
+            <strong>Phone</strong>
+            <span>
+              <a href="tel:+19132072033" style="color:var(--gold);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a>
+            </span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">🌊</div>
+          <div>
+            <strong>24-Hour Emergency Flood Service</strong>
+            <span>
+              <a href="tel:+19132072033" style="color:var(--gold);font-weight:700;text-decoration:none;">(913) 207-2033</a>
+              &nbsp;·&nbsp;
+              <a href="tel:+19132076958" style="color:var(--gold);font-weight:700;text-decoration:none;">(913) 207-6958</a>
+            </span>
+          </div>
+        </div>
+        <div class="contact-detail">
           <div class="contact-icon">📍</div>
           <div><strong>Location</strong><span>Bonner Springs, KS 66012<br>Greater Kansas City Area</span></div>
         </div>
         <div class="contact-detail">
           <div class="contact-icon">📧</div>
-          <div><strong>Email</strong><span><a href="mailto:greenscarpetcleaning@yahoo.com" style="color:inherit;text-decoration:none">greenscarpetcleaning@yahoo.com</a></span></div>
+          <div><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection#0d6a7f6868637e6e6c7f7d68796e61686c6364636a4d746c656262236e6260" style="color:inherit;text-decoration:none"><span class="__cf_email__" data-cfemail="492e3b2c2c273a2a283b392c3d2a252c282720272e093028212626672a2624">[email&#160;protected]</span></a></span></div>
         </div>
         <div class="contact-detail">
           <div class="contact-icon">⏰</div>
@@ -684,6 +724,10 @@
         <div class="contact-detail">
           <div class="contact-icon">🎖️</div>
           <div><strong>Military Discounts</strong><span>Available for active military and veterans</span></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon"><i class="fa-brands fa-facebook" style="font-size:1.3rem;color:#1877f2;"></i></div>
+          <div><strong>Facebook</strong><span><a href="https://www.facebook.com/GreensCarpetandUpholsteryCleaning" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">Green's Carpet & Upholstery Cleaning</a></span></div>
         </div>
       </div>
       <div class="contact-form-card reveal">
@@ -727,18 +771,21 @@
       <a href="#services">Services</a>
       <a href="#about">About Us</a>
       <a href="#process">Our Process</a>
+      <a href="gallery.html">Gallery</a>
       <a href="#contact">Contact</a>
+      <a href="https://www.facebook.com/GreensCarpetandUpholsteryCleaning" target="_blank" rel="noopener" style="color:var(--gold-light);display:inline-flex;align-items:center;gap:6px;"><i class="fa-brands fa-facebook"></i> Facebook</a>
     </div>
   </div>
   <div class="footer-bottom">Copyright © 2025 Greens Carpet & Upholstery Cleaning, all rights reserved. · Est. 1993 · Bonner Springs, KS 66012</div>
 </footer>
 
-<a href="#contact" class="float-cta">📞 Contact Us</a>
+<a href="tel:+19132072033" class="float-cta">📞 (913) 207-2033</a>
 
 <script>
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
-const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => el.classList.add('hidden'));
+const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('hidden'); e.target.classList.add('visible'); } }), { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 function sendEmail() {
   const fname = document.getElementById('fname').value.trim();
@@ -748,35 +795,25 @@ function sendEmail() {
   const service = document.getElementById('service').value;
   const message = document.getElementById('message').value.trim();
   const msg = document.getElementById('form-msg');
-
   if (!fname || !email || !message) {
     msg.className = 'error';
     msg.textContent = 'Please fill in your name, email, and message.';
     return;
   }
-
   const btn = document.querySelector('.contact-form-card .btn-primary');
   btn.textContent = 'Sending...';
   btn.disabled = true;
-
   emailjs.send('alfombras', 'template_alfombras', {
-    fname: fname,
-    lname: lname,
-    email: email,
+    fname, lname, email,
     phone: phone || 'Not provided',
     service: service || 'Not specified',
-    message: message
+    message
   }).then(() => {
     msg.className = 'success';
     msg.textContent = '✅ Message sent! We will get back to you soon.';
     btn.textContent = 'Send Message ✉️';
     btn.disabled = false;
-    document.getElementById('fname').value = '';
-    document.getElementById('lname').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('phone').value = '';
-    document.getElementById('service').value = '';
-    document.getElementById('message').value = '';
+    ['fname','lname','email','phone','service','message'].forEach(id => document.getElementById(id).value = '');
   }).catch(() => {
     msg.className = 'error';
     msg.textContent = '❌ Something went wrong. Please try again or call us directly.';
@@ -795,9 +832,6 @@ window.addEventListener('scroll', () => {
     nav.style.backdropFilter = 'none';
     nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
   }
-  let current = '';
-  document.querySelectorAll('section[id]').forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
-  document.querySelectorAll('.nav-links a').forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold-light)' : ''; });
 });
 </script>
 </body>
