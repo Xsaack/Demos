@@ -978,6 +978,9 @@ document.getElementById('user-avatar-h').textContent = user.name.charAt(0).toUpp
 document.getElementById('user-avatar-h').style.background = `linear-gradient(135deg, ${user.color}, ${user.color}99)`;
 document.getElementById('nav-admin').style.display = user.role === 'admin' ? '' : 'none';
 document.getElementById('btn-daychange').style.display = user.role === 'admin' ? '' : 'none';
+// Sync bottom nav admin button for mobile
+const _bnAdmin = document.getElementById('bn-admin');
+if (_bnAdmin) _bnAdmin.style.display = user.role === 'admin' ? '' : 'none';
 initApp();
 startAutoRefresh();
 }
@@ -986,6 +989,8 @@ document.getElementById('login-user').addEventListener('keydown', e => { if (e.k
 function doLogout() {
 currentUser = null; cart = {};
 stopAutoRefresh();
+const _bnAdminOut = document.getElementById('bn-admin');
+if (_bnAdminOut) _bnAdminOut.style.display = 'none';
 document.getElementById('app').style.display = 'none';
 document.getElementById('login-screen').style.display = 'flex';
 document.getElementById('login-error').textContent = '';
