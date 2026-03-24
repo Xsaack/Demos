@@ -625,8 +625,19 @@
 
 <div class="modal-overlay" id="qty-overlay" onclick="closeQtyNumpad(event)" style="display:none;opacity:0;transition:opacity .2s">
   <div style="background:var(--warm-white);border-radius:20px;padding:24px;width:320px;box-shadow:0 20px 60px rgba(0,0,0,.35);position:relative">
-    <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--brown-dark);margin-bottom:4px" id="qty-modal-name">Producto</div>
-    <div style="font-size:12px;color:var(--gray-text);margin-bottom:14px">Ingresa la cantidad en libras</div>
+    <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--brown-dark);margin-bottom:10px" id="qty-modal-name">Producto</div>
+
+    <!-- Unit toggle: Libras / Piezas -->
+    <div style="display:flex;gap:0;margin-bottom:14px;border:2px solid var(--border);border-radius:10px;overflow:hidden">
+      <button id="unit-btn-lb" onclick="setQtyUnit('lb')"
+        style="flex:1;padding:9px 6px;border:none;background:var(--brown-dark);color:white;font-family:'Lato',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .18s">
+        ⚖️ Libras
+      </button>
+      <button id="unit-btn-pz" onclick="setQtyUnit('pz')"
+        style="flex:1;padding:9px 6px;border:none;background:white;color:var(--gray-text);font-family:'Lato',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .18s">
+        🔢 Piezas
+      </button>
+    </div>
 
     <div style="background:white;border:2px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:baseline;gap:8px">
       <span id="qty-display-val" style="font-size:32px;font-weight:900;font-family:'Playfair Display',serif;color:var(--brown-dark);min-width:80px;letter-spacing:-1px">0</span>
@@ -644,18 +655,13 @@
       <button class="numpad-btn" onclick="qtyNumpadPress('7')">7</button>
       <button class="numpad-btn" onclick="qtyNumpadPress('8')">8</button>
       <button class="numpad-btn" onclick="qtyNumpadPress('9')">9</button>
-      <button class="numpad-btn" onclick="qtyNumpadPress('.')">.</button>
+      <button class="numpad-btn" id="qty-dot-btn" onclick="qtyNumpadPress('.')">.</button>
       <button class="numpad-btn" onclick="qtyNumpadPress('0')">0</button>
       <button class="numpad-btn numpad-del" onclick="qtyNumpadPress('del')">⌫</button>
     </div>
 
-    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">
-      <button onclick="qtyNumpadSet('0.5')"  style="flex:1;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--brown-mid);cursor:pointer">½ lb</button>
-      <button onclick="qtyNumpadSet('1')"    style="flex:1;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--brown-mid);cursor:pointer">1 lb</button>
-      <button onclick="qtyNumpadSet('2')"    style="flex:1;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--brown-mid);cursor:pointer">2 lb</button>
-      <button onclick="qtyNumpadSet('3')"    style="flex:1;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--brown-mid);cursor:pointer">3 lb</button>
-      <button onclick="qtyNumpadSet('5')"    style="flex:1;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--brown-mid);cursor:pointer">5 lb</button>
-    </div>
+    <!-- Quick-set buttons — dynamic based on unit -->
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap" id="qty-quick-btns"></div>
 
     <div style="display:flex;gap:10px">
       <button onclick="closeQtyNumpad()" style="flex:1;padding:13px;background:var(--cream);border:2px solid var(--border);border-radius:12px;font-family:Lato,sans-serif;font-size:14px;font-weight:700;color:var(--gray-text);cursor:pointer">Cancelar</button>
@@ -1338,8 +1344,11 @@ ${p.code ? `<div style="font-size:10px;color:var(--gray-text);margin-bottom:2px"
 function addToCart(pid) {
 const prod = PRODUCTS.find(p => p.id === pid);
 if (!prod) return;
-if (!cart[pid]) cart[pid] = { ...prod, qty: 0.25, prep: 'Natural', pack: 'Bolsa' };
-else cart[pid].qty = Math.round((cart[pid].qty + 0.25) * 100) / 100;
+if (!cart[pid]) cart[pid] = { ...prod, qty: 0.25, prep: 'Natural', pack: 'Bolsa', selectedUnit: 'lb' };
+else {
+  const step = (cart[pid].selectedUnit === 'pz') ? 1 : 0.25;
+  cart[pid].qty = Math.round((cart[pid].qty + step) * 100) / 100;
+}
 renderCart();
 showToast(`${prod.icon} ${prod.name} añadido`);
 }
@@ -1351,13 +1360,59 @@ renderCart();
 }
 let qtyActivePid = null;
 let qtyInput = '';
+let qtyCurrentUnit = 'lb'; // active unit in the modal
+
+function renderQtyQuickBtns() {
+  var container = document.getElementById('qty-quick-btns');
+  if (!container) return;
+  var s = 'flex:1;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--brown-mid);cursor:pointer';
+  var btns = '';
+  if (qtyCurrentUnit === 'lb') {
+    [['0.5','½ lb'],['1','1 lb'],['2','2 lb'],['3','3 lb'],['5','5 lb']].forEach(function(p) {
+      btns += '<button onclick="qtyNumpadSet(' + JSON.stringify(p[0]) + ')" style="' + s + '">' + p[1] + '</button>';
+    });
+    var dotBtn = document.getElementById('qty-dot-btn');
+    if (dotBtn) dotBtn.style.visibility = 'visible';
+  } else {
+    [['1','1 pz'],['2','2 pz'],['3','3 pz'],['5','5 pz'],['10','10 pz']].forEach(function(p) {
+      btns += '<button onclick="qtyNumpadSet(' + JSON.stringify(p[0]) + ')" style="' + s + '">' + p[1] + '</button>';
+    });
+    var dotBtn = document.getElementById('qty-dot-btn');
+    if (dotBtn) dotBtn.style.visibility = 'hidden';
+  }
+  container.innerHTML = btns;
+}
+
+function setQtyUnit(unit) {
+  qtyCurrentUnit = unit;
+  qtyInput = '';
+  // update toggle buttons style
+  const lbBtn = document.getElementById('unit-btn-lb');
+  const pzBtn = document.getElementById('unit-btn-pz');
+  if (lbBtn && pzBtn) {
+    if (unit === 'lb') {
+      lbBtn.style.background = 'var(--brown-dark)'; lbBtn.style.color = 'white';
+      pzBtn.style.background = 'white'; pzBtn.style.color = 'var(--gray-text)';
+    } else {
+      pzBtn.style.background = 'var(--brown-dark)'; pzBtn.style.color = 'white';
+      lbBtn.style.background = 'white'; lbBtn.style.color = 'var(--gray-text)';
+    }
+  }
+  document.getElementById('qty-display-unit').textContent = unit;
+  renderQtyQuickBtns();
+  updateQtyDisplay();
+}
+
 function openQtyNumpad(pid) {
 const prod = cart[pid];
 if (!prod) return;
 qtyActivePid = pid;
 qtyInput = '';
+// Use the item's current unit if set, otherwise default to lb
+qtyCurrentUnit = prod.selectedUnit || prod.unit || 'lb';
 document.getElementById('qty-modal-name').textContent = prod.icon + ' ' + prod.name;
-document.getElementById('qty-display-unit').textContent = prod.unit;
+// Apply unit toggle UI
+setQtyUnit(qtyCurrentUnit);
 updateQtyDisplay();
 const overlay = document.getElementById('qty-overlay');
 overlay.style.display = 'flex';
@@ -1381,9 +1436,11 @@ function qtyNumpadPress(key) {
 if (key === 'del') {
 qtyInput = qtyInput.slice(0, -1);
 } else if (key === '.') {
+// Decimals only allowed for libras
+if (qtyCurrentUnit === 'pz') return;
 if (!qtyInput.includes('.')) qtyInput += '.';
 } else {
-if (qtyInput.includes('.')) {
+if (qtyCurrentUnit === 'lb' && qtyInput.includes('.')) {
 const decimals = qtyInput.split('.')[1] || '';
 if (decimals.length >= 2) return;
 }
@@ -1412,11 +1469,13 @@ sub.textContent = '';
 }
 function confirmQty() {
 if (!qtyActivePid) return;
-const val = parseFloat(qtyInput);
+let val = parseFloat(qtyInput);
 if (isNaN(val) || val <= 0) {
 delete cart[qtyActivePid];
 } else {
+if (qtyCurrentUnit === 'pz') val = Math.round(val); // whole numbers only for piezas
 cart[qtyActivePid].qty = Math.round(val * 100) / 100;
+cart[qtyActivePid].selectedUnit = qtyCurrentUnit;
 }
 closeQtyNumpad();
 renderCart();
@@ -1461,7 +1520,7 @@ return '<div class="cart-item" id="ci-' + item.id + '">' +
     '<div class="ci-qty-row">' +
       '<button class="qty-display-btn" onclick="openQtyNumpad(' + item.id + ')" title="Toca para cambiar cantidad">' +
         '<span class="qty-display">' + item.qty + '</span>' +
-        '<span class="qty-unit">' + item.unit + '</span>' +
+        '<span class="qty-unit">' + (item.selectedUnit || item.unit) + '</span>' +
         '<span style="font-size:10px;color:var(--brown-light);margin-left:3px">✏️</span>' +
       '</button>' +
     '</div>' +
@@ -1756,7 +1815,7 @@ ${o.items.map(i => {
   const noteHtml = i.note ? '<br><span style="font-size:11px;color:var(--gray-text);font-style:italic">↳ ' + i.note + '</span>' : '';
   const priceHtml = i.price > 0 ? '$' + (i.price * i.qty).toFixed(2) : '—';
   return '<div class="modal-item">' +
-    '<span class="modal-item-name">' + i.icon + ' ' + i.name + ' × ' + i.qty + ' ' + (i.unit||'lb') +
+    '<span class="modal-item-name">' + i.icon + ' ' + i.name + ' × ' + i.qty + ' ' + (i.selectedUnit||i.unit||'lb') +
       (tags ? '<br><span style="font-size:11px;color:var(--brown-light);font-weight:700">' + tags + '</span>' : '') +
       noteHtml + '</span>' +
     '<span class="modal-item-price">' + priceHtml + '</span>' +
@@ -2126,7 +2185,7 @@ const itemsHtml = o.items.map(function(i) {
   const noteHtml = i.note ? '<br><span style="font-size:8px;color:#555;font-style:italic">\u21b3 ' + i.note + '</span>' : '';
   const priceHtml = i.price > 0 ? '$' + (i.price * i.qty).toFixed(2) : '\u2014';
   return '<div class="print-item">' +
-    '<span class="print-item-name">' + i.icon + ' ' + i.name + ' ' + i.qty + (i.unit||'lb') + tagsHtml + noteHtml + '</span>' +
+    '<span class="print-item-name">' + i.icon + ' ' + i.name + ' ' + i.qty + (i.selectedUnit||i.unit||'lb') + tagsHtml + noteHtml + '</span>' +
     '<span class="print-item-price">' + priceHtml + '</span>' +
   '</div>';
 }).join('');
