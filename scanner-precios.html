@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ScanPrice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c26;
+    --accent: #00e5ff;
+    --accent2: #ff3d71;
+    --accent3: #a259ff;
+    --text: #f0f0ff;
+    --text-dim: #6b6b8a;
+    --border: rgba(255,255,255,0.07);
+    --glow: 0 0 30px rgba(0,229,255,0.25);
+    --glow2: 0 0 30px rgba(255,61,113,0.25);
+    --radius: 20px;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+    overflow: hidden;
+  }
+
+  /* ── LAYOUT ── */
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 12px;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  .logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--accent); }
+  .btn-list {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    transition: all .2s;
+  }
+  .btn-list:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 24px;
+    gap: 20px;
+    overflow: hidden;
+  }
+
+  /* ── SCANNER WINDOW ── */
+  #scanner-wrap {
+    width: 100%;
+    flex: 1;
+    max-height: 340px;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--border);
+  }
+  #scanner-wrap.active { border-color: var(--accent); box-shadow: var(--glow); }
+  #scanner-wrap.found  { border-color: #00ff88; box-shadow: 0 0 30px rgba(0,255,136,0.3); }
+  #scanner-wrap.new-product { border-color: var(--accent3); box-shadow: 0 0 30px rgba(162,89,255,0.3); }
+
+  #interactive { width: 100%; height: 100%; }
+  #interactive video { width: 100% !important; height: 100% !important; object-fit: cover; }
+  #interactive canvas { display: none !important; }
+
+  .scanner-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .scan-frame {
+    width: 220px; height: 120px;
+    position: relative;
+  }
+  .scan-frame::before, .scan-frame::after,
+  .scan-frame > span::before, .scan-frame > span::after {
+    content: '';
+    position: absolute;
+    width: 24px; height: 24px;
+    border-color: var(--accent);
+    border-style: solid;
+  }
+  .scan-frame::before  { top:0;    left:0;  border-width: 3px 0 0 3px; }
+  .scan-frame::after   { top:0;    right:0; border-width: 3px 3px 0 0; }
+  .scan-frame > span::before { bottom:0; left:0;  border-width: 0 0 3px 3px; }
+  .scan-frame > span::after  { bottom:0; right:0; border-width: 0 3px 3px 0; }
+
+  .scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: scanMove 2s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--accent);
+  }
+  @keyframes scanMove {
+    0%,100% { top: 8px; opacity: 0.4; }
+    50% { top: calc(100% - 8px); opacity: 1; }
+  }
+
+  .scanner-idle-msg {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; color: var(--text-dim);
+    background: var(--surface);
+  }
+  .scanner-idle-msg svg { opacity: 0.3; }
+  .scanner-idle-msg p { font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ── SCAN BUTTON ── */
+  #btn-scan {
+    width: 100%;
+    padding: 18px;
+    border-radius: 16px;
+    border: none;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(0,229,255,0.3);
+  }
+  #btn-scan:active { transform: scale(0.97); }
+  #btn-scan.scanning {
+    background: var(--accent2);
+    box-shadow: 0 4px 20px rgba(255,61,113,0.3);
+  }
+
+  /* ── RESULT CARD ── */
+  #result-card {
+    width: 100%;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    flex-shrink: 0;
+    transition: all .3s;
+    min-height: 90px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  #result-card.found  { border-color: #00ff88; background: rgba(0,255,136,0.05); }
+  #result-card.miss   { border-color: var(--accent2); background: rgba(255,61,113,0.05); }
+
+  .result-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px;
+  }
+  .result-code {
+    font-family: var(--font-mono); font-size: 13px; color: var(--text-dim); margin-bottom: 4px;
+  }
+  .result-price {
+    font-size: 48px; font-weight: 800; line-height: 1;
+    color: #00ff88;
+    letter-spacing: -2px;
+  }
+  .result-notfound {
+    font-size: 18px; font-weight: 700; color: var(--accent2);
+  }
+  .result-placeholder {
+    font-size: 15px; color: var(--text-dim); font-weight: 400;
+  }
+
+  /* ── MODAL BASE ── */
+  .modal-backdrop {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s;
+  }
+  .modal-backdrop.show { opacity: 1; pointer-events: all; }
+
+  .modal-sheet {
+    width: 100%; max-width: 480px;
+    background: var(--surface);
+    border-radius: 24px 24px 0 0;
+    padding: 12px 24px 36px;
+    transform: translateY(100%);
+    transition: transform .3s cubic-bezier(.32,1,.23,1);
+    border-top: 1px solid var(--border);
+  }
+  .modal-backdrop.show .modal-sheet { transform: translateY(0); }
+
+  .sheet-handle {
+    width: 40px; height: 4px; border-radius: 2px;
+    background: var(--border); margin: 0 auto 20px;
+  }
+  .sheet-title {
+    font-size: 20px; font-weight: 800; margin-bottom: 20px;
+  }
+  .sheet-title span { color: var(--accent); }
+
+  /* ── FORM ── */
+  .form-group { margin-bottom: 16px; }
+  .form-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-dim); display: block; margin-bottom: 8px;
+  }
+  .form-input {
+    width: 100%; padding: 14px 16px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; color: var(--text);
+    font-family: var(--font-mono); font-size: 16px;
+    outline: none; transition: border-color .2s;
+  }
+  .form-input:focus { border-color: var(--accent); }
+  .form-input[readonly] { color: var(--text-dim); }
+
+  .btn-save {
+    width: 100%; padding: 16px;
+    background: var(--accent3); color: #fff;
+    border: none; border-radius: 14px;
+    font-family: var(--font-display); font-size: 16px; font-weight: 800;
+    cursor: pointer; transition: all .2s; margin-top: 6px;
+    box-shadow: 0 4px 20px rgba(162,89,255,0.3);
+  }
+  .btn-save:active { transform: scale(0.97); }
+
+  .btn-cancel {
+    width: 100%; padding: 14px;
+    background: transparent; color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 14px;
+    font-family: var(--font-display); font-size: 15px; font-weight: 700;
+    cursor: pointer; margin-top: 10px;
+    transition: all .2s;
+  }
+  .btn-cancel:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* ── PRODUCT LIST ── */
+  #list-modal .modal-sheet { max-height: 80vh; display: flex; flex-direction: column; }
+  .list-scroll { overflow-y: auto; flex: 1; padding-right: 4px; }
+  .list-scroll::-webkit-scrollbar { width: 4px; }
+  .list-scroll::-webkit-scrollbar-track { background: transparent; }
+  .list-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .product-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+  .product-item:last-child { border-bottom: none; }
+  .product-code { font-family: var(--font-mono); font-size: 13px; color: var(--text-dim); }
+  .product-price-badge {
+    font-family: var(--font-mono); font-size: 18px; font-weight: 700;
+    color: #00ff88; margin-left: auto;
+    white-space: nowrap;
+  }
+  .btn-delete {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-dim); border-radius: 8px;
+    padding: 6px 10px; cursor: pointer; font-size: 14px;
+    transition: all .2s; flex-shrink: 0;
+  }
+  .btn-delete:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  .empty-state {
+    text-align: center; padding: 40px 0;
+    color: var(--text-dim); font-size: 14px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 120px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 12px;
+    padding: 12px 20px; font-size: 14px; font-weight: 700;
+    z-index: 999; opacity: 0;
+    transition: all .3s; white-space: nowrap;
+    pointer-events: none;
+  }
+  #toast.show {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+  }
+  #toast.success { border-color: #00ff88; color: #00ff88; }
+  #toast.error   { border-color: var(--accent2); color: var(--accent2); }
+
+  /* ── PULSE ANIMATION ── */
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .pulsing { animation: pulse 1.2s ease-in-out infinite; }
+
+  /* ── DESKTOP ── */
+  @media (min-width: 480px) {
+    #app { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+    .modal-sheet { border-radius: 24px !important; margin-bottom: 40px; }
+    .modal-backdrop { align-items: center; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logo">Scan<span>Price</span></div>
+    <button class="btn-list" onclick="openList()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="3" cy="12" r="1.5" fill="currentColor"/><circle cx="3" cy="18" r="1.5" fill="currentColor"/></svg>
+      Productos
+    </button>
+  </header>
+
+  <main>
+    <!-- Scanner -->
+    <div id="scanner-wrap">
+      <div id="interactive"></div>
+      <div class="scanner-overlay">
+        <div class="scan-frame">
+          <span></span>
+          <div class="scan-line" id="scan-line" style="display:none"></div>
+        </div>
+      </div>
+      <div class="scanner-idle-msg" id="idle-msg">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="4" height="4"/>
+          <line x1="20" y1="14" x2="20" y2="14" stroke-width="2"/><line x1="20" y1="20" x2="20" y2="20" stroke-width="2"/>
+        </svg>
+        <p>Presiona Escanear</p>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="result-card">
+      <div class="result-label">Resultado</div>
+      <div class="result-placeholder" id="result-placeholder">Esperando escaneo...</div>
+      <div id="result-content" style="display:none">
+        <div class="result-code" id="result-code"></div>
+        <div class="result-price" id="result-price"></div>
+        <div class="result-notfound" id="result-notfound" style="display:none">Producto no registrado</div>
+      </div>
+    </div>
+
+    <!-- Scan button -->
+    <button id="btn-scan" onclick="toggleScan()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M2 8V5a2 2 0 0 1 2-2h3M2 16v3a2 2 0 0 0 2 2h3M22 8V5a2 2 0 0 0-2-2h-3M22 16v3a2 2 0 0 1-2 2h-3"/>
+        <line x1="7" y1="12" x2="17" y2="12" stroke-width="2.5"/>
+      </svg>
+      <span id="btn-scan-text">Escanear</span>
+    </button>
+  </main>
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div class="modal-backdrop" id="add-modal">
+  <div class="modal-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Nuevo <span>Producto</span></div>
+    <div class="form-group">
+      <label class="form-label">Código de barras</label>
+      <input class="form-input" id="form-code" readonly>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Precio ($)</label>
+      <input class="form-input" id="form-price" type="number" step="0.01" min="0" placeholder="0.00" inputmode="decimal">
+    </div>
+    <button class="btn-save" onclick="saveProduct()">Guardar Producto</button>
+    <button class="btn-cancel" onclick="closeAddModal()">Cancelar</button>
+  </div>
+</div>
+
+<!-- LIST MODAL -->
+<div class="modal-backdrop" id="list-modal">
+  <div class="modal-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Mis <span>Productos</span></div>
+    <div class="list-scroll" id="product-list-container"></div>
+    <button class="btn-cancel" onclick="closeList()" style="margin-top:16px">Cerrar</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ── STATE ──
+let isScanning = false;
+let lastCode = null;
+let scanLock = false;
+let audioCtx = null;
+
+// ── STORAGE ──
+function getProducts() {
+  try { return JSON.parse(localStorage.getItem('scanprice_products') || '{}'); }
+  catch { return {}; }
+}
+function saveProducts(p) { localStorage.setItem('scanprice_products', JSON.stringify(p)); }
+
+// ── AUDIO ──
+function beep(type = 'found') {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    if (type === 'found') {
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(1100, audioCtx.currentTime + 0.07);
+    } else {
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    }
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+  } catch(e) {}
+}
+
+function vibrate(pattern = [80]) {
+  if (navigator.vibrate) navigator.vibrate(pattern);
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg, type = '') {
+  const el = document.getElementById('toast');
+  clearTimeout(toastTimer);
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  toastTimer = setTimeout(() => { el.className = ''; }, 2500);
+}
+
+// ── SCANNER ──
+function toggleScan() {
+  isScanning ? stopScan() : startScan();
+}
+
+function startScan() {
+  const wrap = document.getElementById('scanner-wrap');
+  const btn = document.getElementById('btn-scan');
+  const btnText = document.getElementById('btn-scan-text');
+  const idleMsg = document.getElementById('idle-msg');
+  const scanLine = document.getElementById('scan-line');
+
+  isScanning = true;
+  btn.classList.add('scanning');
+  btnText.textContent = 'Detener';
+  wrap.classList.add('active');
+  scanLine.style.display = 'block';
+
+  const config = {
+    inputStream: {
+      name: 'Live',
+      type: 'LiveStream',
+      target: document.getElementById('interactive'),
+      constraints: {
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        facingMode: 'environment'
+      }
+    },
+    locator: { patchSize: 'medium', halfSample: true },
+    numOfWorkers: navigator.hardwareConcurrency > 2 ? 2 : 1,
+    frequency: 10,
+    decoder: {
+      readers: [
+        'ean_reader', 'ean_8_reader', 'code_128_reader',
+        'code_39_reader', 'upc_reader', 'upc_e_reader',
+        'codabar_reader', 'i2of5_reader'
+      ]
+    },
+    locate: true
+  };
+
+  Quagga.init(config, function(err) {
+    if (err) {
+      console.error(err);
+      stopScan();
+      showToast('Error accediendo a la cámara', 'error');
+      return;
+    }
+    idleMsg.style.display = 'none';
+    Quagga.start();
+  });
+
+  Quagga.onDetected(onCodeDetected);
+}
+
+function stopScan() {
+  isScanning = false;
+  const btn = document.getElementById('btn-scan');
+  const btnText = document.getElementById('btn-scan-text');
+  const wrap = document.getElementById('scanner-wrap');
+  const scanLine = document.getElementById('scan-line');
+  const idleMsg = document.getElementById('idle-msg');
+
+  btn.classList.remove('scanning');
+  btnText.textContent = 'Escanear';
+  wrap.classList.remove('active', 'found', 'new-product');
+  scanLine.style.display = 'none';
+  idleMsg.style.display = 'flex';
+
+  try { Quagga.offDetected(onCodeDetected); Quagga.stop(); } catch(e) {}
+}
+
+function onCodeDetected(result) {
+  if (scanLock) return;
+  const code = result.codeResult && result.codeResult.code;
+  if (!code || code === lastCode) return;
+
+  // confidence check
+  const errors = result.codeResult.decodedCodes
+    ? result.codeResult.decodedCodes
+        .filter(x => x.error !== undefined)
+        .map(x => x.error)
+    : [];
+  const avgError = errors.length ? errors.reduce((a,b) => a+b, 0) / errors.length : 1;
+  if (avgError > 0.25) return;
+
+  scanLock = true;
+  lastCode = code;
+  setTimeout(() => { scanLock = false; }, 3000);
+
+  stopScan();
+  handleCode(code);
+}
+
+// ── HANDLE SCANNED CODE ──
+function handleCode(code) {
+  const products = getProducts();
+  const wrap = document.getElementById('scanner-wrap');
+  const card = document.getElementById('result-card');
+  const placeholder = document.getElementById('result-placeholder');
+  const content = document.getElementById('result-content');
+  const codeEl = document.getElementById('result-code');
+  const priceEl = document.getElementById('result-price');
+  const notFoundEl = document.getElementById('result-notfound');
+
+  placeholder.style.display = 'none';
+  content.style.display = 'block';
+  codeEl.textContent = code;
+
+  if (products[code] !== undefined) {
+    // FOUND
+    const price = products[code];
+    priceEl.textContent = '$' + parseFloat(price).toFixed(2);
+    priceEl.style.display = 'block';
+    notFoundEl.style.display = 'none';
+    card.className = 'found';
+    wrap.classList.add('found');
+    beep('found');
+    vibrate([60, 30, 60]);
+    showToast('✓ Producto encontrado', 'success');
+  } else {
+    // NOT FOUND
+    priceEl.style.display = 'none';
+    notFoundEl.style.display = 'block';
+    card.className = 'miss';
+    wrap.classList.add('new-product');
+    beep('miss');
+    vibrate([100]);
+    showToast('Producto no registrado', 'error');
+    openAddModal(code);
+  }
+}
+
+// ── ADD MODAL ──
+function openAddModal(code) {
+  document.getElementById('form-code').value = code;
+  document.getElementById('form-price').value = '';
+  document.getElementById('add-modal').classList.add('show');
+  setTimeout(() => document.getElementById('form-price').focus(), 350);
+}
+
+function closeAddModal() {
+  document.getElementById('add-modal').classList.remove('show');
+}
+
+function saveProduct() {
+  const code = document.getElementById('form-code').value.trim();
+  const priceRaw = document.getElementById('form-price').value;
+  const price = parseFloat(priceRaw);
+
+  if (!code) { showToast('Código inválido', 'error'); return; }
+  if (isNaN(price) || price < 0) { showToast('Ingresa un precio válido', 'error'); return; }
+
+  const products = getProducts();
+  products[code] = price;
+  saveProducts(products);
+
+  closeAddModal();
+  showToast('✓ Producto guardado', 'success');
+  beep('found');
+  vibrate([40, 20, 40]);
+
+  // Update result card
+  const card = document.getElementById('result-card');
+  const priceEl = document.getElementById('result-price');
+  const notFoundEl = document.getElementById('result-notfound');
+  priceEl.textContent = '$' + price.toFixed(2);
+  priceEl.style.display = 'block';
+  notFoundEl.style.display = 'none';
+  card.className = 'found';
+}
+
+// ── LIST MODAL ──
+function openList() {
+  renderList();
+  document.getElementById('list-modal').classList.add('show');
+}
+function closeList() {
+  document.getElementById('list-modal').classList.remove('show');
+}
+
+function renderList() {
+  const products = getProducts();
+  const container = document.getElementById('product-list-container');
+  const keys = Object.keys(products);
+
+  if (!keys.length) {
+    container.innerHTML = '<div class="empty-state">Sin productos guardados</div>';
+    return;
+  }
+
+  container.innerHTML = keys.map(code => `
+    <div class="product-item" id="item-${CSS.escape(code)}">
+      <div>
+        <div class="result-label" style="margin:0 0 2px">Código</div>
+        <div class="product-code">${code}</div>
+      </div>
+      <div class="product-price-badge">$${parseFloat(products[code]).toFixed(2)}</div>
+      <button class="btn-delete" onclick="deleteProduct('${code}')">✕</button>
+    </div>
+  `).join('');
+}
+
+function deleteProduct(code) {
+  const products = getProducts();
+  delete products[code];
+  saveProducts(products);
+  renderList();
+  showToast('Producto eliminado', 'error');
+  vibrate([40]);
+  if (lastCode === code) {
+    const card = document.getElementById('result-card');
+    const priceEl = document.getElementById('result-price');
+    const notFoundEl = document.getElementById('result-notfound');
+    priceEl.style.display = 'none';
+    notFoundEl.style.display = 'block';
+    card.className = 'miss';
+  }
+}
+
+// ── CLOSE MODALS ON BACKDROP ──
+document.getElementById('add-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeAddModal();
+});
+document.getElementById('list-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeList();
+});
+
+// Enter in price field saves
+document.getElementById('form-price').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') saveProduct();
+});
+
+// ── FALLBACK: BarcodeDetector API ──
+// (Quagga is primary; BarcodeDetector used as manual trigger for supported devices)
+async function tryNativeBarcode() {
+  if (!('BarcodeDetector' in window)) return false;
+  return true;
+}
+</script>
+</body>
+</html>
