@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Green's Carpet & Upholstery Cleaning | Bonner Springs, KS</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init('olFi0GxDR4FXZj0K2');</script>
 <style>
@@ -76,9 +77,124 @@
   .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
   .hamburger span { width: 26px; height: 2px; background: white; border-radius: 2px; }
 
+  /* HERITAGE BAR */
+  .heritage-bar {
+    position: fixed; top: 80px; left: 0; right: 0; z-index: 999;
+    background: var(--gold);
+    padding: 6px 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .heritage-bar-inner {
+    display: flex; align-items: center; gap: 40px;
+    white-space: nowrap;
+    animation: marquee 28s linear infinite;
+  }
+  .heritage-bar-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--navy);
+  }
+  .heritage-bar-dot { width: 4px; height: 4px; background: var(--navy); border-radius: 50%; opacity: 0.5; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* TOP SPOTLIGHT STRIP — new section just below heritage bar */
+  .top-spotlight {
+    margin-top: calc(80px + 32px); /* nav + heritage bar */
+    background: linear-gradient(135deg, #0d1a3a 0%, var(--navy) 60%, #0f2040 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 0 5%;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    min-height: 96px;
+    position: relative;
+    overflow: hidden;
+  }
+  .top-spotlight::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 120%, rgba(201,162,39,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .spotlight-card {
+    flex: 1;
+    max-width: 580px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 32px;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    transition: background .25s;
+  }
+  .spotlight-card:hover { background: rgba(255,255,255,0.04); }
+  .spotlight-card + .spotlight-card {
+    border-left: 1px solid rgba(255,255,255,0.12);
+  }
+  .spotlight-icon {
+    flex-shrink: 0;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+  .spotlight-icon--restretch {
+    background: rgba(201,162,39,0.15);
+    border: 2px solid rgba(201,162,39,0.5);
+  }
+  .spotlight-icon--flood {
+    background: rgba(42,157,143,0.15);
+    border: 2px solid rgba(42,157,143,0.5);
+  }
+  .spotlight-text { flex: 1; }
+  .spotlight-label {
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 3px;
+  }
+  .spotlight-label--teal { color: var(--teal); }
+  .spotlight-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 1.8vw, 1.22rem);
+    font-weight: 700; color: var(--white);
+    line-height: 1.2; margin-bottom: 4px;
+  }
+  .spotlight-sub {
+    font-size: 0.78rem; color: rgba(255,255,255,0.6); line-height: 1.4;
+  }
+  .spotlight-badge {
+    flex-shrink: 0;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .spotlight-badge--gold {
+    background: var(--gold); color: var(--navy);
+  }
+  .spotlight-badge--teal {
+    background: var(--teal); color: white;
+    animation: pulse-teal 2s ease-in-out infinite;
+  }
+  .top-spotlight--single {
+    justify-content: center;
+  }
+  .top-spotlight--single .spotlight-card {
+    max-width: 760px;
+    justify-content: center;
+  }
+  @keyframes pulse-teal {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(42,157,143,0.5); }
+    50% { box-shadow: 0 0 0 8px rgba(42,157,143,0); }
+  }
+
   /* HERO */
   .hero {
-    margin-top: 116px; min-height: calc(100vh - 116px);
+    min-height: calc(100vh - 80px - 32px);
     background: url("imgen/imagen3.png") center center / cover no-repeat;
     display: flex; align-items: center; position: relative; overflow: hidden;
   }
@@ -146,7 +262,6 @@
   .services-header .section-subtitle { margin: 0 auto; }
   .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
 
-  /* Base card */
   .service-card {
     border-radius: 12px; overflow: hidden;
     position: relative; display: block;
@@ -156,8 +271,6 @@
     transition: transform .35s ease, box-shadow .35s ease;
   }
   .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(26,39,68,0.25); }
-
-  /* Overlay — hidden by default, fades in on hover */
   .service-card::before {
     content: '';
     position: absolute; inset: 0; z-index: 1;
@@ -166,8 +279,6 @@
     transition: opacity .4s ease;
   }
   .service-card:hover::before { opacity: 1; }
-
-  /* Permanent dark gradient just for the title at the bottom */
   .service-card::after {
     content: '';
     position: absolute; inset: 0; z-index: 1;
@@ -175,14 +286,8 @@
     transition: opacity .4s ease;
   }
   .service-card:hover::after { opacity: 0; }
-
-  /* Icon hidden */
   .service-icon { display: none; }
-
-  /* All card content sits above overlays */
   .service-card > *:not(.service-icon):not(.service-card--water-bg) { position: relative; z-index: 2; }
-
-  /* Title always visible at bottom */
   .service-card h3 {
     position: absolute !important; bottom: 24px; left: 24px; right: 24px;
     font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700;
@@ -191,12 +296,7 @@
     text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     transform: translateY(0);
   }
-  .service-card:hover h3 {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-
-  /* Content block — title + text together, centered, shown on hover */
+  .service-card:hover h3 { opacity: 0; transform: translateY(-8px); }
   .service-card .card-hover-content {
     position: absolute !important;
     inset: 0; z-index: 2;
@@ -206,9 +306,7 @@
     opacity: 0; transform: translateY(10px);
     transition: opacity .4s ease .05s, transform .4s ease .05s;
   }
-  .service-card:hover .card-hover-content {
-    opacity: 1; transform: translateY(0);
-  }
+  .service-card:hover .card-hover-content { opacity: 1; transform: translateY(0); }
   .service-card .card-hover-content h4 {
     font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
     color: var(--gold-light) !important; margin: 0 0 12px 0;
@@ -220,8 +318,6 @@
     line-height: 1.7; margin: 0 !important;
     opacity: 1 !important; transform: none !important;
   }
-
-  /* Description text — only used if NOT wrapped in card-hover-content */
   .service-card > p {
     position: absolute !important; top: 80px; left: 24px; right: 24px;
     font-size: 0.88rem !important; color: rgba(255,255,255,0.88) !important;
@@ -231,7 +327,6 @@
   }
   .service-card:hover > p { opacity: 1; transform: translateY(0); }
 
-  /* Individual background images */
   .service-card--carpet     { background: url("imgen/imagen4.png")  center center / cover no-repeat; }
   .service-card--upholstery { background: url("imgen/imagen8.png")  center center / cover no-repeat; }
   .service-card--restretch  { background: url("imgen/imagen5.png")  center center / cover no-repeat; }
@@ -241,6 +336,14 @@
   .service-card--residential{ background: url("imgen/imagen11.png") center center / cover no-repeat; }
   .service-card--military   { background: url("imgen/imagen12.png") center center / cover no-repeat; }
   .service-card--water-bg   { display: none; }
+
+  .restretch-badge {
+    position: absolute; top: 16px; left: 16px; z-index: 3;
+    background: var(--gold); color: var(--navy);
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
 
   /* ABOUT */
   .about { background: var(--white); }
@@ -328,30 +431,6 @@
   .float-cta { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: var(--gold); color: var(--navy); border: none; border-radius: 50px; padding: 14px 24px; font-weight: 700; font-size: 0.85rem; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; transition: all .25s; text-decoration: none; letter-spacing: 0.5px; }
   .float-cta:hover { background: var(--gold-light); transform: translateY(-3px); }
 
-  /* HERITAGE BAR */
-  .heritage-bar {
-    position: fixed; top: 80px; left: 0; right: 0; z-index: 999;
-    background: var(--gold);
-    padding: 6px 0;
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-  }
-  .heritage-bar-inner {
-    display: flex; align-items: center; gap: 40px;
-    white-space: nowrap;
-    animation: marquee 28s linear infinite;
-  }
-  .heritage-bar-item {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 2.5px;
-    text-transform: uppercase; color: var(--navy);
-  }
-  .heritage-bar-dot { width: 4px; height: 4px; background: var(--navy); border-radius: 50%; opacity: 0.5; }
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .reveal { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
@@ -364,6 +443,10 @@
     .nav-links { display: none; position: fixed; top: 116px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 998; }
     .nav-links.open { display: flex; }
     .hamburger { display: flex; }
+    .top-spotlight { flex-direction: column; min-height: auto; padding: 0; }
+    .spotlight-card { padding: 16px 20px; max-width: 100%; }
+    .spotlight-card + .spotlight-card { border-left: none; border-top: 1px solid rgba(255,255,255,0.12); }
+    .spotlight-badge { display: none; }
     .hero-content { grid-template-columns: 1fr; }
     .hero-card { display: none; }
     .about-grid { grid-template-columns: 1fr; }
@@ -433,6 +516,21 @@
     <span class="heritage-bar-dot"></span>
   </div>
 </div>
+
+<!-- TOP SPOTLIGHT: 24Hr Emergency Flood only -->
+<div class="top-spotlight top-spotlight--single">
+  <a href="tel:+19132072033" class="spotlight-card">
+    <div class="spotlight-icon spotlight-icon--flood">🌊</div>
+    <div class="spotlight-text">
+      <div class="spotlight-label spotlight-label--teal">Emergency · Always Available</div>
+      <div class="spotlight-title">24-Hour Emergency Flood Service</div>
+      <div class="spotlight-sub">Call now: (913) 207-2033 &nbsp;·&nbsp; (913) 207-6958</div>
+    </div>
+    <div class="spotlight-badge spotlight-badge--teal">Call 24/7</div>
+  </a>
+</div>
+
+<!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-glow"></div>
   <div class="hero-content">
@@ -508,10 +606,11 @@
         </div>
       </a>
       <a href="#contact" class="service-card service-card--restretch reveal">
-        <h3>Carpet Restretching</h3>
+        <div class="restretch-badge">↔️ Popular Service</div>
+        <h3>Carpet Re-stretching</h3>
         <div class="card-hover-content">
-          <h4>Carpet Restretching</h4>
-          <p>Ripples, bubbles, or wrinkles? We use power stretchers to eliminate looseness, reinstall tack strips and trim excess carpet for a perfect finish.</p>
+          <h4>Carpet Re-stretching</h4>
+          <p>Ripples, bubbles, or wrinkles ruining the look of your floors? We use professional power stretchers to pull your carpet tight, reinstall tack strips, and trim any excess — leaving a flawless, like-new finish. Fast results, guaranteed.</p>
         </div>
       </a>
       <a href="#contact" class="service-card service-card--repair reveal">
@@ -673,8 +772,8 @@
       <div class="payment-chip">PayPal</div>
       <div class="payment-chip">Venmo</div>
       <div class="payment-chip">Apple Pay</div>
-      <div class="payment-chip">Google Pay</div>
-      <div class="payment-chip">Samsung Pay</div>
+      <div class="payment-chip">Zelle</div>
+      <div class="payment-chip">Cash App</div>
     </div>
   </div>
 </section>
@@ -689,7 +788,23 @@
         <p class="section-subtitle" style="margin-bottom:32px">We're ready to help. We respond quickly to all inquiries.</p>
         <div class="contact-detail">
           <div class="contact-icon">📞</div>
-          <div><strong>Phone</strong><span><a href="tel:+19132072033" style="color:var(--gold);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a></span></div>
+          <div>
+            <strong>Phone</strong>
+            <span>
+              <a href="tel:+19132072033" style="color:var(--gold);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a>
+            </span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">🌊</div>
+          <div>
+            <strong>24-Hour Emergency Flood Service</strong>
+            <span>
+              <a href="tel:+19132072033" style="color:var(--gold);font-weight:700;text-decoration:none;">(913) 207-2033</a>
+              &nbsp;·&nbsp;
+              <a href="tel:+19132076958" style="color:var(--gold);font-weight:700;text-decoration:none;">(913) 207-6958</a>
+            </span>
+          </div>
         </div>
         <div class="contact-detail">
           <div class="contact-icon">📍</div>
@@ -697,7 +812,7 @@
         </div>
         <div class="contact-detail">
           <div class="contact-icon">📧</div>
-          <div><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection#0d6a7f6868637e6e6c7f7d68796e61686c6364636a4d746c656262236e6260" style="color:inherit;text-decoration:none"><span class="__cf_email__" data-cfemail="492e3b2c2c273a2a283b392c3d2a252c282720272e093028212626672a2624">[email&#160;protected]</span></a></span></div>
+          <div><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection#6c0b1e0909021f0f0d1e1c09182c09140d011c0009420f0301" style="color:inherit;text-decoration:none"><span class="__cf_email__" data-cfemail="2641544343485545475456435266435e474b564a430845494b">[email&#160;protected]</span></a></span></div>
         </div>
         <div class="contact-detail">
           <div class="contact-icon">⏰</div>
@@ -706,6 +821,10 @@
         <div class="contact-detail">
           <div class="contact-icon">🎖️</div>
           <div><strong>Military Discounts</strong><span>Available for active military and veterans</span></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon"><i class="fa-brands fa-facebook" style="font-size:1.3rem;color:#1877f2;"></i></div>
+          <div><strong>Facebook</strong><span><a href="https://www.facebook.com/GreensCarpetandUpholsteryCleaning" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">Green's Carpet & Upholstery Cleaning</a></span></div>
         </div>
       </div>
       <div class="contact-form-card reveal">
@@ -751,6 +870,7 @@
       <a href="#process">Our Process</a>
       <a href="gallery.html">Gallery</a>
       <a href="#contact">Contact</a>
+      <a href="https://www.facebook.com/GreensCarpetandUpholsteryCleaning" target="_blank" rel="noopener" style="color:var(--gold-light);display:inline-flex;align-items:center;gap:6px;"><i class="fa-brands fa-facebook"></i> Facebook</a>
     </div>
   </div>
   <div class="footer-bottom">Copyright © 2025 Greens Carpet & Upholstery Cleaning, all rights reserved. · Est. 1993 · Bonner Springs, KS 66012</div>
@@ -758,7 +878,7 @@
 
 <a href="tel:+19132072033" class="float-cta">📞 (913) 207-2033</a>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
 document.querySelectorAll('.reveal').forEach(el => el.classList.add('hidden'));
@@ -802,14 +922,4 @@ window.addEventListener('scroll', () => {
   const nav = document.querySelector('nav');
   if (window.scrollY > 30) {
     nav.style.background = 'rgba(26,39,68,0.92)';
-    nav.style.backdropFilter = 'blur(12px)';
-    nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
-  } else {
-    nav.style.background = 'var(--navy)';
-    nav.style.backdropFilter = 'none';
-    nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
-  }
-});
-</script>
-</body>
-</html>
+    nav.style.backdropFilter =
