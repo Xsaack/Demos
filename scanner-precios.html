@@ -32,6 +32,19 @@
 
   html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-display); overflow: hidden; }
 
+  /* Hidden scanner container — off-screen but rendered so QuaggaJS can access video */
+  #scanner-hidden {
+    position: fixed;
+    left: -9999px;
+    top: -9999px;
+    width: 320px;
+    height: 240px;
+    pointer-events: none;
+    visibility: hidden;
+  }
+  #scanner-hidden video { width: 320px !important; height: 240px !important; }
+  #scanner-hidden canvas { display: none !important; }
+
   #app {
     display: flex; flex-direction: column;
     height: 100dvh; max-width: 480px;
@@ -74,63 +87,71 @@
     gap: 12px; overflow: hidden; min-height: 0;
   }
 
-  /* ── SCANNER ── */
-  #scanner-wrap {
-    width: 100%; flex: 1; max-height: 260px; min-height: 160px;
+  /* ── SCAN INDICATOR (replaces the camera view) ── */
+  #scan-indicator {
+    width: 100%; flex: 1; max-height: 200px; min-height: 130px;
     position: relative; border-radius: var(--radius); overflow: hidden;
-    background: #000; border: 1px solid var(--border); flex-shrink: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; flex-shrink: 0; transition: border-color .3s, box-shadow .3s;
   }
-  #scanner-wrap.active { border-color: var(--accent); box-shadow: var(--glow); }
-  #scanner-wrap.found  { border-color: var(--green); box-shadow: 0 0 30px rgba(0,255,136,0.3); }
-  #scanner-wrap.new-product { border-color: var(--accent3); box-shadow: 0 0 30px rgba(162,89,255,0.3); }
-  #scanner-wrap.sale-found { border-color: var(--accent4); box-shadow: 0 0 30px rgba(255,184,0,0.3); }
+  #scan-indicator.active   { border-color: var(--accent); box-shadow: var(--glow); }
+  #scan-indicator.found    { border-color: var(--green);  box-shadow: 0 0 30px rgba(0,255,136,0.3); }
+  #scan-indicator.new-product { border-color: var(--accent3); box-shadow: 0 0 30px rgba(162,89,255,0.3); }
+  #scan-indicator.sale-found  { border-color: var(--accent4); box-shadow: 0 0 30px rgba(255,184,0,0.3); }
+  #scan-indicator.mode-sale   { border-color: rgba(255,184,0,0.3); }
 
-  #interactive { width: 100%; height: 100%; }
-  #interactive video { width: 100% !important; height: 100% !important; object-fit: cover; }
-  #interactive canvas { display: none !important; }
-
-  .scanner-overlay {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center; pointer-events: none;
+  /* Animated barcode icon */
+  .barcode-icon {
+    display: flex; align-items: flex-end; gap: 3px; height: 44px;
   }
-  .scan-frame { width: 200px; height: 100px; position: relative; }
-  .scan-frame::before, .scan-frame::after,
-  .scan-frame > span::before, .scan-frame > span::after {
-    content: ''; position: absolute; width: 20px; height: 20px;
-    border-color: var(--accent); border-style: solid;
+  .barcode-icon .bar {
+    background: var(--text-dim); border-radius: 2px; width: 4px;
+    transition: background .3s;
   }
-  .scan-frame::before  { top:0; left:0;   border-width: 3px 0 0 3px; }
-  .scan-frame::after   { top:0; right:0;  border-width: 3px 3px 0 0; }
-  .scan-frame > span::before { bottom:0; left:0;  border-width: 0 0 3px 3px; }
-  .scan-frame > span::after  { bottom:0; right:0; border-width: 0 3px 3px 0; }
+  #scan-indicator.active .barcode-icon .bar { background: var(--accent); }
+  #scan-indicator.mode-sale .barcode-icon .bar { background: rgba(255,184,0,0.5); }
+  #scan-indicator.mode-sale.active .barcode-icon .bar { background: var(--accent4); }
 
-  #scanner-wrap.mode-sale .scan-frame::before,
-  #scanner-wrap.mode-sale .scan-frame::after,
-  #scanner-wrap.mode-sale .scan-frame > span::before,
-  #scanner-wrap.mode-sale .scan-frame > span::after { border-color: var(--accent4); }
+  @keyframes barPulse {
+    0%,100% { transform: scaleY(1); }
+    50%      { transform: scaleY(0.5); }
+  }
+  #scan-indicator.active .barcode-icon .bar { animation: barPulse .6s ease-in-out infinite; }
+  #scan-indicator.active .barcode-icon .bar:nth-child(1) { animation-delay: 0s; }
+  #scan-indicator.active .barcode-icon .bar:nth-child(2) { animation-delay: .08s; }
+  #scan-indicator.active .barcode-icon .bar:nth-child(3) { animation-delay: .16s; }
+  #scan-indicator.active .barcode-icon .bar:nth-child(4) { animation-delay: .06s; }
+  #scan-indicator.active .barcode-icon .bar:nth-child(5) { animation-delay: .14s; }
+  #scan-indicator.active .barcode-icon .bar:nth-child(6) { animation-delay: .04s; }
+  #scan-indicator.active .barcode-icon .bar:nth-child(7) { animation-delay: .12s; }
+  #scan-indicator.active .barcode-icon .bar:nth-child(8) { animation-delay: .02s; }
 
-  .scan-line {
-    position: absolute; left: 0; right: 0; height: 2px;
+  .scan-status-text {
+    font-size: 13px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-dim);
+    transition: color .3s;
+  }
+  #scan-indicator.active .scan-status-text { color: var(--accent); }
+  #scan-indicator.mode-sale.active .scan-status-text { color: var(--accent4); }
+
+  /* Sweep line animation */
+  .sweep-line {
+    position: absolute; left: 20px; right: 20px; height: 2px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    animation: scanMove 1.2s ease-in-out infinite;
-    box-shadow: 0 0 8px var(--accent);
+    box-shadow: 0 0 8px var(--accent); display: none;
+    animation: sweepMove 1s ease-in-out infinite;
+    border-radius: 2px;
   }
-  #scanner-wrap.mode-sale .scan-line {
+  #scan-indicator.mode-sale .sweep-line {
     background: linear-gradient(90deg, transparent, var(--accent4), transparent);
     box-shadow: 0 0 8px var(--accent4);
   }
-  @keyframes scanMove {
-    0%,100% { top: 6px; opacity: 0.5; }
-    50% { top: calc(100% - 6px); opacity: 1; }
+  #scan-indicator.active .sweep-line { display: block; }
+  @keyframes sweepMove {
+    0%,100% { top: 20px; opacity: 0.4; }
+    50%      { top: calc(100% - 20px); opacity: 1; }
   }
-
-  .scanner-idle-msg {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 8px; color: var(--text-dim); background: var(--surface);
-  }
-  .scanner-idle-msg svg { opacity: 0.3; }
-  .scanner-idle-msg p { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 
   /* ── RESULT CARD ── */
   #result-card {
@@ -216,12 +237,15 @@
   /* ── BUTTONS ROW ── */
   .btns-row { display: flex; gap: 10px; width: 100%; flex-shrink: 0; }
 
+  /* Hold-to-scan button */
   #btn-scan {
     flex: 1; padding: 16px 10px; border-radius: 14px; border: none;
     background: var(--accent); color: #000; font-family: var(--font-display);
-    font-size: 15px; font-weight: 800; cursor: pointer; transition: all .2s;
+    font-size: 15px; font-weight: 800; cursor: pointer; transition: background .2s, box-shadow .2s, transform .1s;
     display: flex; align-items: center; justify-content: center; gap: 8px;
     box-shadow: 0 4px 20px rgba(0,229,255,0.3);
+    user-select: none; -webkit-user-select: none;
+    touch-action: none; /* prevent scroll interference */
   }
   #btn-scan:active { transform: scale(0.97); }
   #btn-scan.scanning { background: var(--accent2); box-shadow: 0 4px 20px rgba(255,61,113,0.3); }
@@ -341,10 +365,6 @@
   #toast.error   { border-color: var(--accent2); color: var(--accent2); }
   #toast.sale    { border-color: var(--accent4); color: var(--accent4); }
 
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-  .pulsing { animation: pulse 1s ease-in-out infinite; }
-
-  /* ── CART ADD FLASH ── */
   @keyframes flashGreen {
     0% { background: rgba(0,255,136,0.25); }
     100% { background: transparent; }
@@ -359,6 +379,12 @@
 </style>
 </head>
 <body>
+
+<!-- Hidden scanner target (off-screen, not visible but accessible to QuaggaJS) -->
+<div id="scanner-hidden">
+  <div id="interactive"></div>
+</div>
+
 <div id="app">
   <header>
     <div class="logo">Scan<span>Price</span></div>
@@ -381,22 +407,20 @@
   </div>
 
   <main>
-    <!-- Scanner -->
-    <div id="scanner-wrap">
-      <div id="interactive"></div>
-      <div class="scanner-overlay">
-        <div class="scan-frame">
-          <span></span>
-          <div class="scan-line" id="scan-line" style="display:none"></div>
-        </div>
+    <!-- Scan Indicator (replaces camera preview) -->
+    <div id="scan-indicator">
+      <div class="barcode-icon" id="barcode-icon">
+        <div class="bar" style="height:44px"></div>
+        <div class="bar" style="height:30px"></div>
+        <div class="bar" style="height:44px"></div>
+        <div class="bar" style="height:20px"></div>
+        <div class="bar" style="height:44px"></div>
+        <div class="bar" style="height:36px"></div>
+        <div class="bar" style="height:44px"></div>
+        <div class="bar" style="height:28px"></div>
       </div>
-      <div class="scanner-idle-msg" id="idle-msg">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="4" height="4"/>
-        </svg>
-        <p>Presiona Escanear</p>
-      </div>
+      <div class="scan-status-text" id="scan-status-text">Mantén para escanear</div>
+      <div class="sweep-line"></div>
     </div>
 
     <!-- SCAN mode: result card -->
@@ -431,7 +455,9 @@
 
     <!-- Buttons -->
     <div class="btns-row">
-      <button id="btn-scan" onclick="toggleScan()">
+      <button id="btn-scan"
+        onmousedown="holdStart()" onmouseup="holdEnd()" onmouseleave="holdEnd()"
+        ontouchstart="holdStart(event)" ontouchend="holdEnd()" ontouchcancel="holdEnd()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M2 8V5a2 2 0 0 1 2-2h3M2 16v3a2 2 0 0 0 2 2h3M22 8V5a2 2 0 0 0-2-2h-3M22 16v3a2 2 0 0 1-2 2h-3"/>
           <line x1="7" y1="12" x2="17" y2="12" stroke-width="2.5"/>
@@ -450,7 +476,7 @@
 <div class="modal-backdrop" id="add-modal">
   <div class="modal-sheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title" id="add-modal-title">Nuevo <span>Producto</span></div>
+    <div class="sheet-title">Nuevo <span>Producto</span></div>
     <div class="form-group">
       <label class="form-label">Código de barras</label>
       <input class="form-input" id="form-code" readonly>
@@ -518,9 +544,7 @@
     <div class="sheet-title">Confirmar <span class="sale-accent">Venta</span></div>
     <div class="checkout-total" id="checkout-total-display">$0.00</div>
     <div class="checkout-items" id="checkout-items-display"></div>
-    <button class="btn-confirm-checkout" onclick="confirmCheckout()">
-      ✓ Confirmar Venta
-    </button>
+    <button class="btn-confirm-checkout" onclick="confirmCheckout()">✓ Confirmar Venta</button>
     <button class="btn-cancel" onclick="closeCheckout()">Cancelar</button>
   </div>
 </div>
@@ -530,13 +554,15 @@
 <script>
 // ── STATE ──
 let isScanning = false;
-let lastCode = null;
-let scanLock = false;
-let audioCtx = null;
-let currentMode = 'scan'; // 'scan' | 'sale'
-let cart = {}; // { code: { name, price, qty } }
-let pendingAddMode = null; // null | 'scan' | 'sale'
-let recentCodes = []; // for confidence voting
+let isHolding  = false;
+let scanLock   = false;
+let lastCode   = null;
+let recentCodes = [];
+let audioCtx   = null;
+let currentMode = 'scan';
+let cart = {};
+let pendingAddMode = null;
+let quaggaStarted = false;
 
 // ── STORAGE ──
 function getProducts() {
@@ -579,28 +605,44 @@ function showToast(msg, type = '') {
   toastTimer = setTimeout(() => { el.className = ''; }, 2500);
 }
 
+// ── INDICATOR UI ──
+function setIndicatorState(state) {
+  const el = document.getElementById('scan-indicator');
+  const txt = document.getElementById('scan-status-text');
+  el.className = '';
+  if (currentMode === 'sale') el.classList.add('mode-sale');
+
+  const messages = {
+    idle:       'Mantén para escanear',
+    scanning:   'Escaneando...',
+    found:      '¡Encontrado!',
+    'new-product': 'Producto nuevo',
+    'sale-found':  'Agregado al carrito',
+  };
+
+  if (state !== 'idle') el.classList.add(state);
+  txt.textContent = messages[state] || 'Mantén para escanear';
+}
+
 // ── MODE ──
 function setMode(mode) {
+  if (isScanning) { holdEnd(); }
   currentMode = mode;
-  const tabScan = document.getElementById('tab-scan');
-  const tabSale = document.getElementById('tab-sale');
-  const resultCard = document.getElementById('result-card');
-  const salePanel = document.getElementById('sale-panel');
-  const btnScan = document.getElementById('btn-scan');
-  const btnCheckout = document.getElementById('btn-checkout');
-  const wrap = document.getElementById('scanner-wrap');
 
-  if (isScanning) stopScan();
+  const tabScan    = document.getElementById('tab-scan');
+  const tabSale    = document.getElementById('tab-sale');
+  const resultCard = document.getElementById('result-card');
+  const salePanel  = document.getElementById('sale-panel');
+  const btnScan    = document.getElementById('btn-scan');
+  const btnCheckout= document.getElementById('btn-checkout');
 
   if (mode === 'scan') {
     tabScan.className = 'tab-btn active-scan';
     tabSale.className = 'tab-btn';
     resultCard.style.display = 'flex';
     salePanel.classList.remove('visible');
-    btnScan.className = 'btn-scan' in btnScan ? '' : '';
     btnScan.classList.remove('sale-mode');
     btnCheckout.style.display = 'none';
-    wrap.classList.remove('mode-sale');
   } else {
     tabScan.className = 'tab-btn';
     tabSale.className = 'tab-btn active-sale';
@@ -608,84 +650,100 @@ function setMode(mode) {
     salePanel.classList.add('visible');
     btnScan.classList.add('sale-mode');
     btnCheckout.style.display = 'flex';
-    wrap.classList.add('mode-sale');
+  }
+  setIndicatorState('idle');
+}
+
+// ── HOLD-TO-SCAN ──
+function holdStart(e) {
+  if (e) e.preventDefault(); // prevent mobile long-press context menu
+  if (isHolding) return;
+  isHolding = true;
+  startScan();
+}
+
+function holdEnd() {
+  if (!isHolding) return;
+  isHolding = false;
+  // Only stop if we're still in continuous scanning (not locked on a result)
+  if (isScanning && !scanLock) {
+    stopScan();
+    setIndicatorState('idle');
   }
 }
 
-// ── SCANNER (improved: faster frequency, multi-reader voting) ──
-function toggleScan() { isScanning ? stopScan() : startScan(); }
-
+// ── SCANNER ──
 function startScan() {
-  const wrap = document.getElementById('scanner-wrap');
+  if (isScanning) return;
+  isScanning = true;
+  scanLock = false;
+  recentCodes = [];
+
   const btn = document.getElementById('btn-scan');
   const btnText = document.getElementById('btn-scan-text');
-  const idleMsg = document.getElementById('idle-msg');
-  const scanLine = document.getElementById('scan-line');
-
-  isScanning = true;
-  recentCodes = [];
   btn.classList.add('scanning');
-  btnText.textContent = 'Detener';
-  wrap.classList.add('active');
-  scanLine.style.display = 'block';
-
-  const constraints = { facingMode: 'environment' };
-  // Try high-res first for better detection
-  const idealConstraints = { width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: 'environment' };
+  btnText.textContent = 'Suelta para detener';
+  setIndicatorState('scanning');
 
   const config = {
     inputStream: {
       name: 'Live',
       type: 'LiveStream',
       target: document.getElementById('interactive'),
-      constraints: idealConstraints
+      constraints: {
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        facingMode: 'environment'
+      }
     },
-    locator: {
-      patchSize: 'large',   // larger patches = faster on clear barcodes
-      halfSample: false      // full sample = more accurate
-    },
+    locator: { patchSize: 'large', halfSample: false },
     numOfWorkers: Math.min(navigator.hardwareConcurrency || 2, 4),
-    frequency: 20,           // was 10, now 20fps detection
+    frequency: 20,
     decoder: {
       readers: [
-        'ean_reader',
-        'ean_8_reader',
-        'upc_reader',
-        'upc_e_reader',
-        'code_128_reader',
-        'code_39_reader',
-        'codabar_reader',
-        'i2of5_reader'
+        'ean_reader', 'ean_8_reader',
+        'upc_reader', 'upc_e_reader',
+        'code_128_reader', 'code_39_reader',
+        'codabar_reader', 'i2of5_reader'
       ],
       multiple: false
     },
     locate: true
   };
 
+  if (quaggaStarted) {
+    // Quagga already initialised — just re-attach listeners and start
+    Quagga.onDetected(onCodeDetected);
+    Quagga.start();
+    return;
+  }
+
   Quagga.init(config, function(err) {
     if (err) {
-      console.warn('High-res failed, fallback:', err);
-      // Fallback to lower constraints
-      config.inputStream.constraints = constraints;
+      // Fallback lower resolution
+      config.inputStream.constraints = { facingMode: 'environment' };
       config.locator.patchSize = 'medium';
       config.locator.halfSample = true;
       Quagga.init(config, function(err2) {
         if (err2) {
-          stopScan();
+          isScanning = false;
+          isHolding = false;
+          setIndicatorState('idle');
+          document.getElementById('btn-scan').classList.remove('scanning');
+          document.getElementById('btn-scan-text').textContent = 'Escanear';
           showToast('Error accediendo a la cámara', 'error');
           return;
         }
-        idleMsg.style.display = 'none';
+        quaggaStarted = true;
+        Quagga.onDetected(onCodeDetected);
         Quagga.start();
       });
       return;
     }
-    idleMsg.style.display = 'none';
+    quaggaStarted = true;
+    Quagga.onDetected(onCodeDetected);
     Quagga.start();
   });
-
-  Quagga.onDetected(onCodeDetected);
-  Quagga.onProcessed(onProcessed);
 }
 
 function stopScan() {
@@ -693,83 +751,73 @@ function stopScan() {
   recentCodes = [];
   const btn = document.getElementById('btn-scan');
   const btnText = document.getElementById('btn-scan-text');
-  const wrap = document.getElementById('scanner-wrap');
-  const scanLine = document.getElementById('scan-line');
-  const idleMsg = document.getElementById('idle-msg');
-
   btn.classList.remove('scanning');
   btnText.textContent = 'Escanear';
-  wrap.classList.remove('active', 'found', 'new-product', 'sale-found');
-  if (currentMode === 'sale') wrap.classList.add('mode-sale');
-  scanLine.style.display = 'none';
-  idleMsg.style.display = 'flex';
 
-  try { Quagga.offDetected(onCodeDetected); Quagga.offProcessed(onProcessed); Quagga.stop(); } catch(e) {}
+  try { Quagga.offDetected(onCodeDetected); Quagga.stop(); quaggaStarted = false; } catch(e) {}
 }
 
-// Draw detection box for visual feedback
-function onProcessed(result) {
-  // Minimal - just keep it fast
-}
-
+// ── CODE DETECTION ──
 function onCodeDetected(result) {
   if (scanLock) return;
   const code = result.codeResult && result.codeResult.code;
   if (!code || code.length < 4) return;
 
-  // Voting: require same code 2 times in quick succession for reliability but speed
+  // Require 2 confirmations for reliability
   recentCodes.push(code);
-  if (recentCodes.length > 5) recentCodes.shift();
-
+  if (recentCodes.length > 6) recentCodes.shift();
   const count = recentCodes.filter(c => c === code).length;
-  if (count < 2) return; // need at least 2 confirmations
+  if (count < 2) return;
 
-  if (code === lastCode && scanLock) return;
-
-  scanLock = true;
+  if (code === lastCode) return;
   lastCode = code;
+  scanLock = true;
   recentCodes = [];
-  setTimeout(() => { scanLock = false; }, 2500);
 
-  stopScan();
+  // Stop scanning immediately
+  try { Quagga.offDetected(onCodeDetected); Quagga.stop(); quaggaStarted = false; } catch(e) {}
+  isScanning = false;
+  isHolding  = false;
+  document.getElementById('btn-scan').classList.remove('scanning');
+  document.getElementById('btn-scan-text').textContent = 'Escanear';
+
   handleCode(code);
+
+  // Release scanLock after a delay so next hold can scan again
+  setTimeout(() => { scanLock = false; lastCode = null; }, 2000);
 }
 
 // ── HANDLE CODE ──
 function handleCode(code) {
-  if (currentMode === 'sale') {
-    handleCodeSale(code);
-  } else {
-    handleCodeScan(code);
-  }
+  if (currentMode === 'sale') handleCodeSale(code);
+  else handleCodeScan(code);
 }
 
 function handleCodeScan(code) {
   const products = getProducts();
-  const wrap = document.getElementById('scanner-wrap');
-  const card = document.getElementById('result-card');
+  const card        = document.getElementById('result-card');
   const placeholder = document.getElementById('result-placeholder');
-  const content = document.getElementById('result-content');
-  const codeEl = document.getElementById('result-code');
-  const nameEl = document.getElementById('result-name');
-  const priceEl = document.getElementById('result-price');
-  const notFoundEl = document.getElementById('result-notfound');
+  const content     = document.getElementById('result-content');
+  const codeEl      = document.getElementById('result-code');
+  const nameEl      = document.getElementById('result-name');
+  const priceEl     = document.getElementById('result-price');
+  const notFoundEl  = document.getElementById('result-notfound');
 
   placeholder.style.display = 'none';
   content.style.display = 'block';
   codeEl.textContent = code;
 
   if (products[code] !== undefined) {
-    const item = products[code];
+    const item  = products[code];
     const price = typeof item === 'object' ? item.price : item;
     const name  = typeof item === 'object' ? (item.name || '') : '';
     priceEl.textContent = '$' + parseFloat(price).toFixed(2);
     priceEl.style.display = 'block';
-    if (name) { nameEl.textContent = name; nameEl.style.display = 'block'; }
-    else nameEl.style.display = 'none';
+    nameEl.style.display = name ? 'block' : 'none';
+    if (name) nameEl.textContent = name;
     notFoundEl.style.display = 'none';
     card.className = 'found';
-    wrap.classList.add('found');
+    setIndicatorState('found');
     beep('found'); vibrate([60, 30, 60]);
     showToast('✓ Producto encontrado', 'success');
   } else {
@@ -777,7 +825,7 @@ function handleCodeScan(code) {
     nameEl.style.display = 'none';
     notFoundEl.style.display = 'block';
     card.className = 'miss';
-    wrap.classList.add('new-product');
+    setIndicatorState('new-product');
     beep('miss'); vibrate([100]);
     showToast('Producto no registrado', 'error');
     pendingAddMode = 'scan';
@@ -787,20 +835,19 @@ function handleCodeScan(code) {
 
 function handleCodeSale(code) {
   const products = getProducts();
-  const wrap = document.getElementById('scanner-wrap');
 
   if (products[code] !== undefined) {
-    const item = products[code];
+    const item  = products[code];
     const price = typeof item === 'object' ? item.price : item;
     const name  = typeof item === 'object' ? (item.name || '') : code;
     addToCart(code, name || code, parseFloat(price));
-    wrap.classList.add('sale-found');
-    setTimeout(() => { wrap.classList.remove('sale-found'); if(currentMode==='sale') wrap.classList.add('mode-sale'); }, 800);
+    setIndicatorState('sale-found');
+    setTimeout(() => setIndicatorState('idle'), 800);
     beep('sale'); vibrate([40, 20, 40]);
     showToast('+ ' + (name || code) + ' agregado', 'sale');
   } else {
-    wrap.classList.add('new-product');
-    setTimeout(() => { wrap.classList.remove('new-product'); if(currentMode==='sale') wrap.classList.add('mode-sale'); }, 800);
+    setIndicatorState('new-product');
+    setTimeout(() => setIndicatorState('idle'), 800);
     beep('miss'); vibrate([100]);
     showToast('Producto no registrado', 'error');
     pendingAddMode = 'sale';
@@ -810,13 +857,9 @@ function handleCodeSale(code) {
 
 // ── CART ──
 function addToCart(code, name, price) {
-  if (cart[code]) {
-    cart[code].qty++;
-  } else {
-    cart[code] = { name, price, qty: 1 };
-  }
+  if (cart[code]) cart[code].qty++;
+  else cart[code] = { name, price, qty: 1 };
   renderCart();
-  // Flash the item
   setTimeout(() => {
     const el = document.getElementById('cart-item-' + CSS.escape(code));
     if (el) { el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 600); }
@@ -826,13 +869,10 @@ function addToCart(code, name, price) {
 function renderCart() {
   const container = document.getElementById('cart-container');
   const keys = Object.keys(cart);
-
   if (!keys.length) {
     container.innerHTML = '<div class="cart-empty">Escanea productos para agregar</div>';
-    updateTotal();
-    return;
+    updateTotal(); return;
   }
-
   container.innerHTML = keys.map(code => {
     const item = cart[code];
     const subtotal = (item.price * item.qty).toFixed(2);
@@ -850,7 +890,6 @@ function renderCart() {
       <div class="cart-item-price">$${subtotal}</div>
     </div>`;
   }).join('');
-
   updateTotal();
 }
 
@@ -863,24 +902,20 @@ function changeQty(code, delta) {
 
 function updateTotal() {
   const keys = Object.keys(cart);
-  const total = keys.reduce((sum, code) => sum + cart[code].price * cart[code].qty, 0);
-  const items = keys.reduce((sum, code) => sum + cart[code].qty, 0);
+  const total = keys.reduce((sum, c) => sum + cart[c].price * cart[c].qty, 0);
+  const items = keys.reduce((sum, c) => sum + cart[c].qty, 0);
   document.getElementById('total-amount').textContent = '$' + total.toFixed(2);
   document.getElementById('total-items').textContent = items + (items === 1 ? ' artículo' : ' artículos');
 }
 
-function clearCart() {
-  cart = {};
-  renderCart();
-  showToast('Carrito vaciado', 'error');
-}
+function clearCart() { cart = {}; renderCart(); showToast('Carrito vaciado', 'error'); }
 
 // ── CHECKOUT ──
 function openCheckout() {
   const keys = Object.keys(cart);
   if (!keys.length) { showToast('El carrito está vacío', 'error'); return; }
-  const total = keys.reduce((sum, code) => sum + cart[code].price * cart[code].qty, 0);
-  const items = keys.reduce((sum, code) => sum + cart[code].qty, 0);
+  const total = keys.reduce((sum, c) => sum + cart[c].price * cart[c].qty, 0);
+  const items = keys.reduce((sum, c) => sum + cart[c].qty, 0);
   document.getElementById('checkout-total-display').textContent = '$' + total.toFixed(2);
   document.getElementById('checkout-items-display').textContent =
     items + ' artículo' + (items > 1 ? 's' : '') + ' · ' + keys.length + ' producto' + (keys.length > 1 ? 's' : '');
@@ -889,10 +924,8 @@ function openCheckout() {
 function closeCheckout() { document.getElementById('checkout-modal').classList.remove('show'); }
 function confirmCheckout() {
   const keys = Object.keys(cart);
-  const total = keys.reduce((sum, code) => sum + cart[code].price * cart[code].qty, 0);
-  closeCheckout();
-  cart = {};
-  renderCart();
+  const total = keys.reduce((sum, c) => sum + cart[c].price * cart[c].qty, 0);
+  closeCheckout(); cart = {}; renderCart();
   beep('sale'); vibrate([60, 30, 60, 30, 80]);
   showToast('✓ Venta de $' + total.toFixed(2) + ' completada', 'success');
 }
@@ -905,17 +938,13 @@ function openAddModal(code) {
   document.getElementById('add-modal').classList.add('show');
   setTimeout(() => document.getElementById('form-name').focus(), 350);
 }
-function closeAddModal() {
-  document.getElementById('add-modal').classList.remove('show');
-  pendingAddMode = null;
-}
+function closeAddModal() { document.getElementById('add-modal').classList.remove('show'); pendingAddMode = null; }
 function saveProduct() {
-  const code = document.getElementById('form-code').value.trim();
-  const name = document.getElementById('form-name').value.trim();
+  const code  = document.getElementById('form-code').value.trim();
+  const name  = document.getElementById('form-name').value.trim();
   const price = parseFloat(document.getElementById('form-price').value);
   if (!code) { showToast('Código inválido', 'error'); return; }
   if (isNaN(price) || price < 0) { showToast('Ingresa un precio válido', 'error'); return; }
-
   const products = getProducts();
   products[code] = { price, name };
   saveProducts(products);
@@ -927,15 +956,16 @@ function saveProduct() {
     addToCart(code, name || code, price);
     showToast('+ Agregado al carrito', 'sale');
   } else {
-    const card = document.getElementById('result-card');
-    const priceEl = document.getElementById('result-price');
-    const nameEl = document.getElementById('result-name');
+    const card     = document.getElementById('result-card');
+    const priceEl  = document.getElementById('result-price');
+    const nameEl   = document.getElementById('result-name');
     const notFoundEl = document.getElementById('result-notfound');
     priceEl.textContent = '$' + price.toFixed(2);
     priceEl.style.display = 'block';
     if (name) { nameEl.textContent = name; nameEl.style.display = 'block'; }
     notFoundEl.style.display = 'none';
     card.className = 'found';
+    setIndicatorState('found');
   }
   pendingAddMode = null;
 }
@@ -949,7 +979,7 @@ function renderList() {
   const keys = Object.keys(products);
   if (!keys.length) { container.innerHTML = '<div class="empty-state">Sin productos guardados</div>'; return; }
   container.innerHTML = keys.map(code => {
-    const item = products[code];
+    const item  = products[code];
     const price = typeof item === 'object' ? item.price : item;
     const name  = typeof item === 'object' ? (item.name || '') : '';
     const nameHtml = name
@@ -970,17 +1000,14 @@ function renderList() {
 }
 function deleteProduct(code) {
   const products = getProducts();
-  delete products[code];
-  saveProducts(products);
-  renderList();
-  showToast('Producto eliminado', 'error');
-  vibrate([40]);
+  delete products[code]; saveProducts(products);
+  renderList(); showToast('Producto eliminado', 'error'); vibrate([40]);
 }
 
 // ── EDIT MODAL ──
 function openEditModal(code) {
   const products = getProducts();
-  const item = products[code];
+  const item  = products[code];
   const price = typeof item === 'object' ? item.price : item;
   const name  = typeof item === 'object' ? (item.name || '') : '';
   document.getElementById('edit-code').value  = code;
@@ -999,8 +1026,7 @@ function saveEditProduct() {
   const products = getProducts();
   products[code] = { price, name };
   saveProducts(products);
-  closeEditModal();
-  renderList();
+  closeEditModal(); renderList();
   showToast('✓ Producto actualizado', 'success');
   beep('found'); vibrate([40, 20, 40]);
 }
@@ -1012,7 +1038,7 @@ function exportExcel() {
   if (!keys.length) { showToast('No hay productos para exportar', 'error'); return; }
   const rows = [['Código', 'Nombre', 'Precio']];
   keys.forEach(code => {
-    const item = products[code];
+    const item  = products[code];
     const price = typeof item === 'object' ? item.price : item;
     const name  = typeof item === 'object' ? (item.name || '') : '';
     rows.push([code, name, parseFloat(price).toFixed(2)]);
@@ -1031,13 +1057,13 @@ function importExcel(e) {
   const reader = new FileReader();
   reader.onload = function(ev) {
     try {
-      const text = ev.target.result.replace(/^\uFEFF/, '');
+      const text  = ev.target.result.replace(/^\uFEFF/, '');
       const lines = text.trim().split(/\r?\n/);
       if (lines.length < 2) { showToast('Archivo vacío o inválido', 'error'); return; }
       const products = getProducts();
       let imported = 0;
       for (let i = 1; i < lines.length; i++) {
-        const cols = parseCSVLine(lines[i]);
+        const cols  = parseCSVLine(lines[i]);
         if (!cols || cols.length < 2) continue;
         const code  = (cols[0] || '').trim();
         const name  = (cols[1] || '').trim();
@@ -1046,8 +1072,7 @@ function importExcel(e) {
         products[code] = { price, name };
         imported++;
       }
-      saveProducts(products);
-      renderList();
+      saveProducts(products); renderList();
       showToast(`✓ ${imported} productos importados`, 'success');
       beep('found');
     } catch(err) { showToast('Error al leer el archivo', 'error'); }
@@ -1078,6 +1103,9 @@ document.getElementById('form-name').addEventListener('keydown', e => { if (e.ke
 document.getElementById('form-price').addEventListener('keydown', e => { if (e.key === 'Enter') saveProduct(); });
 document.getElementById('edit-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('edit-price').focus(); });
 document.getElementById('edit-price').addEventListener('keydown', e => { if (e.key === 'Enter') saveEditProduct(); });
+
+// Prevent context menu on long-press of scan button (mobile)
+document.getElementById('btn-scan').addEventListener('contextmenu', e => e.preventDefault());
 </script>
 </body>
 </html>
