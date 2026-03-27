@@ -191,33 +191,55 @@
 
     /* ── VIDEO SECTION ── */
     .videos-section { background: var(--gray-light); }
-    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; justify-items: center; }
-    .video-card { background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 20px rgba(26,39,68,0.08); transition: transform .3s, box-shadow .3s; width: 100%; max-width: 300px; }
+    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .video-card {
+      background: var(--white); border-radius: 14px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(26,39,68,0.08);
+      transition: transform .3s, box-shadow .3s; width: 100%;
+    }
     .video-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,39,68,0.14); }
-    .video-thumb { position: relative; width: 100%; padding-top: 177.78%; background: var(--navy); overflow: hidden; }
-    .video-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+
+    /* ── FIXED: aspect ratio 16:9 para thumbnails de YouTube ── */
+    .video-thumb {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 */
+      background: var(--navy);
+      overflow: hidden;
+    }
+    .video-thumb img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; transition: transform .4s ease;
+      display: block;
+    }
     .video-card:hover .video-thumb img { transform: scale(1.05); }
-    .video-overlay { position: absolute; inset: 0; background: rgba(26,39,68,0.5); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; transition: background .3s; text-decoration: none; }
-    .video-card:hover .video-overlay { background: rgba(26,39,68,0.28); }
-    .play-circle { width: 64px; height: 64px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: var(--navy); box-shadow: 0 4px 20px rgba(0,0,0,0.35); transition: transform .3s, box-shadow .3s; }
+    .video-overlay {
+      position: absolute; inset: 0;
+      background: rgba(26,39,68,0.45);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; transition: background .3s; text-decoration: none;
+    }
+    .video-card:hover .video-overlay { background: rgba(26,39,68,0.25); }
+    .play-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--gold); display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: var(--navy);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+      transition: transform .3s, box-shadow .3s;
+    }
     .video-card:hover .play-circle { transform: scale(1.12); box-shadow: 0 8px 28px rgba(201,162,39,0.55); }
-    .shorts-badge { background: var(--gold); color: var(--navy); font-size: 0.66rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; }
+    .shorts-badge {
+      background: var(--gold); color: var(--navy);
+      font-size: 0.66rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 4px;
+    }
     .video-info { padding: 18px 20px; }
     .video-info h4 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-    .watch-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.78rem; font-weight: 700; color: var(--gold); text-decoration: none; transition: color .2s; }
-    .watch-link:hover { color: var(--navy); }
-    .video-info p  { font-size: 0.82rem; color: var(--text-mid); line-height: 1.55; }
+    .video-info p { font-size: 0.82rem; color: var(--text-mid); line-height: 1.55; }
     .watch-link {
       display: inline-flex; align-items: center; gap: 6px;
       margin-top: 10px; font-size: 0.78rem; font-weight: 700;
       color: var(--gold); text-decoration: none; transition: color .2s;
-    }
-    .watch-link:hover { color: var(--navy); }
-    .watch-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 10px; font-size: 0.78rem; font-weight: 700;
-      color: var(--gold); text-decoration: none;
-      transition: color .2s;
     }
     .watch-link:hover { color: var(--navy); }
 
@@ -400,14 +422,14 @@
 
       <div class="ba-card reveal" data-category="carpet">
         <div class="ba-slider" id="slider-1">
-          <div class="ba-after"  style="background-image: url('imgen/after_carpet_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_carpet_1.jpg');">
             <div class="ba-placeholder" id="ph-after-1"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
           <div class="ba-before" style="background-image: url('imgen/before_carpet_1.jpg');" id="before-1">
             <div class="ba-placeholder" id="ph-before-1"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-1"></div>
-          <div class="ba-handle"  id="handle-1">◀▶</div>
+          <div class="ba-handle" id="handle-1">◀▶</div>
           <div class="ba-label ba-label-before">Before</div>
           <div class="ba-label ba-label-after">After</div>
         </div>
@@ -420,14 +442,14 @@
 
       <div class="ba-card reveal" data-category="stain">
         <div class="ba-slider" id="slider-2">
-          <div class="ba-after"  style="background-image: url('imgen/after_stain_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_1.jpg');">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
           <div class="ba-before" style="background-image: url('imgen/before_stain_1.jpg');" id="before-2">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-2"></div>
-          <div class="ba-handle"  id="handle-2">◀▶</div>
+          <div class="ba-handle" id="handle-2">◀▶</div>
           <div class="ba-label ba-label-before">Before</div>
           <div class="ba-label ba-label-after">After</div>
         </div>
@@ -440,14 +462,14 @@
 
       <div class="ba-card reveal" data-category="upholstery">
         <div class="ba-slider" id="slider-3">
-          <div class="ba-after"  style="background-image: url('imgen/after_upholstery_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_upholstery_1.jpg');">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
           <div class="ba-before" style="background-image: url('imgen/before_upholstery_1.jpg');" id="before-3">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-3"></div>
-          <div class="ba-handle"  id="handle-3">◀▶</div>
+          <div class="ba-handle" id="handle-3">◀▶</div>
           <div class="ba-label ba-label-before">Before</div>
           <div class="ba-label ba-label-after">After</div>
         </div>
@@ -460,14 +482,14 @@
 
       <div class="ba-card reveal" data-category="restretch">
         <div class="ba-slider" id="slider-4">
-          <div class="ba-after"  style="background-image: url('imgen/after_restretch_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_restretch_1.jpg');">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
           <div class="ba-before" style="background-image: url('imgen/before_restretch_1.jpg');" id="before-4">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-4"></div>
-          <div class="ba-handle"  id="handle-4">◀▶</div>
+          <div class="ba-handle" id="handle-4">◀▶</div>
           <div class="ba-label ba-label-before">Before</div>
           <div class="ba-label ba-label-after">After</div>
         </div>
@@ -480,14 +502,14 @@
 
       <div class="ba-card reveal" data-category="water">
         <div class="ba-slider" id="slider-5">
-          <div class="ba-after"  style="background-image: url('imgen/after_water_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_water_1.jpg');">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
           <div class="ba-before" style="background-image: url('imgen/before_water_1.jpg');" id="before-5">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-5"></div>
-          <div class="ba-handle"  id="handle-5">◀▶</div>
+          <div class="ba-handle" id="handle-5">◀▶</div>
           <div class="ba-label ba-label-before">Before</div>
           <div class="ba-label ba-label-after">After</div>
         </div>
@@ -500,14 +522,14 @@
 
       <div class="ba-card reveal" data-category="carpet">
         <div class="ba-slider" id="slider-6">
-          <div class="ba-after"  style="background-image: url('imgen/after_carpet_2.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_carpet_2.jpg');">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
           <div class="ba-before" style="background-image: url('imgen/before_carpet_2.jpg');" id="before-6">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-6"></div>
-          <div class="ba-handle"  id="handle-6">◀▶</div>
+          <div class="ba-handle" id="handle-6">◀▶</div>
           <div class="ba-label ba-label-before">Before</div>
           <div class="ba-label ba-label-after">After</div>
         </div>
@@ -520,14 +542,14 @@
 
       <div class="ba-card reveal" data-category="tile">
         <div class="ba-slider" id="slider-7">
-          <div class="ba-after"  style="background-image: url('imgen/after_tile_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_tile_1.jpg');">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
           <div class="ba-before" style="background-image: url('imgen/before_tile_1.jpg');" id="before-7">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-7"></div>
-          <div class="ba-handle"  id="handle-7">◀▶</div>
+          <div class="ba-handle" id="handle-7">◀▶</div>
           <div class="ba-label ba-label-before">Before</div>
           <div class="ba-label ba-label-after">After</div>
         </div>
@@ -552,7 +574,12 @@
       <!-- Video 1 -->
       <div class="video-card reveal">
         <div class="video-thumb">
-          <img src="https://i.ytimg.com/vi/Nt4Yhm9MAM8/hqdefault.jpg" alt="Carpet Cleaning Process" loading="lazy">
+          <img
+            src="https://i.ytimg.com/vi/Nt4Yhm9MAM8/maxresdefault.jpg"
+            alt="Carpet Cleaning Process"
+            loading="lazy"
+            onerror="this.src='https://i.ytimg.com/vi/Nt4Yhm9MAM8/hqdefault.jpg'"
+          >
           <a class="video-overlay" href="https://youtube.com/shorts/Nt4Yhm9MAM8" target="_blank" rel="noopener">
             <div class="play-circle">▶</div>
             <span class="shorts-badge">YouTube Shorts</span>
@@ -568,7 +595,12 @@
       <!-- Video 2 -->
       <div class="video-card reveal">
         <div class="video-thumb">
-          <img src="https://i.ytimg.com/vi/EcZmlWKD0hg/hqdefault.jpg" alt="Stain Removal Demo" loading="lazy">
+          <img
+            src="https://i.ytimg.com/vi/EcZmlWKD0hg/maxresdefault.jpg"
+            alt="Stain Removal Demo"
+            loading="lazy"
+            onerror="this.src='https://i.ytimg.com/vi/EcZmlWKD0hg/hqdefault.jpg'"
+          >
           <a class="video-overlay" href="https://youtube.com/shorts/EcZmlWKD0hg" target="_blank" rel="noopener">
             <div class="play-circle">▶</div>
             <span class="shorts-badge">YouTube Shorts</span>
@@ -584,7 +616,12 @@
       <!-- Video 3 -->
       <div class="video-card reveal">
         <div class="video-thumb">
-          <img src="https://i.ytimg.com/vi/YUNPGDRa6j0/hqdefault.jpg" alt="Upholstery Restoration" loading="lazy">
+          <img
+            src="https://i.ytimg.com/vi/YUNPGDRa6j0/maxresdefault.jpg"
+            alt="Upholstery Restoration"
+            loading="lazy"
+            onerror="this.src='https://i.ytimg.com/vi/YUNPGDRa6j0/hqdefault.jpg'"
+          >
           <a class="video-overlay" href="https://youtube.com/shorts/YUNPGDRa6j0" target="_blank" rel="noopener">
             <div class="play-circle">▶</div>
             <span class="shorts-badge">YouTube Shorts</span>
@@ -749,10 +786,10 @@ function filterCards(category, btn) {
 }
 
 function initSlider(id) {
-  const slider   = document.getElementById('slider-' + id);
-  const before   = document.getElementById('before-' + id);
-  const divider  = document.getElementById('divider-' + id);
-  const handle   = document.getElementById('handle-' + id);
+  const slider  = document.getElementById('slider-' + id);
+  const before  = document.getElementById('before-' + id);
+  const divider = document.getElementById('divider-' + id);
+  const handle  = document.getElementById('handle-' + id);
   if (!slider) return;
 
   let dragging = false;
@@ -761,9 +798,9 @@ function initSlider(id) {
     const rect = slider.getBoundingClientRect();
     let pct = Math.min(Math.max((x - rect.left) / rect.width, 0.05), 0.95);
     const pctStr = (pct * 100).toFixed(1) + '%';
-    before.style.clipPath   = `inset(0 ${(100 - pct * 100).toFixed(1)}% 0 0)`;
-    divider.style.left      = pctStr;
-    handle.style.left       = pctStr;
+    before.style.clipPath  = `inset(0 ${(100 - pct * 100).toFixed(1)}% 0 0)`;
+    divider.style.left     = pctStr;
+    handle.style.left      = pctStr;
   }
 
   slider.addEventListener('mousedown',  e => { dragging = true; setPos(e.clientX); });
