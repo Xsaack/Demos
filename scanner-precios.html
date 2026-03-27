@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-<!-- SheetJS for Excel export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -58,7 +57,6 @@
     display: flex; align-items: center; gap: 5px; transition: all .2s;
   }
   .btn-header:hover { color: var(--accent); border-color: var(--accent); }
-  .btn-header.sale-active { color: var(--accent5); border-color: var(--accent5); background: rgba(255,179,0,0.08); }
 
   /* ── MODE TABS ── */
   .mode-tabs {
@@ -318,18 +316,6 @@
 
   .empty-state { text-align: center; padding: 36px 0; color: var(--text-dim); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 
-  /* ── INVENTORY MODAL ── */
-  #inventory-modal .modal-sheet { max-height: 85vh; display: flex; flex-direction: column; }
-  .inventory-summary {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
-  }
-  .inv-stat {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 12px; padding: 12px 14px;
-  }
-  .inv-stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
-  .inv-stat-value { font-size: 22px; font-weight: 800; color: var(--accent); }
-
   /* ── SALE SUMMARY MODAL ── */
   #sale-summary-modal .modal-sheet { max-height: 85vh; display: flex; flex-direction: column; }
   .summary-items { overflow-y: auto; flex: 1; }
@@ -377,10 +363,6 @@
   <header>
     <div class="logo">Scan<span>Price</span></div>
     <div class="header-actions">
-      <button class="btn-header" onclick="openInventory()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="5" rx="1"/><rect x="2" y="10" width="20" height="5" rx="1"/><rect x="2" y="17" width="20" height="5" rx="1"/></svg>
-        Inventario
-      </button>
       <button class="btn-header" onclick="openList()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="3" cy="12" r="1.5" fill="currentColor"/><circle cx="3" cy="18" r="1.5" fill="currentColor"/></svg>
         Productos
@@ -517,37 +499,6 @@
   </div>
 </div>
 
-<!-- INVENTORY MODAL -->
-<div class="modal-backdrop" id="inventory-modal">
-  <div class="modal-sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title">📦 <span>Inventario</span></div>
-    <div class="inventory-summary">
-      <div class="inv-stat">
-        <div class="inv-stat-label">Total productos</div>
-        <div class="inv-stat-value" id="inv-total-products">0</div>
-      </div>
-      <div class="inv-stat">
-        <div class="inv-stat-label">Con nombre</div>
-        <div class="inv-stat-value" id="inv-named">0</div>
-      </div>
-    </div>
-    <div class="list-toolbar">
-      <button class="btn-toolbar export" onclick="exportInventoryExcel()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Generar Inventario Excel
-      </button>
-      <label class="btn-toolbar import">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Cargar desde Excel
-        <input type="file" id="inv-import-file" accept=".xlsx,.xls,.csv" onchange="importExcel(event)">
-      </label>
-    </div>
-    <div class="list-scroll" id="inventory-list-container"></div>
-    <button class="btn-cancel" onclick="closeInventory()" style="margin-top:14px">Cerrar</button>
-  </div>
-</div>
-
 <!-- SALE SUMMARY MODAL -->
 <div class="modal-backdrop" id="sale-summary-modal">
   <div class="modal-sheet">
@@ -568,8 +519,8 @@
 <script>
 // ── STATE ──
 let isScanning = false;
-let lastCode = null;
 let scanLock = false;
+let recentCodes = {}; // { code: timestamp } — prevents immediate re-scan of same code
 let audioCtx = null;
 let currentMode = 'scan'; // 'scan' | 'sale'
 
@@ -583,7 +534,6 @@ function getProducts() {
 }
 function saveProducts(p) { localStorage.setItem('scanprice_products', JSON.stringify(p)); }
 
-// Products format: { code: { price, name } } OR legacy { code: price }
 function getProductData(code) {
   const products = getProducts();
   const val = products[code];
@@ -666,6 +616,7 @@ function startScan() {
   const scanLine = document.getElementById('scan-line');
 
   isScanning = true;
+  recentCodes = {};
   btn.classList.add('scanning');
   btnText.textContent = 'Detener';
   wrap.classList.add('active');
@@ -713,7 +664,11 @@ function stopScan() {
 function onCodeDetected(result) {
   if (scanLock) return;
   const code = result.codeResult && result.codeResult.code;
-  if (!code || code === lastCode) return;
+  if (!code) return;
+
+  // Debounce: same code cannot fire again within 2.5s
+  const now = Date.now();
+  if (recentCodes[code] && now - recentCodes[code] < 2500) return;
 
   const errors = result.codeResult.decodedCodes
     ? result.codeResult.decodedCodes.filter(x => x.error !== undefined).map(x => x.error)
@@ -721,11 +676,7 @@ function onCodeDetected(result) {
   const avgError = errors.length ? errors.reduce((a,b) => a+b, 0) / errors.length : 1;
   if (avgError > 0.25) return;
 
-  scanLock = true;
-  lastCode = code;
-  setTimeout(() => { scanLock = false; lastCode = null; }, 3000);
-
-  stopScan();
+  recentCodes[code] = now;
   handleCode(code);
 }
 
@@ -741,6 +692,7 @@ function handleCode(code) {
   }
 }
 
+// Scan mode: keep scanning if product found, stop only if not registered
 function handleScanMode(code, product, wrap) {
   const card = document.getElementById('result-card');
   const placeholder = document.getElementById('result-placeholder');
@@ -760,43 +712,69 @@ function handleScanMode(code, product, wrap) {
     notFoundEl.style.display = 'none';
     if (product.name) { nameEl.textContent = product.name; nameEl.style.display = 'block'; }
     else { nameEl.style.display = 'none'; }
-    card.className = 'found'; wrap.classList.add('found');
+    card.className = 'found';
+
+    // Flash the scanner border green briefly, then keep scanning
+    wrap.classList.remove('found','new-product');
+    wrap.classList.add('found');
+    setTimeout(() => {
+      if (isScanning) wrap.classList.remove('found');
+    }, 600);
+
     beep('found'); vibrate([60,30,60]);
-    showToast('✓ Producto encontrado', 'success');
+    showToast('✓ ' + (product.name || code), 'success');
+    // DO NOT stop scanning — continue reading next code
   } else {
     priceEl.style.display = 'none';
     nameEl.style.display = 'none';
     notFoundEl.style.display = 'block';
-    card.className = 'miss'; wrap.classList.add('new-product');
+    card.className = 'miss';
+
+    // Stop scanning so user can register the product
+    scanLock = true;
+    stopScan();
+    setTimeout(() => { scanLock = false; }, 500);
+
+    wrap.classList.add('new-product');
     beep('miss'); vibrate([100]);
     showToast('Producto no registrado', 'error');
     openAddModal(code);
   }
 }
 
+// Sale mode: keep scanning if product found, stop only if not registered
 function handleSaleScan(code, product, wrap) {
   if (!product) {
+    // Stop scanning to let user register the new product
+    scanLock = true;
+    stopScan();
+    setTimeout(() => { scanLock = false; }, 500);
+
     beep('miss'); vibrate([100]);
     showToast('Producto no registrado', 'error');
     wrap.classList.add('new-product');
-    setTimeout(() => wrap.classList.remove('new-product'), 1000);
     openAddModal(code);
     return;
   }
 
-  // Add to sale
+  // Add to sale and keep scanning
   if (saleItems[code]) {
     saleItems[code].qty += 1;
   } else {
     saleItems[code] = { name: product.name || code, price: product.price, qty: 1 };
   }
 
+  wrap.classList.remove('found');
   wrap.classList.add('found');
-  setTimeout(() => wrap.classList.remove('found'), 800);
+  setTimeout(() => {
+    if (isScanning) wrap.classList.remove('found');
+  }, 600);
+
   beep('found'); vibrate([40,20,40]);
   const displayName = product.name || code;
   showToast(`✓ ${displayName} agregado`, 'sale');
   renderSalePanel();
+  // DO NOT stop scanning — continue for next product
 }
 
 // ── SALE ──
@@ -863,7 +841,8 @@ function finishSale() {
   const keys = Object.keys(saleItems);
   if (!keys.length) { showToast('Agrega productos primero', 'error'); return; }
 
-  // Build summary
+  if (isScanning) stopScan();
+
   let total = 0;
   const summaryEl = document.getElementById('summary-items-container');
   summaryEl.innerHTML = keys.map(code => {
@@ -927,7 +906,13 @@ function openAddModal(code) {
   document.getElementById('add-modal').classList.add('show');
   setTimeout(() => document.getElementById('form-name').focus(), 350);
 }
-function closeAddModal() { document.getElementById('add-modal').classList.remove('show'); }
+function closeAddModal() {
+  document.getElementById('add-modal').classList.remove('show');
+  // Resume scanning after closing without saving
+  if (currentMode === 'scan' || currentMode === 'sale') {
+    // Don't auto-resume; user must press scan again
+  }
+}
 
 function saveProduct() {
   const code = document.getElementById('form-code').value.trim();
@@ -942,7 +927,6 @@ function saveProduct() {
   showToast('✓ Producto guardado', 'success');
   beep('found'); vibrate([40,20,40]);
 
-  // Update result card if in scan mode
   if (currentMode === 'scan') {
     const card = document.getElementById('result-card');
     const priceEl = document.getElementById('result-price');
@@ -954,7 +938,6 @@ function saveProduct() {
     if (name) { nameEl.textContent = name; nameEl.style.display = 'block'; }
     card.className = 'found';
   } else {
-    // If sale mode, add the product to sale
     if (saleItems[code]) saleItems[code].qty += 1;
     else saleItems[code] = { name: name || code, price, qty: 1 };
     renderSalePanel();
@@ -981,7 +964,6 @@ function saveEdit() {
   setProductData(code, { price, name });
   closeEditModal();
   renderList();
-  renderInventoryList();
   showToast('✓ Producto actualizado', 'success');
 }
 
@@ -1019,51 +1001,8 @@ function deleteProduct(code) {
   delete products[code];
   saveProducts(products);
   renderList();
-  renderInventoryList();
   showToast('Producto eliminado', 'error');
   vibrate([40]);
-}
-
-// ── INVENTORY MODAL ──
-function openInventory() {
-  renderInventoryStats();
-  renderInventoryList();
-  document.getElementById('inventory-modal').classList.add('show');
-}
-function closeInventory() { document.getElementById('inventory-modal').classList.remove('show'); }
-
-function renderInventoryStats() {
-  const products = getProducts();
-  const keys = Object.keys(products);
-  const named = keys.filter(k => { const d = getProductData(k); return d && d.name; });
-  document.getElementById('inv-total-products').textContent = keys.length;
-  document.getElementById('inv-named').textContent = named.length;
-}
-
-function renderInventoryList() {
-  const products = getProducts();
-  const container = document.getElementById('inventory-list-container');
-  const keys = Object.keys(products);
-
-  if (!keys.length) { container.innerHTML = '<div class="empty-state">Sin productos guardados</div>'; return; }
-
-  container.innerHTML = keys.map(code => {
-    const data = getProductData(code);
-    const name = data ? data.name : '';
-    const price = data ? data.price : 0;
-    return `
-      <div class="product-item">
-        <div class="product-info">
-          ${name ? `<div class="product-name-display">${escHtml(name)}</div>` : '<div class="product-name-display" style="color:var(--text-dim);font-style:italic">Sin nombre</div>'}
-          <div class="product-code">${code}</div>
-        </div>
-        <div class="product-price-badge">$${price.toFixed(2)}</div>
-        <button class="btn-edit" onclick="openEditModal('${code}')">✏️</button>
-      </div>
-    `;
-  }).join('');
-
-  renderInventoryStats();
 }
 
 // ── EXPORT / IMPORT EXCEL ──
@@ -1085,34 +1024,6 @@ function exportExcel() {
   showToast('✓ Excel exportado', 'success');
 }
 
-function exportInventoryExcel() {
-  const products = getProducts();
-  const keys = Object.keys(products);
-  if (!keys.length) { showToast('Sin productos en inventario', 'error'); return; }
-
-  const date = new Date().toLocaleDateString('es-MX');
-  const rows = keys.map((code, i) => {
-    const d = getProductData(code);
-    return {
-      '#': i + 1,
-      'Código': code,
-      'Nombre': d ? d.name : '',
-      'Precio': d ? d.price : 0,
-      'Fecha': date
-    };
-  });
-
-  const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{wch:5},{wch:20},{wch:30},{wch:12},{wch:14}];
-
-  // Style header row (SheetJS community doesn't support rich styles but we add a note row)
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Inventario');
-  const dateFile = new Date().toISOString().slice(0,10);
-  XLSX.writeFile(wb, `inventario_${dateFile}.xlsx`);
-  showToast('✓ Inventario Excel generado', 'success');
-}
-
 function importExcel(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -1131,7 +1042,6 @@ function importExcel(event) {
       let count = 0;
 
       rows.forEach(row => {
-        // Support various column name formats
         const code = String(row['Código'] || row['Codigo'] || row['code'] || row['CODE'] || '').trim();
         const price = parseFloat(row['Precio'] || row['price'] || row['Price'] || 0);
         const name = String(row['Nombre'] || row['nombre'] || row['name'] || row['Name'] || '').trim();
@@ -1144,7 +1054,6 @@ function importExcel(event) {
 
       saveProducts(products);
       renderList();
-      renderInventoryList();
       showToast(`✓ ${count} productos importados`, 'success');
     } catch(err) {
       showToast('Error al leer el archivo', 'error');
@@ -1152,11 +1061,11 @@ function importExcel(event) {
     }
   };
   reader.readAsArrayBuffer(file);
-  event.target.value = ''; // Reset input
+  event.target.value = '';
 }
 
 // ── CLOSE MODALS ON BACKDROP ──
-['add-modal','edit-modal','list-modal','inventory-modal','sale-summary-modal'].forEach(id => {
+['add-modal','edit-modal','list-modal','sale-summary-modal'].forEach(id => {
   document.getElementById(id).addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('show');
   });
