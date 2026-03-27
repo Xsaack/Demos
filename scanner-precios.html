@@ -8,7 +8,6 @@
 <title>ScanPrice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,7 +25,6 @@
     --text-dim: #6b6b8a;
     --border: rgba(255,255,255,0.07);
     --glow: 0 0 30px rgba(0,229,255,0.25);
-    --glow2: 0 0 30px rgba(255,61,113,0.25);
     --radius: 20px;
     --font-display: 'Syne', sans-serif;
     --font-mono: 'Space Mono', monospace;
@@ -40,7 +38,6 @@
     margin: 0 auto; position: relative; overflow: hidden;
   }
 
-  /* ── HEADER ── */
   header {
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px 20px 10px; flex-shrink: 0; z-index: 10;
@@ -58,10 +55,7 @@
   }
   .btn-header:hover { color: var(--accent); border-color: var(--accent); }
 
-  /* ── MODE TABS ── */
-  .mode-tabs {
-    display: flex; gap: 8px; padding: 0 20px 12px; flex-shrink: 0;
-  }
+  .mode-tabs { display: flex; gap: 8px; padding: 0 20px 12px; flex-shrink: 0; }
   .mode-tab {
     flex: 1; padding: 10px; border-radius: 12px;
     border: 1px solid var(--border); background: var(--surface2);
@@ -69,36 +63,26 @@
     font-size: 13px; font-weight: 700; cursor: pointer;
     transition: all .2s; text-align: center;
   }
-  .mode-tab.active {
-    border-color: var(--accent); color: var(--accent);
-    background: rgba(0,229,255,0.08);
-  }
-  .mode-tab.sale-tab.active {
-    border-color: var(--accent5); color: var(--accent5);
-    background: rgba(255,179,0,0.08);
-  }
+  .mode-tab.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.08); }
+  .mode-tab.sale-tab.active { border-color: var(--accent5); color: var(--accent5); background: rgba(255,179,0,0.08); }
 
-  /* ── MAIN ── */
   main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 20px 16px; gap: 14px; overflow: hidden; }
 
-  /* ── SCANNER ── */
   #scanner-wrap {
     width: 100%; flex: 1; max-height: 280px;
     position: relative; border-radius: var(--radius);
     overflow: hidden; background: #000;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border); transition: border-color .3s, box-shadow .3s;
   }
-  #scanner-wrap.active { border-color: var(--accent); box-shadow: var(--glow); }
-  #scanner-wrap.found  { border-color: var(--accent4); box-shadow: 0 0 30px rgba(0,255,136,0.3); }
-  #scanner-wrap.new-product { border-color: var(--accent3); box-shadow: 0 0 30px rgba(162,89,255,0.3); }
-  #scanner-wrap.sale-mode { border-color: var(--accent5); box-shadow: 0 0 30px rgba(255,179,0,0.25); }
+  #scanner-wrap.active     { border-color: var(--accent); box-shadow: var(--glow); }
+  #scanner-wrap.found      { border-color: var(--accent4); box-shadow: 0 0 30px rgba(0,255,136,0.3); }
+  #scanner-wrap.new-product{ border-color: var(--accent3); box-shadow: 0 0 30px rgba(162,89,255,0.3); }
+  #scanner-wrap.sale-mode  { border-color: var(--accent5); box-shadow: 0 0 30px rgba(255,179,0,0.25); }
 
-  #interactive { width: 100%; height: 100%; }
-  #interactive video { width: 100% !important; height: 100% !important; object-fit: cover; }
-  #interactive canvas { display: none !important; }
+  #scanner-video { width: 100%; height: 100%; object-fit: cover; display: none; }
 
   .scanner-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-  .scan-frame { width: 200px; height: 110px; position: relative; }
+  .scan-frame { width: 220px; height: 120px; position: relative; }
   .scan-frame::before, .scan-frame::after,
   .scan-frame > span::before, .scan-frame > span::after {
     content: ''; position: absolute; width: 22px; height: 22px;
@@ -124,7 +108,6 @@
   .scanner-idle-msg svg { opacity: 0.3; }
   .scanner-idle-msg p { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 
-  /* ── SCAN BUTTON ── */
   #btn-scan {
     width: 100%; padding: 16px; border-radius: 14px; border: none;
     background: var(--accent); color: #000;
@@ -138,7 +121,6 @@
   #btn-scan.sale-btn { background: var(--accent5); box-shadow: 0 4px 20px rgba(255,179,0,0.3); }
   #btn-scan.sale-btn.scanning { background: var(--accent2); }
 
-  /* ── RESULT CARD ── */
   #result-card {
     width: 100%; border-radius: var(--radius);
     background: var(--surface); border: 1px solid var(--border);
@@ -147,7 +129,6 @@
   }
   #result-card.found { border-color: var(--accent4); background: rgba(0,255,136,0.05); }
   #result-card.miss  { border-color: var(--accent2); background: rgba(255,61,113,0.05); }
-  #result-card.added { border-color: var(--accent5); background: rgba(255,179,0,0.05); }
 
   .result-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
   .result-code { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); margin-bottom: 2px; }
@@ -156,7 +137,6 @@
   .result-notfound { font-size: 16px; font-weight: 700; color: var(--accent2); }
   .result-placeholder { font-size: 14px; color: var(--text-dim); font-weight: 400; }
 
-  /* ── SALE PANEL ── */
   #sale-panel {
     width: 100%; border-radius: var(--radius);
     background: var(--surface); border: 1px solid var(--border);
@@ -173,52 +153,28 @@
   .sale-items::-webkit-scrollbar { width: 3px; }
   .sale-items::-webkit-scrollbar-thumb { background: var(--border); }
 
-  .sale-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 6px 10px; background: var(--surface2); border-radius: 10px; gap: 8px;
-  }
+  .sale-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: var(--surface2); border-radius: 10px; gap: 8px; }
   .sale-item-info { flex: 1; min-width: 0; }
   .sale-item-name { font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sale-item-code { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); }
-  .sale-item-qty {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; display: flex; align-items: center; gap: 6px; padding: 2px 4px;
-  }
-  .qty-btn {
-    background: none; border: none; color: var(--text-dim);
-    font-size: 16px; cursor: pointer; padding: 0 4px; line-height: 1;
-    transition: color .2s;
-  }
+  .sale-item-qty { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; gap: 6px; padding: 2px 4px; }
+  .qty-btn { background: none; border: none; color: var(--text-dim); font-size: 16px; cursor: pointer; padding: 0 4px; line-height: 1; transition: color .2s; }
   .qty-btn:hover { color: var(--accent5); }
   .qty-num { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--text); min-width: 20px; text-align: center; }
   .sale-item-price { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--accent4); white-space: nowrap; }
   .sale-item-del { background: none; border: none; color: var(--text-dim); font-size: 14px; cursor: pointer; padding: 2px 4px; transition: color .2s; }
   .sale-item-del:hover { color: var(--accent2); }
 
-  .sale-total-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-top: 8px; border-top: 1px solid var(--border);
-  }
+  .sale-total-row { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid var(--border); }
   .sale-total-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); }
   .sale-total-amount { font-size: 28px; font-weight: 800; color: var(--accent5); letter-spacing: -1px; }
 
   .sale-actions { display: flex; gap: 8px; }
-  .btn-finish-sale {
-    flex: 1; padding: 12px; border-radius: 12px; border: none;
-    background: var(--accent5); color: #000;
-    font-family: var(--font-display); font-size: 14px; font-weight: 800;
-    cursor: pointer; transition: all .2s;
-  }
+  .btn-finish-sale { flex: 1; padding: 12px; border-radius: 12px; border: none; background: var(--accent5); color: #000; font-family: var(--font-display); font-size: 14px; font-weight: 800; cursor: pointer; transition: all .2s; }
   .btn-finish-sale:active { transform: scale(0.97); }
-  .btn-cancel-sale {
-    padding: 12px 16px; border-radius: 12px;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--text-dim); font-family: var(--font-display);
-    font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;
-  }
+  .btn-cancel-sale { padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); font-family: var(--font-display); font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; }
   .btn-cancel-sale:hover { border-color: var(--accent2); color: var(--accent2); }
 
-  /* ── MODAL BASE ── */
   .modal-backdrop {
     position: fixed; inset: 0; z-index: 100;
     background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
@@ -226,97 +182,48 @@
     opacity: 0; pointer-events: none; transition: opacity .25s;
   }
   .modal-backdrop.show { opacity: 1; pointer-events: all; }
-  .modal-sheet {
-    width: 100%; max-width: 480px; background: var(--surface);
-    border-radius: 24px 24px 0 0; padding: 12px 24px 36px;
-    transform: translateY(100%); transition: transform .3s cubic-bezier(.32,1,.23,1);
-    border-top: 1px solid var(--border);
-  }
+  .modal-sheet { width: 100%; max-width: 480px; background: var(--surface); border-radius: 24px 24px 0 0; padding: 12px 24px 36px; transform: translateY(100%); transition: transform .3s cubic-bezier(.32,1,.23,1); border-top: 1px solid var(--border); }
   .modal-backdrop.show .modal-sheet { transform: translateY(0); }
   .sheet-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 18px; }
   .sheet-title { font-size: 20px; font-weight: 800; margin-bottom: 18px; }
   .sheet-title span { color: var(--accent); }
 
-  /* ── FORM ── */
   .form-group { margin-bottom: 14px; }
   .form-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); display: block; margin-bottom: 6px; }
-  .form-input {
-    width: 100%; padding: 13px 15px;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 12px; color: var(--text);
-    font-family: var(--font-mono); font-size: 16px;
-    outline: none; transition: border-color .2s;
-  }
+  .form-input { width: 100%; padding: 13px 15px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-family: var(--font-mono); font-size: 16px; outline: none; transition: border-color .2s; }
   .form-input:focus { border-color: var(--accent); }
   .form-input[readonly] { color: var(--text-dim); }
 
-  .btn-save {
-    width: 100%; padding: 15px; background: var(--accent3); color: #fff;
-    border: none; border-radius: 13px;
-    font-family: var(--font-display); font-size: 15px; font-weight: 800;
-    cursor: pointer; transition: all .2s; margin-top: 4px;
-    box-shadow: 0 4px 20px rgba(162,89,255,0.3);
-  }
+  .btn-save { width: 100%; padding: 15px; background: var(--accent3); color: #fff; border: none; border-radius: 13px; font-family: var(--font-display); font-size: 15px; font-weight: 800; cursor: pointer; transition: all .2s; margin-top: 4px; box-shadow: 0 4px 20px rgba(162,89,255,0.3); }
   .btn-save:active { transform: scale(0.97); }
-  .btn-cancel {
-    width: 100%; padding: 13px; background: transparent; color: var(--text-dim);
-    border: 1px solid var(--border); border-radius: 13px;
-    font-family: var(--font-display); font-size: 14px; font-weight: 700;
-    cursor: pointer; margin-top: 10px; transition: all .2s;
-  }
+  .btn-cancel { width: 100%; padding: 13px; background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: 13px; font-family: var(--font-display); font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: all .2s; }
   .btn-cancel:hover { border-color: var(--accent2); color: var(--accent2); }
 
-  /* ── PRODUCT LIST MODAL ── */
   #list-modal .modal-sheet { max-height: 85vh; display: flex; flex-direction: column; }
   .list-scroll { overflow-y: auto; flex: 1; padding-right: 4px; }
   .list-scroll::-webkit-scrollbar { width: 4px; }
   .list-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  .list-toolbar {
-    display: flex; gap: 8px; margin-bottom: 14px;
-  }
-  .btn-toolbar {
-    flex: 1; padding: 10px 8px; border-radius: 10px;
-    border: 1px solid var(--border); background: var(--surface2);
-    color: var(--text-dim); font-family: var(--font-display);
-    font-size: 12px; font-weight: 700; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 5px;
-    transition: all .2s;
-  }
+  .list-toolbar { display: flex; gap: 8px; margin-bottom: 14px; }
+  .btn-toolbar { flex: 1; padding: 10px 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); color: var(--text-dim); font-family: var(--font-display); font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: all .2s; }
   .btn-toolbar.export { border-color: rgba(0,255,136,0.3); color: var(--accent4); }
   .btn-toolbar.export:hover { border-color: var(--accent4); background: rgba(0,255,136,0.05); }
   .btn-toolbar.import { border-color: rgba(0,229,255,0.3); color: var(--accent); }
   .btn-toolbar.import:hover { border-color: var(--accent); background: rgba(0,229,255,0.05); }
-
   #import-file { display: none; }
 
-  .product-item {
-    display: flex; align-items: center;
-    padding: 12px 0; border-bottom: 1px solid var(--border); gap: 10px;
-  }
+  .product-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); gap: 10px; }
   .product-item:last-child { border-bottom: none; }
   .product-info { flex: 1; min-width: 0; }
   .product-name-display { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
   .product-code { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
   .product-price-badge { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--accent4); white-space: nowrap; }
-  .btn-edit {
-    background: transparent; border: 1px solid var(--border);
-    color: var(--text-dim); border-radius: 8px;
-    padding: 6px 10px; cursor: pointer; font-size: 13px;
-    transition: all .2s; flex-shrink: 0;
-  }
+  .btn-edit { background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 13px; transition: all .2s; flex-shrink: 0; }
   .btn-edit:hover { border-color: var(--accent3); color: var(--accent3); }
-  .btn-delete {
-    background: transparent; border: 1px solid var(--border);
-    color: var(--text-dim); border-radius: 8px;
-    padding: 6px 10px; cursor: pointer; font-size: 13px;
-    transition: all .2s; flex-shrink: 0;
-  }
+  .btn-delete { background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 13px; transition: all .2s; flex-shrink: 0; }
   .btn-delete:hover { border-color: var(--accent2); color: var(--accent2); }
-
   .empty-state { text-align: center; padding: 36px 0; color: var(--text-dim); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 
-  /* ── SALE SUMMARY MODAL ── */
   #sale-summary-modal .modal-sheet { max-height: 85vh; display: flex; flex-direction: column; }
   .summary-items { overflow-y: auto; flex: 1; }
   .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
@@ -325,14 +232,10 @@
   .summary-item-name { font-size: 14px; font-weight: 700; color: var(--text); }
   .summary-item-detail { font-size: 11px; color: var(--text-dim); font-family: var(--font-mono); margin-top: 2px; }
   .summary-item-price { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--accent4); }
-  .summary-grand-total {
-    border-top: 2px solid var(--border); margin-top: 10px; padding-top: 14px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
+  .summary-grand-total { border-top: 2px solid var(--border); margin-top: 10px; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; }
   .summary-grand-label { font-size: 14px; font-weight: 700; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
   .summary-grand-amount { font-size: 36px; font-weight: 800; color: var(--accent5); letter-spacing: -1px; }
 
-  /* ── TOAST ── */
   #toast {
     position: fixed; bottom: 110px; left: 50%;
     transform: translateX(-50%) translateY(20px);
@@ -345,11 +248,7 @@
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   #toast.success { border-color: var(--accent4); color: var(--accent4); }
   #toast.error   { border-color: var(--accent2); color: var(--accent2); }
-  #toast.info    { border-color: var(--accent); color: var(--accent); }
   #toast.sale    { border-color: var(--accent5); color: var(--accent5); }
-
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
-  .pulsing { animation: pulse 1.2s ease-in-out infinite; }
 
   @media (min-width: 480px) {
     #app { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
@@ -370,18 +269,19 @@
     </div>
   </header>
 
-  <!-- MODE TABS -->
   <div class="mode-tabs">
     <button class="mode-tab active" id="tab-scan" onclick="setMode('scan')">🔍 Escanear</button>
     <button class="mode-tab sale-tab" id="tab-sale" onclick="setMode('sale')">🛒 Venta</button>
   </div>
 
   <main>
-    <!-- Scanner -->
     <div id="scanner-wrap">
-      <div id="interactive"></div>
+      <video id="scanner-video" autoplay playsinline muted style="display:none"></video>
       <div class="scanner-overlay">
-        <div class="scan-frame"><span></span><div class="scan-line" id="scan-line" style="display:none"></div></div>
+        <div class="scan-frame">
+          <span></span>
+          <div class="scan-line" id="scan-line" style="display:none"></div>
+        </div>
       </div>
       <div class="scanner-idle-msg" id="idle-msg">
         <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -392,7 +292,6 @@
       </div>
     </div>
 
-    <!-- Result card (scan mode) -->
     <div id="result-card">
       <div class="result-label">Resultado</div>
       <div class="result-placeholder" id="result-placeholder">Esperando escaneo...</div>
@@ -404,7 +303,6 @@
       </div>
     </div>
 
-    <!-- Sale panel (sale mode) -->
     <div id="sale-panel">
       <div class="sale-header">
         <span class="sale-title">🛒 Venta activa</span>
@@ -423,7 +321,6 @@
       </div>
     </div>
 
-    <!-- Scan button -->
     <button id="btn-scan" onclick="toggleScan()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="M2 8V5a2 2 0 0 1 2-2h3M2 16v3a2 2 0 0 0 2 2h3M22 8V5a2 2 0 0 0-2-2h-3M22 16v3a2 2 0 0 1-2 2h-3"/>
@@ -467,11 +364,11 @@
     </div>
     <div class="form-group">
       <label class="form-label">Nombre del producto</label>
-      <input class="form-input" id="edit-name" type="text" placeholder="Ej: Coca-Cola 600ml">
+      <input class="form-input" id="edit-name" type="text">
     </div>
     <div class="form-group">
       <label class="form-label">Precio ($)</label>
-      <input class="form-input" id="edit-price" type="number" step="0.01" min="0" placeholder="0.00" inputmode="decimal">
+      <input class="form-input" id="edit-price" type="number" step="0.01" min="0" inputmode="decimal">
     </div>
     <button class="btn-save" style="background:var(--accent)" onclick="saveEdit()">Guardar Cambios</button>
     <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
@@ -513,21 +410,32 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
 <script>
-// ── STATE ──
+// ────────────────────────────────────────────────
+// STATE
+// ────────────────────────────────────────────────
 let isScanning = false;
-let scanLock = false;
-let recentCodes = {}; // { code: timestamp } — prevents immediate re-scan of same code
-let audioCtx = null;
-let currentMode = 'scan'; // 'scan' | 'sale'
+let scanLock   = false;
+let recentCodes = {};   // code → timestamp, debounce
+let audioCtx   = null;
+let currentMode = 'scan';
+let saleItems  = {};
 
-// Sale state
-let saleItems = {}; // { code: { name, price, qty } }
+// Camera / detection
+let mediaStream   = null;
+let scanInterval  = null;
+let detector      = null;  // native BarcodeDetector instance
+let zxingDecoder  = null;  // ZXing BrowserMultiFormatReader
+let offCanvas     = null;
+let offCtx        = null;
 
-// ── STORAGE ──
+const HAS_NATIVE = (typeof BarcodeDetector !== 'undefined');
+
+// ────────────────────────────────────────────────
+// STORAGE
+// ────────────────────────────────────────────────
 function getProducts() {
   try { return JSON.parse(localStorage.getItem('scanprice_products') || '{}'); }
   catch { return {}; }
@@ -535,343 +443,351 @@ function getProducts() {
 function saveProducts(p) { localStorage.setItem('scanprice_products', JSON.stringify(p)); }
 
 function getProductData(code) {
-  const products = getProducts();
-  const val = products[code];
-  if (val === undefined || val === null) return null;
-  if (typeof val === 'number' || typeof val === 'string') return { price: parseFloat(val), name: '' };
-  return { price: parseFloat(val.price || 0), name: val.name || '' };
+  const v = getProducts()[code];
+  if (v == null) return null;
+  if (typeof v === 'number' || typeof v === 'string') return { price: parseFloat(v), name: '' };
+  return { price: parseFloat(v.price || 0), name: v.name || '' };
 }
 function setProductData(code, data) {
-  const products = getProducts();
-  products[code] = data;
-  saveProducts(products);
+  const p = getProducts();
+  p[code] = data;
+  saveProducts(p);
 }
 
-// ── MODE ──
+// ────────────────────────────────────────────────
+// MODE
+// ────────────────────────────────────────────────
 function setMode(mode) {
   currentMode = mode;
   document.getElementById('tab-scan').classList.toggle('active', mode === 'scan');
   document.getElementById('tab-sale').classList.toggle('active', mode === 'sale');
-  const resultCard = document.getElementById('result-card');
-  const salePanel = document.getElementById('sale-panel');
   const btn = document.getElementById('btn-scan');
-
   if (mode === 'sale') {
-    resultCard.style.display = 'none';
-    salePanel.classList.add('visible');
+    document.getElementById('result-card').style.display = 'none';
+    document.getElementById('sale-panel').classList.add('visible');
     btn.classList.add('sale-btn');
     document.getElementById('idle-text').textContent = 'Escanea un producto';
     renderSalePanel();
   } else {
-    resultCard.style.display = 'flex';
-    salePanel.classList.remove('visible');
+    document.getElementById('result-card').style.display = 'flex';
+    document.getElementById('sale-panel').classList.remove('visible');
     btn.classList.remove('sale-btn');
     document.getElementById('idle-text').textContent = 'Presiona Escanear';
   }
-
   if (isScanning) stopScan();
 }
 
-// ── AUDIO ──
+// ────────────────────────────────────────────────
+// AUDIO / HAPTIC
+// ────────────────────────────────────────────────
 function beep(type = 'found') {
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain); gain.connect(audioCtx.destination);
-    if (type === 'found') {
-      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-      osc.frequency.setValueAtTime(1100, audioCtx.currentTime + 0.07);
-    } else {
-      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-    }
+    osc.frequency.setValueAtTime(type === 'found' ? 880 : 440, audioCtx.currentTime);
+    if (type === 'found') osc.frequency.setValueAtTime(1100, audioCtx.currentTime + 0.07);
     gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
     osc.start(); osc.stop(audioCtx.currentTime + 0.25);
   } catch(e) {}
 }
+function vibrate(p = [80]) { if (navigator.vibrate) navigator.vibrate(p); }
 
-function vibrate(pattern = [80]) {
-  if (navigator.vibrate) navigator.vibrate(pattern);
-}
-
-// ── TOAST ──
+// ────────────────────────────────────────────────
+// TOAST
+// ────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg, type = '') {
   const el = document.getElementById('toast');
   clearTimeout(toastTimer);
   el.textContent = msg;
   el.className = 'show ' + type;
-  toastTimer = setTimeout(() => { el.className = ''; }, 2500);
+  toastTimer = setTimeout(() => { el.className = ''; }, 2800);
 }
 
-// ── SCANNER ──
+// ────────────────────────────────────────────────
+// SCANNER — start / stop
+// ────────────────────────────────────────────────
 function toggleScan() { isScanning ? stopScan() : startScan(); }
 
-function startScan() {
-  const wrap = document.getElementById('scanner-wrap');
-  const btn = document.getElementById('btn-scan');
-  const btnText = document.getElementById('btn-scan-text');
-  const idleMsg = document.getElementById('idle-msg');
-  const scanLine = document.getElementById('scan-line');
-
+async function startScan() {
   isScanning = true;
   recentCodes = {};
+
+  const wrap    = document.getElementById('scanner-wrap');
+  const btn     = document.getElementById('btn-scan');
+  const video   = document.getElementById('scanner-video');
+  const scanLine= document.getElementById('scan-line');
+  const idleMsg = document.getElementById('idle-msg');
+
   btn.classList.add('scanning');
-  btnText.textContent = 'Detener';
+  document.getElementById('btn-scan-text').textContent = 'Detener';
   wrap.classList.add('active');
   if (currentMode === 'sale') wrap.classList.add('sale-mode');
   scanLine.style.display = 'block';
 
-  const config = {
-    inputStream: {
-      name: 'Live', type: 'LiveStream',
-      target: document.getElementById('interactive'),
-      constraints: { width:{ideal:1280}, height:{ideal:720}, facingMode:'environment' }
-    },
-    locator: { patchSize: 'medium', halfSample: true },
-    numOfWorkers: navigator.hardwareConcurrency > 2 ? 2 : 1,
-    frequency: 10,
-    decoder: { readers: ['ean_reader','ean_8_reader','code_128_reader','code_39_reader','upc_reader','upc_e_reader','codabar_reader','i2of5_reader'] },
-    locate: true
-  };
+  // Request camera
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: { ideal: 'environment' },
+        width:  { ideal: 1280 },
+        height: { ideal: 720 }
+      }
+    });
+  } catch(err) {
+    showToast('No se pudo acceder a la cámara', 'error');
+    _resetUI(); return;
+  }
 
-  Quagga.init(config, function(err) {
-    if (err) { stopScan(); showToast('Error accediendo a la cámara', 'error'); return; }
-    idleMsg.style.display = 'none';
-    Quagga.start();
+  video.srcObject = mediaStream;
+  video.style.display = 'block';
+  idleMsg.style.display = 'none';
+
+  try { await video.play(); } catch(e) {}
+
+  // Offscreen canvas for ZXing
+  offCanvas = document.createElement('canvas');
+  offCtx    = offCanvas.getContext('2d', { willReadFrequently: true });
+
+  if (HAS_NATIVE) {
+    // ── Path A: native BarcodeDetector (Chrome Android, Safari 17+)
+    try {
+      const formats = await BarcodeDetector.getSupportedFormats();
+      detector = new BarcodeDetector({ formats });
+    } catch(e) {
+      detector = new BarcodeDetector({ formats: ['ean_13','ean_8','code_128','code_39','upc_a','upc_e','qr_code','itf','codabar'] });
+    }
+    scanInterval = setInterval(_nativeTick, 120);
+  } else {
+    // ── Path B: ZXing via esm.sh (loads once)
+    if (!zxingDecoder) {
+      showToast('Cargando motor de escaneo…', '');
+      await _loadZXing();
+    }
+    scanInterval = setInterval(_zxingTick, 180);
+  }
+}
+
+async function _nativeTick() {
+  const video = document.getElementById('scanner-video');
+  if (!isScanning || video.readyState < 2) return;
+  try {
+    const results = await detector.detect(video);
+    if (results && results.length) onCodeFound(results[0].rawValue);
+  } catch(e) {}
+}
+
+async function _zxingTick() {
+  const video = document.getElementById('scanner-video');
+  if (!isScanning || !zxingDecoder || video.readyState < 2) return;
+  try {
+    offCanvas.width  = video.videoWidth  || 640;
+    offCanvas.height = video.videoHeight || 480;
+    offCtx.drawImage(video, 0, 0, offCanvas.width, offCanvas.height);
+    const result = await zxingDecoder.decodeFromCanvas(offCanvas);
+    if (result) onCodeFound(result.getText());
+  } catch(e) { /* NotFoundException is normal */ }
+}
+
+function _loadZXing() {
+  return new Promise((resolve, reject) => {
+    // Inject a module script that puts the reader on window
+    const s = document.createElement('script');
+    s.type = 'module';
+    s.innerHTML = `
+      import { BrowserMultiFormatReader } from 'https://esm.sh/@zxing/library@0.20.0';
+      window.__zxingReader = new BrowserMultiFormatReader();
+      window.dispatchEvent(new Event('zxing-ready'));
+    `;
+    document.head.appendChild(s);
+    const onReady = () => {
+      zxingDecoder = window.__zxingReader;
+      resolve();
+    };
+    window.addEventListener('zxing-ready', onReady, { once: true });
+    // Timeout fallback
+    setTimeout(() => {
+      if (!zxingDecoder) { showToast('Error cargando escáner', 'error'); stopScan(); }
+    }, 10000);
   });
-
-  Quagga.onDetected(onCodeDetected);
 }
 
 function stopScan() {
   isScanning = false;
-  const btn = document.getElementById('btn-scan');
-  const wrap = document.getElementById('scanner-wrap');
-  const scanLine = document.getElementById('scan-line');
+  if (scanInterval) { clearInterval(scanInterval); scanInterval = null; }
+  if (mediaStream)  { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+  _resetUI();
+}
+
+function _resetUI() {
+  const wrap    = document.getElementById('scanner-wrap');
+  const video   = document.getElementById('scanner-video');
+  const scanLine= document.getElementById('scan-line');
   const idleMsg = document.getElementById('idle-msg');
+  const btn     = document.getElementById('btn-scan');
 
   btn.classList.remove('scanning');
   document.getElementById('btn-scan-text').textContent = 'Escanear';
   wrap.classList.remove('active','found','new-product','sale-mode');
   scanLine.style.display = 'none';
+  video.srcObject = null;
+  video.style.display = 'none';
   idleMsg.style.display = 'flex';
-
-  try { Quagga.offDetected(onCodeDetected); Quagga.stop(); } catch(e) {}
 }
 
-function onCodeDetected(result) {
-  if (scanLock) return;
-  const code = result.codeResult && result.codeResult.code;
-  if (!code) return;
-
-  // Debounce: same code cannot fire again within 2.5s
+// ────────────────────────────────────────────────
+// CODE HANDLER
+// ────────────────────────────────────────────────
+function onCodeFound(code) {
+  if (!code || scanLock) return;
   const now = Date.now();
   if (recentCodes[code] && now - recentCodes[code] < 2500) return;
-
-  const errors = result.codeResult.decodedCodes
-    ? result.codeResult.decodedCodes.filter(x => x.error !== undefined).map(x => x.error)
-    : [];
-  const avgError = errors.length ? errors.reduce((a,b) => a+b, 0) / errors.length : 1;
-  if (avgError > 0.25) return;
-
   recentCodes[code] = now;
-  handleCode(code);
+  currentMode === 'sale' ? handleSaleScan(code) : handleScanMode(code);
 }
 
-// ── HANDLE SCANNED CODE ──
-function handleCode(code) {
+function handleScanMode(code) {
   const product = getProductData(code);
-  const wrap = document.getElementById('scanner-wrap');
+  const wrap    = document.getElementById('scanner-wrap');
+  const card    = document.getElementById('result-card');
 
-  if (currentMode === 'sale') {
-    handleSaleScan(code, product, wrap);
-  } else {
-    handleScanMode(code, product, wrap);
-  }
-}
-
-// Scan mode: keep scanning if product found, stop only if not registered
-function handleScanMode(code, product, wrap) {
-  const card = document.getElementById('result-card');
-  const placeholder = document.getElementById('result-placeholder');
-  const content = document.getElementById('result-content');
-  const codeEl = document.getElementById('result-code');
-  const nameEl = document.getElementById('result-name');
-  const priceEl = document.getElementById('result-price');
-  const notFoundEl = document.getElementById('result-notfound');
-
-  placeholder.style.display = 'none';
-  content.style.display = 'block';
-  codeEl.textContent = code;
+  document.getElementById('result-placeholder').style.display = 'none';
+  document.getElementById('result-content').style.display = 'block';
+  document.getElementById('result-code').textContent = code;
 
   if (product) {
-    priceEl.textContent = '$' + product.price.toFixed(2);
-    priceEl.style.display = 'block';
-    notFoundEl.style.display = 'none';
+    document.getElementById('result-price').textContent = '$' + product.price.toFixed(2);
+    document.getElementById('result-price').style.display = 'block';
+    document.getElementById('result-notfound').style.display = 'none';
+    const nameEl = document.getElementById('result-name');
     if (product.name) { nameEl.textContent = product.name; nameEl.style.display = 'block'; }
-    else { nameEl.style.display = 'none'; }
+    else nameEl.style.display = 'none';
     card.className = 'found';
-
-    // Flash the scanner border green briefly, then keep scanning
+    // Flash border, keep scanning
     wrap.classList.remove('found','new-product');
     wrap.classList.add('found');
-    setTimeout(() => {
-      if (isScanning) wrap.classList.remove('found');
-    }, 600);
-
+    setTimeout(() => { if (isScanning) wrap.classList.remove('found'); }, 700);
     beep('found'); vibrate([60,30,60]);
     showToast('✓ ' + (product.name || code), 'success');
-    // DO NOT stop scanning — continue reading next code
   } else {
-    priceEl.style.display = 'none';
-    nameEl.style.display = 'none';
-    notFoundEl.style.display = 'block';
+    document.getElementById('result-price').style.display = 'none';
+    document.getElementById('result-name').style.display = 'none';
+    document.getElementById('result-notfound').style.display = 'block';
     card.className = 'miss';
-
-    // Stop scanning so user can register the product
     scanLock = true;
     stopScan();
-    setTimeout(() => { scanLock = false; }, 500);
-
-    wrap.classList.add('new-product');
+    setTimeout(() => { scanLock = false; }, 600);
     beep('miss'); vibrate([100]);
     showToast('Producto no registrado', 'error');
     openAddModal(code);
   }
 }
 
-// Sale mode: keep scanning if product found, stop only if not registered
-function handleSaleScan(code, product, wrap) {
+function handleSaleScan(code) {
+  const product = getProductData(code);
+  const wrap    = document.getElementById('scanner-wrap');
+
   if (!product) {
-    // Stop scanning to let user register the new product
     scanLock = true;
     stopScan();
-    setTimeout(() => { scanLock = false; }, 500);
-
+    setTimeout(() => { scanLock = false; }, 600);
     beep('miss'); vibrate([100]);
     showToast('Producto no registrado', 'error');
-    wrap.classList.add('new-product');
     openAddModal(code);
     return;
   }
 
-  // Add to sale and keep scanning
-  if (saleItems[code]) {
-    saleItems[code].qty += 1;
-  } else {
-    saleItems[code] = { name: product.name || code, price: product.price, qty: 1 };
-  }
+  if (saleItems[code]) saleItems[code].qty += 1;
+  else saleItems[code] = { name: product.name || code, price: product.price, qty: 1 };
 
   wrap.classList.remove('found');
+  void wrap.offsetWidth; // force reflow for re-animation
   wrap.classList.add('found');
-  setTimeout(() => {
-    if (isScanning) wrap.classList.remove('found');
-  }, 600);
-
+  setTimeout(() => { if (isScanning) wrap.classList.remove('found'); }, 700);
   beep('found'); vibrate([40,20,40]);
-  const displayName = product.name || code;
-  showToast(`✓ ${displayName} agregado`, 'sale');
+  showToast('✓ ' + (product.name || code) + ' agregado', 'sale');
   renderSalePanel();
-  // DO NOT stop scanning — continue for next product
 }
 
-// ── SALE ──
+// ────────────────────────────────────────────────
+// SALE
+// ────────────────────────────────────────────────
 function renderSalePanel() {
-  const list = document.getElementById('sale-items-list');
+  const list    = document.getElementById('sale-items-list');
   const totalEl = document.getElementById('sale-total');
   const countEl = document.getElementById('sale-count');
+  const keys    = Object.keys(saleItems);
 
-  const keys = Object.keys(saleItems);
   if (!keys.length) {
     list.innerHTML = '<div class="empty-state" style="padding:16px 0;font-size:11px">Escanea productos para agregar</div>';
-    totalEl.textContent = '$0.00';
-    countEl.textContent = '0 productos';
-    return;
+    totalEl.textContent = '$0.00'; countEl.textContent = '0 productos'; return;
   }
 
-  let total = 0;
-  let totalQty = 0;
+  let total = 0, totalQty = 0;
   list.innerHTML = keys.map(code => {
-    const item = saleItems[code];
-    const subtotal = item.price * item.qty;
-    total += subtotal;
-    totalQty += item.qty;
-    return `
-      <div class="sale-item">
-        <div class="sale-item-info">
-          <div class="sale-item-name">${escHtml(item.name)}</div>
-          <div class="sale-item-code">${code} · $${item.price.toFixed(2)} c/u</div>
-        </div>
-        <div class="sale-item-qty">
-          <button class="qty-btn" onclick="changeSaleQty('${code}',-1)">−</button>
-          <span class="qty-num">${item.qty}</span>
-          <button class="qty-btn" onclick="changeSaleQty('${code}',1)">+</button>
-        </div>
-        <span class="sale-item-price">$${subtotal.toFixed(2)}</span>
-        <button class="sale-item-del" onclick="removeSaleItem('${code}')">✕</button>
+    const it = saleItems[code];
+    const sub = it.price * it.qty;
+    total += sub; totalQty += it.qty;
+    return `<div class="sale-item">
+      <div class="sale-item-info">
+        <div class="sale-item-name">${escHtml(it.name)}</div>
+        <div class="sale-item-code">${code} · $${it.price.toFixed(2)} c/u</div>
       </div>
-    `;
+      <div class="sale-item-qty">
+        <button class="qty-btn" onclick="changeSaleQty('${code}',-1)">−</button>
+        <span class="qty-num">${it.qty}</span>
+        <button class="qty-btn" onclick="changeSaleQty('${code}',1)">+</button>
+      </div>
+      <span class="sale-item-price">$${sub.toFixed(2)}</span>
+      <button class="sale-item-del" onclick="removeSaleItem('${code}')">✕</button>
+    </div>`;
   }).join('');
 
   totalEl.textContent = '$' + total.toFixed(2);
   countEl.textContent = totalQty + (totalQty === 1 ? ' producto' : ' productos');
 }
 
-function changeSaleQty(code, delta) {
+function changeSaleQty(code, d) {
   if (!saleItems[code]) return;
-  saleItems[code].qty = Math.max(1, saleItems[code].qty + delta);
+  saleItems[code].qty = Math.max(1, saleItems[code].qty + d);
   renderSalePanel();
 }
-
-function removeSaleItem(code) {
-  delete saleItems[code];
-  renderSalePanel();
-}
-
+function removeSaleItem(code) { delete saleItems[code]; renderSalePanel(); }
 function cancelSale() {
-  if (Object.keys(saleItems).length === 0) { showToast('No hay venta activa', 'error'); return; }
-  saleItems = {};
-  renderSalePanel();
-  showToast('Venta cancelada', 'error');
+  if (!Object.keys(saleItems).length) { showToast('No hay venta activa', 'error'); return; }
+  saleItems = {}; renderSalePanel(); showToast('Venta cancelada', 'error');
 }
 
 function finishSale() {
   const keys = Object.keys(saleItems);
   if (!keys.length) { showToast('Agrega productos primero', 'error'); return; }
-
   if (isScanning) stopScan();
-
   let total = 0;
-  const summaryEl = document.getElementById('summary-items-container');
-  summaryEl.innerHTML = keys.map(code => {
-    const item = saleItems[code];
-    const subtotal = item.price * item.qty;
-    total += subtotal;
-    return `
-      <div class="summary-item">
+  document.getElementById('summary-items-container').innerHTML =
+    keys.map(code => {
+      const it = saleItems[code], sub = it.price * it.qty;
+      total += sub;
+      return `<div class="summary-item">
         <div class="summary-item-left">
-          <div class="summary-item-name">${escHtml(item.name)}</div>
-          <div class="summary-item-detail">${code} · ${item.qty} × $${item.price.toFixed(2)}</div>
+          <div class="summary-item-name">${escHtml(it.name)}</div>
+          <div class="summary-item-detail">${code} · ${it.qty} × $${it.price.toFixed(2)}</div>
         </div>
-        <div class="summary-item-price">$${subtotal.toFixed(2)}</div>
-      </div>
-    `;
-  }).join('') + `
-    <div class="summary-grand-total">
+        <div class="summary-item-price">$${sub.toFixed(2)}</div>
+      </div>`;
+    }).join('') +
+    `<div class="summary-grand-total">
       <span class="summary-grand-label">Total</span>
       <span class="summary-grand-amount">$${total.toFixed(2)}</span>
-    </div>
-  `;
-
+    </div>`;
   document.getElementById('sale-summary-modal').classList.add('show');
 }
 
 function closeSaleSummary() {
   document.getElementById('sale-summary-modal').classList.remove('show');
-  saleItems = {};
-  renderSalePanel();
+  saleItems = {}; renderSalePanel();
   showToast('✓ Venta completada', 'success');
   beep('found'); vibrate([40,20,40,20,40]);
 }
@@ -879,64 +795,50 @@ function closeSaleSummary() {
 function exportSaleExcel() {
   const keys = Object.keys(saleItems);
   if (!keys.length) { showToast('Sin datos de venta', 'error'); return; }
-
   let total = 0;
   const rows = keys.map(code => {
-    const item = saleItems[code];
-    const subtotal = item.price * item.qty;
-    total += subtotal;
-    return { 'Código': code, 'Nombre': item.name, 'Precio Unit.': item.price, 'Cantidad': item.qty, 'Subtotal': subtotal };
+    const it = saleItems[code], sub = it.price * it.qty;
+    total += sub;
+    return { 'Código': code, 'Nombre': it.name, 'Precio Unit.': it.price, 'Cantidad': it.qty, 'Subtotal': sub };
   });
-  rows.push({ 'Código': '', 'Nombre': 'TOTAL', 'Precio Unit.': '', 'Cantidad': '', 'Subtotal': total });
-
+  rows.push({ 'Código':'','Nombre':'TOTAL','Precio Unit.':'','Cantidad':'','Subtotal': total });
   const ws = XLSX.utils.json_to_sheet(rows);
   ws['!cols'] = [{wch:18},{wch:28},{wch:14},{wch:10},{wch:14}];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Venta');
-  const date = new Date().toISOString().slice(0,10);
-  XLSX.writeFile(wb, `venta_${date}.xlsx`);
+  XLSX.writeFile(wb, `venta_${new Date().toISOString().slice(0,10)}.xlsx`);
   showToast('✓ Excel de venta exportado', 'success');
 }
 
-// ── ADD PRODUCT MODAL ──
+// ────────────────────────────────────────────────
+// MODALS — Add / Edit
+// ────────────────────────────────────────────────
 function openAddModal(code) {
-  document.getElementById('form-code').value = code;
-  document.getElementById('form-name').value = '';
+  document.getElementById('form-code').value  = code;
+  document.getElementById('form-name').value  = '';
   document.getElementById('form-price').value = '';
   document.getElementById('add-modal').classList.add('show');
   setTimeout(() => document.getElementById('form-name').focus(), 350);
 }
-function closeAddModal() {
-  document.getElementById('add-modal').classList.remove('show');
-  // Resume scanning after closing without saving
-  if (currentMode === 'scan' || currentMode === 'sale') {
-    // Don't auto-resume; user must press scan again
-  }
-}
+function closeAddModal() { document.getElementById('add-modal').classList.remove('show'); }
 
 function saveProduct() {
-  const code = document.getElementById('form-code').value.trim();
-  const name = document.getElementById('form-name').value.trim();
+  const code  = document.getElementById('form-code').value.trim();
+  const name  = document.getElementById('form-name').value.trim();
   const price = parseFloat(document.getElementById('form-price').value);
-
   if (!code) { showToast('Código inválido', 'error'); return; }
   if (isNaN(price) || price < 0) { showToast('Ingresa un precio válido', 'error'); return; }
-
   setProductData(code, { price, name });
   closeAddModal();
   showToast('✓ Producto guardado', 'success');
   beep('found'); vibrate([40,20,40]);
-
   if (currentMode === 'scan') {
-    const card = document.getElementById('result-card');
-    const priceEl = document.getElementById('result-price');
+    document.getElementById('result-price').textContent = '$' + price.toFixed(2);
+    document.getElementById('result-price').style.display = 'block';
+    document.getElementById('result-notfound').style.display = 'none';
     const nameEl = document.getElementById('result-name');
-    const notFoundEl = document.getElementById('result-notfound');
-    priceEl.textContent = '$' + price.toFixed(2);
-    priceEl.style.display = 'block';
-    notFoundEl.style.display = 'none';
     if (name) { nameEl.textContent = name; nameEl.style.display = 'block'; }
-    card.className = 'found';
+    document.getElementById('result-card').className = 'found';
   } else {
     if (saleItems[code]) saleItems[code].qty += 1;
     else saleItems[code] = { name: name || code, price, qty: 1 };
@@ -944,78 +846,66 @@ function saveProduct() {
   }
 }
 
-// ── EDIT PRODUCT MODAL ──
 function openEditModal(code) {
-  const product = getProductData(code);
-  document.getElementById('edit-code').value = code;
-  document.getElementById('edit-name').value = product ? product.name : '';
-  document.getElementById('edit-price').value = product ? product.price : '';
+  const p = getProductData(code);
+  document.getElementById('edit-code').value  = code;
+  document.getElementById('edit-name').value  = p ? p.name  : '';
+  document.getElementById('edit-price').value = p ? p.price : '';
   document.getElementById('edit-modal').classList.add('show');
   setTimeout(() => document.getElementById('edit-name').focus(), 350);
 }
 function closeEditModal() { document.getElementById('edit-modal').classList.remove('show'); }
 
 function saveEdit() {
-  const code = document.getElementById('edit-code').value.trim();
-  const name = document.getElementById('edit-name').value.trim();
+  const code  = document.getElementById('edit-code').value.trim();
+  const name  = document.getElementById('edit-name').value.trim();
   const price = parseFloat(document.getElementById('edit-price').value);
-
   if (isNaN(price) || price < 0) { showToast('Precio inválido', 'error'); return; }
   setProductData(code, { price, name });
-  closeEditModal();
-  renderList();
+  closeEditModal(); renderList();
   showToast('✓ Producto actualizado', 'success');
 }
 
-// ── LIST MODAL ──
+// ────────────────────────────────────────────────
+// LIST MODAL
+// ────────────────────────────────────────────────
 function openList() { renderList(); document.getElementById('list-modal').classList.add('show'); }
 function closeList() { document.getElementById('list-modal').classList.remove('show'); }
 
 function renderList() {
   const products = getProducts();
-  const container = document.getElementById('product-list-container');
   const keys = Object.keys(products);
-
-  if (!keys.length) { container.innerHTML = '<div class="empty-state">Sin productos guardados</div>'; return; }
-
-  container.innerHTML = keys.map(code => {
-    const data = getProductData(code);
-    const name = data ? data.name : '';
-    const price = data ? data.price : 0;
-    return `
-      <div class="product-item">
-        <div class="product-info">
-          ${name ? `<div class="product-name-display">${escHtml(name)}</div>` : ''}
-          <div class="product-code">${code}</div>
-        </div>
-        <div class="product-price-badge">$${price.toFixed(2)}</div>
-        <button class="btn-edit" onclick="openEditModal('${code}')">✏️</button>
-        <button class="btn-delete" onclick="deleteProduct('${code}')">✕</button>
+  const c = document.getElementById('product-list-container');
+  if (!keys.length) { c.innerHTML = '<div class="empty-state">Sin productos guardados</div>'; return; }
+  c.innerHTML = keys.map(code => {
+    const d = getProductData(code);
+    return `<div class="product-item">
+      <div class="product-info">
+        ${d && d.name ? `<div class="product-name-display">${escHtml(d.name)}</div>` : ''}
+        <div class="product-code">${code}</div>
       </div>
-    `;
+      <div class="product-price-badge">$${(d ? d.price : 0).toFixed(2)}</div>
+      <button class="btn-edit"   onclick="openEditModal('${code}')">✏️</button>
+      <button class="btn-delete" onclick="deleteProduct('${code}')">✕</button>
+    </div>`;
   }).join('');
 }
 
 function deleteProduct(code) {
-  const products = getProducts();
-  delete products[code];
-  saveProducts(products);
-  renderList();
-  showToast('Producto eliminado', 'error');
-  vibrate([40]);
+  const p = getProducts(); delete p[code]; saveProducts(p);
+  renderList(); showToast('Producto eliminado', 'error'); vibrate([40]);
 }
 
-// ── EXPORT / IMPORT EXCEL ──
+// ────────────────────────────────────────────────
+// EXCEL
+// ────────────────────────────────────────────────
 function exportExcel() {
-  const products = getProducts();
-  const keys = Object.keys(products);
+  const keys = Object.keys(getProducts());
   if (!keys.length) { showToast('Sin productos para exportar', 'error'); return; }
-
   const rows = keys.map(code => {
     const d = getProductData(code);
     return { 'Código': code, 'Nombre': d ? d.name : '', 'Precio': d ? d.price : 0 };
   });
-
   const ws = XLSX.utils.json_to_sheet(rows);
   ws['!cols'] = [{wch:20},{wch:30},{wch:12}];
   const wb = XLSX.utils.book_new();
@@ -1025,61 +915,51 @@ function exportExcel() {
 }
 
 function importExcel(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
+  const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(sheet);
-
+      const wb   = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
       if (!rows.length) { showToast('Archivo vacío o inválido', 'error'); return; }
-
       const products = getProducts();
       let count = 0;
-
       rows.forEach(row => {
-        const code = String(row['Código'] || row['Codigo'] || row['code'] || row['CODE'] || '').trim();
-        const price = parseFloat(row['Precio'] || row['price'] || row['Price'] || 0);
-        const name = String(row['Nombre'] || row['nombre'] || row['name'] || row['Name'] || '').trim();
-
-        if (code && !isNaN(price)) {
-          products[code] = { price, name };
-          count++;
-        }
+        const code  = String(row['Código'] || row['Codigo'] || row['code'] || '').trim();
+        const price = parseFloat(row['Precio'] || row['price'] || 0);
+        const name  = String(row['Nombre'] || row['nombre'] || row['name'] || '').trim();
+        if (code && !isNaN(price)) { products[code] = { price, name }; count++; }
       });
-
-      saveProducts(products);
-      renderList();
+      saveProducts(products); renderList();
       showToast(`✓ ${count} productos importados`, 'success');
-    } catch(err) {
-      showToast('Error al leer el archivo', 'error');
-      console.error(err);
-    }
+    } catch(err) { showToast('Error al leer el archivo', 'error'); }
   };
   reader.readAsArrayBuffer(file);
   event.target.value = '';
 }
 
-// ── CLOSE MODALS ON BACKDROP ──
+// ────────────────────────────────────────────────
+// BACKDROP CLOSE
+// ────────────────────────────────────────────────
 ['add-modal','edit-modal','list-modal','sale-summary-modal'].forEach(id => {
   document.getElementById(id).addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('show');
   });
 });
 
-// Enter key shortcuts
-document.getElementById('form-price').addEventListener('keydown', e => { if (e.key === 'Enter') saveProduct(); });
-document.getElementById('edit-price').addEventListener('keydown', e => { if (e.key === 'Enter') saveEdit(); });
-document.getElementById('form-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('form-price').focus(); });
-document.getElementById('edit-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('edit-price').focus(); });
+// ────────────────────────────────────────────────
+// KEYBOARD SHORTCUTS
+// ────────────────────────────────────────────────
+document.getElementById('form-name').addEventListener('keydown',  e => { if (e.key==='Enter') document.getElementById('form-price').focus(); });
+document.getElementById('form-price').addEventListener('keydown', e => { if (e.key==='Enter') saveProduct(); });
+document.getElementById('edit-name').addEventListener('keydown',  e => { if (e.key==='Enter') document.getElementById('edit-price').focus(); });
+document.getElementById('edit-price').addEventListener('keydown', e => { if (e.key==='Enter') saveEdit(); });
 
-// ── UTILS ──
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ────────────────────────────────────────────────
+// UTILS
+// ────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // Init
