@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,11 +134,17 @@
     }
     .ba-after {
       position: absolute; inset: 0;
-      background: center center / cover no-repeat var(--gray-light);
+      background-color: var(--gray-light);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
     .ba-before {
       position: absolute; inset: 0;
-      background: center center / cover no-repeat var(--gray-mid);
+      background-color: var(--gray-mid);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       clip-path: inset(0 50% 0 0);
       transition: clip-path .05s linear;
     }
@@ -440,13 +445,13 @@
         </div>
       </div>
 
-      <!-- Slider 2 — Pet Stain Removal -->
+      <!-- Slider 2 — Pet Stain Removal — FIXED -->
       <div class="ba-card reveal" data-category="stain">
         <div class="ba-slider" id="slider-2">
-          <div class="ba-after" style="background-image: url('imgen/after_stain_1.png');">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_1.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="ba-placeholder" id="ph-after-2"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/IMG_3261.jpeg');" id="before-2">
+          <div class="ba-before" style="background-image: url('imgen/before_stain_1.png'); background-size: cover; background-position: center; background-repeat: no-repeat;" id="before-2">
             <div class="ba-placeholder" id="ph-before-2"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-2"></div>
@@ -464,10 +469,10 @@
       <!-- Slider 8 — Coffee Stain Removal -->
       <div class="ba-card reveal" data-category="stain">
         <div class="ba-slider" id="slider-8">
-          <div class="ba-after" style="background-image: url('imgen/after_stain_coffee.png');">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_coffee.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/before_stain_coffee.png');" id="before-8">
+          <div class="ba-before" style="background-image: url('imgen/before_stain_coffee.png'); background-size: cover; background-position: center; background-repeat: no-repeat;" id="before-8">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-8"></div>
@@ -485,10 +490,10 @@
       <!-- Slider 9 — Wine Stain Removal -->
       <div class="ba-card reveal" data-category="stain">
         <div class="ba-slider" id="slider-9">
-          <div class="ba-after" style="background-image: url('imgen/after_stain_wine.png');">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_wine.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/before_stain_wine.png');" id="before-9">
+          <div class="ba-before" style="background-image: url('imgen/before_stain_wine.png'); background-size: cover; background-position: center; background-repeat: no-repeat;" id="before-9">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-9"></div>
@@ -506,10 +511,10 @@
       <!-- Slider 3 — Carpet Repair -->
       <div class="ba-card reveal" data-category="upholstery">
         <div class="ba-slider" id="slider-3">
-          <div class="ba-after" style="background-image: url('imgen/after_upholstery_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_upholstery_1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/before_upholstery_1.jpg');" id="before-3">
+          <div class="ba-before" style="background-image: url('imgen/before_upholstery_1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" id="before-3">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-3"></div>
@@ -527,10 +532,10 @@
       <!-- Slider 4 — Carpet Re-Stretching -->
       <div class="ba-card reveal" data-category="Re-Stretching">
         <div class="ba-slider" id="slider-4">
-          <div class="ba-after" style="background-image: url('imgen/after_restretching_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_restretching_1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/before_restretching_1.jpg');" id="before-4">
+          <div class="ba-before" style="background-image: url('imgen/before_restretching_1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" id="before-4">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-4"></div>
@@ -548,10 +553,10 @@
       <!-- Slider 5 — Water Damage -->
       <div class="ba-card reveal" data-category="water">
         <div class="ba-slider" id="slider-5">
-          <div class="ba-after" style="background-image: url('imgen/after_water_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_water_1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/before_water_1.jpg');" id="before-5">
+          <div class="ba-before" style="background-image: url('imgen/before_water_1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" id="before-5">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-5"></div>
@@ -569,10 +574,10 @@
       <!-- Slider 6 — Commercial Carpet -->
       <div class="ba-card reveal" data-category="carpet">
         <div class="ba-slider" id="slider-6">
-          <div class="ba-after" style="background-image: url('imgen/after_carpet_2.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_carpet_2.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/before_carpet_2.jpg');" id="before-6">
+          <div class="ba-before" style="background-image: url('imgen/before_carpet_2.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" id="before-6">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-6"></div>
@@ -590,10 +595,10 @@
       <!-- Slider 7 — Wood Floor -->
       <div class="ba-card reveal" data-category="tile">
         <div class="ba-slider" id="slider-7">
-          <div class="ba-after" style="background-image: url('imgen/after_tile_1.jpg');">
+          <div class="ba-after" style="background-image: url('imgen/after_tile_1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/before_tile_1.jpg');" id="before-7">
+          <div class="ba-before" style="background-image: url('imgen/before_tile_1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" id="before-7">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-7"></div>
@@ -826,7 +831,7 @@
 <script>
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 
-// Fix: hide placeholders when background images load successfully
+// Hide placeholders when background images load successfully
 document.querySelectorAll('.ba-after, .ba-before').forEach(el => {
   const raw = el.style.backgroundImage;
   const match = raw.match(/url\(['"]?(.*?)['"]?\)/);
