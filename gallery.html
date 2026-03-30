@@ -191,7 +191,7 @@
 
     /* ── VIDEO SECTION ── */
     .videos-section { background: var(--gray-light); }
-    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .video-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
     .video-card {
       background: var(--white); border-radius: 14px; overflow: hidden;
       box-shadow: 0 4px 20px rgba(26,39,68,0.08);
@@ -199,11 +199,10 @@
     }
     .video-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,39,68,0.14); }
 
-    /* ── FIXED: aspect ratio 16:9 para thumbnails de YouTube ── */
     .video-thumb {
       position: relative;
       width: 100%;
-      padding-top: 56.25%; /* 16:9 */
+      padding-top: 56.25%;
       background: var(--navy);
       overflow: hidden;
     }
@@ -315,7 +314,7 @@
       text-transform: uppercase; padding: 3px 10px; border-radius: 4px;
     }
 
-    @media(max-width: 900px) {
+    @media(max-width: 1100px) {
       .video-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media(max-width: 600px) {
@@ -494,9 +493,9 @@
           <div class="ba-label ba-label-after">After</div>
         </div>
         <div class="ba-info">
-          <h4>Carpet Re-Stretchinging</h4>
+          <h4>Carpet Re-Stretching</h4>
           <p>Ripples and bubbles completely eliminated using power stretchers.</p>
-          <span class="ba-tag">Re-Stretchinging</span>
+          <span class="ba-tag">Re-Stretching</span>
         </div>
       </div>
 
@@ -634,6 +633,27 @@
         </div>
       </div>
 
+      <!-- Video 4 — Deep Cleaning (NUEVO) -->
+      <div class="video-card reveal">
+        <div class="video-thumb">
+          <img
+            src="https://i.ytimg.com/vi/4f9FtAJu6As/maxresdefault.jpg"
+            alt="Deep Cleaning"
+            loading="lazy"
+            onerror="this.src='https://i.ytimg.com/vi/4f9FtAJu6As/hqdefault.jpg'"
+          >
+          <a class="video-overlay" href="https://youtu.be/4f9FtAJu6As" target="_blank" rel="noopener">
+            <div class="play-circle">▶</div>
+            <span class="shorts-badge">YouTube</span>
+          </a>
+        </div>
+        <div class="video-info">
+          <h4>Deep Cleaning</h4>
+          <p>See how we tackle the toughest dirt and grime with a full deep cleaning treatment — results that speak for themselves.</p>
+          <a class="watch-link" href="https://youtu.be/4f9FtAJu6As" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -705,7 +725,7 @@
         <div class="photo-card-info">
           <h4>Carpet Re-Stretching Complete</h4>
           <p>All ripples removed — carpet flat and tight again.</p>
-          <span class="photo-card-tag">Re-Stretchinging</span>
+          <span class="photo-card-tag">Re-Stretching</span>
         </div>
       </div>
 
