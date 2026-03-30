@@ -461,7 +461,7 @@
         </div>
       </div>
 
-      <!-- Slider 8 — Coffee Stain Removal (NEW) -->
+      <!-- Slider 8 — Coffee Stain Removal -->
       <div class="ba-card reveal" data-category="stain">
         <div class="ba-slider" id="slider-8">
           <div class="ba-after" style="background-image: url('imgen/after_stain_coffee.png');">
@@ -482,7 +482,7 @@
         </div>
       </div>
 
-      <!-- Slider 9 — Wine Stain Removal (NEW) -->
+      <!-- Slider 9 — Wine Stain Removal -->
       <div class="ba-card reveal" data-category="stain">
         <div class="ba-slider" id="slider-9">
           <div class="ba-after" style="background-image: url('imgen/after_stain_wine.png');">
@@ -826,11 +826,18 @@
 <script>
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 
+// Fix: hide placeholders when background images load successfully
 document.querySelectorAll('.ba-after, .ba-before').forEach(el => {
-  const url = el.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/, '$1');
-  if (!url) return;
+  const raw = el.style.backgroundImage;
+  const match = raw.match(/url\(['"]?(.*?)['"]?\)/);
+  if (!match || !match[1]) return;
+  const url = match[1];
   const img = new Image();
-  img.onload = () => el.classList.add('has-image');
+  img.onload = () => {
+    el.classList.add('has-image');
+    // Hide ALL placeholders inside this element (covers both before and after sides)
+    el.querySelectorAll('.ba-placeholder').forEach(ph => ph.style.display = 'none');
+  };
   img.src = url;
 });
 
