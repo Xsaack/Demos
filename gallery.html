@@ -419,6 +419,7 @@
 
     <div class="ba-grid" id="baGrid">
 
+      <!-- Slider 1 — Deep Carpet Cleaning -->
       <div class="ba-card reveal" data-category="carpet">
         <div class="ba-slider" id="slider-1">
           <div class="ba-after" style="background-image: url('imgen/after_carpet_1.jpg');">
@@ -439,12 +440,13 @@
         </div>
       </div>
 
+      <!-- Slider 2 — Pet Stain Removal -->
       <div class="ba-card reveal" data-category="stain">
         <div class="ba-slider" id="slider-2">
-          <div class="ba-after" style="background-image: url('imgen/after_stain_1.png');">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_1.jpg');">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
           </div>
-          <div class="ba-before" style="background-image: url('imgen/before_stain_1.png');" id="before-2">
+          <div class="ba-before" style="background-image: url('imgen/before_stain_1.jpg');" id="before-2">
             <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
           </div>
           <div class="ba-divider" id="divider-2"></div>
@@ -459,6 +461,49 @@
         </div>
       </div>
 
+      <!-- Slider 8 — Coffee Stain Removal (NEW) -->
+      <div class="ba-card reveal" data-category="stain">
+        <div class="ba-slider" id="slider-8">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_coffee.jpg');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_stain_coffee.jpg');" id="before-8">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-8"></div>
+          <div class="ba-handle" id="handle-8">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Coffee Stain Removal</h4>
+          <p>Deep coffee stains fully eliminated from carpet fibers — no residue left behind.</p>
+          <span class="ba-tag">Stain Removal</span>
+        </div>
+      </div>
+
+      <!-- Slider 9 — Wine Stain Removal (NEW) -->
+      <div class="ba-card reveal" data-category="stain">
+        <div class="ba-slider" id="slider-9">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_wine.jpg');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_stain_wine.jpg');" id="before-9">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-9"></div>
+          <div class="ba-handle" id="handle-9">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Wine Stain Removal</h4>
+          <p>Stubborn red wine stains completely removed — carpet restored to its original color.</p>
+          <span class="ba-tag">Stain Removal</span>
+        </div>
+      </div>
+
+      <!-- Slider 3 — Carpet Repair -->
       <div class="ba-card reveal" data-category="upholstery">
         <div class="ba-slider" id="slider-3">
           <div class="ba-after" style="background-image: url('imgen/after_upholstery_1.jpg');">
@@ -479,6 +524,7 @@
         </div>
       </div>
 
+      <!-- Slider 4 — Carpet Re-Stretching -->
       <div class="ba-card reveal" data-category="Re-Stretching">
         <div class="ba-slider" id="slider-4">
           <div class="ba-after" style="background-image: url('imgen/after_restretching_1.jpg');">
@@ -499,6 +545,7 @@
         </div>
       </div>
 
+      <!-- Slider 5 — Water Damage -->
       <div class="ba-card reveal" data-category="water">
         <div class="ba-slider" id="slider-5">
           <div class="ba-after" style="background-image: url('imgen/after_water_1.jpg');">
@@ -519,6 +566,7 @@
         </div>
       </div>
 
+      <!-- Slider 6 — Commercial Carpet -->
       <div class="ba-card reveal" data-category="carpet">
         <div class="ba-slider" id="slider-6">
           <div class="ba-after" style="background-image: url('imgen/after_carpet_2.jpg');">
@@ -539,6 +587,7 @@
         </div>
       </div>
 
+      <!-- Slider 7 — Wood Floor -->
       <div class="ba-card reveal" data-category="tile">
         <div class="ba-slider" id="slider-7">
           <div class="ba-after" style="background-image: url('imgen/after_tile_1.jpg');">
@@ -633,7 +682,7 @@
         </div>
       </div>
 
-      <!-- Video 4 — Deep Cleaning (NUEVO) -->
+      <!-- Video 4 -->
       <div class="video-card reveal">
         <div class="video-thumb">
           <iframe
@@ -829,7 +878,7 @@ function initSlider(id) {
   window.addEventListener('touchend', () => dragging = false);
 }
 
-[1,2,3,4,5,6,7].forEach(initSlider);
+[1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(initSlider);
 </script>
 </body>
 </html>
