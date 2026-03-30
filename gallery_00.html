@@ -441,18 +441,24 @@
 
       <!-- Slider 2 — Pet Stain Removal -->
       <div class="ba-card reveal" data-category="stain">
-  <div class="ba-slider" id="slider-2">
-    <div class="ba-after" style="background-image: url('imgen/after_stain_1.png');">
-      <div class="ba-placeholder" id="ph-after-2"><div class="ph-icon">📸</div><p>After photo here</p></div>
-    </div>
-    <div class="ba-before" style="background-image: url('imgen/before_stain_1.png');" id="before-2">
-      <div class="ba-placeholder" id="ph-before-2"><div class="ph-icon">📸</div><p>Before photo here</p></div>
-    </div>
-    <div class="ba-divider" id="divider-2"></div>
-    <div class="ba-handle" id="handle-2">◀▶</div>
-    <div class="ba-label ba-label-before">Before</div>
-    <div class="ba-label ba-label-after">After</div>
-  </div>
+        <div class="ba-slider" id="slider-2">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_1.png');">
+            <div class="ba-placeholder" id="ph-after-2"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_stain_1.png');" id="before-2">
+            <div class="ba-placeholder" id="ph-before-2"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-2"></div>
+          <div class="ba-handle" id="handle-2">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Pet Stain Removal</h4>
+          <p>Complete elimination of pet stains and odor from living room carpet.</p>
+          <span class="ba-tag">Stain Removal</span>
+        </div>
+      </div>
 
       <!-- Slider 8 — Coffee Stain Removal -->
       <div class="ba-card reveal" data-category="stain">
@@ -828,7 +834,6 @@ document.querySelectorAll('.ba-after, .ba-before').forEach(el => {
   const img = new Image();
   img.onload = () => {
     el.classList.add('has-image');
-    // Hide ALL placeholders inside this element (covers both before and after sides)
     el.querySelectorAll('.ba-placeholder').forEach(ph => ph.style.display = 'none');
   };
   img.src = url;
