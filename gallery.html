@@ -183,9 +183,8 @@
       background: linear-gradient(135deg, var(--gray-light), var(--gray-mid));
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 10px; color: var(--text-mid);
-      position: absolute; inset: 0; z-index: 1;
+      position: absolute; inset: 0; z-index: 0;
     }
-    .has-image .ba-placeholder { display: none; }
     .ba-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.4; }
     .ba-placeholder p { font-size: 0.82rem; opacity: 0.6; font-style: italic; }
 
@@ -443,12 +442,8 @@
       <!-- Slider 2 — Pet Stain Removal -->
       <div class="ba-card reveal" data-category="stain">
         <div class="ba-slider" id="slider-2">
-          <div class="ba-after" style="background-image: url('imgen/after_stain_1.png');">
-            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
-          </div>
-          <div class="ba-before" style="background-image: url('imgen/before_stain_1.png');" id="before-2">
-            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
-          </div>
+          <div class="ba-after" style="background-image: url('imgen/after_stain_1.png');"></div>
+          <div class="ba-before" style="background-image: url('imgen/before_stain_1.png');" id="before-2"></div>
           <div class="ba-divider" id="divider-2"></div>
           <div class="ba-handle" id="handle-2">◀▶</div>
           <div class="ba-label ba-label-before">Before</div>
