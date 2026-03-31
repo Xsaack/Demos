@@ -101,9 +101,9 @@
     100% { transform: translateX(-50%); }
   }
 
-  /* TOP SPOTLIGHT STRIP — new section just below heritage bar */
+  /* TOP SPOTLIGHT STRIP */
   .top-spotlight {
-    margin-top: calc(80px + 32px); /* nav + heritage bar */
+    margin-top: calc(80px + 32px);
     background: linear-gradient(135deg, #0d1a3a 0%, var(--navy) 60%, #0f2040 100%);
     border-bottom: 3px solid var(--gold);
     padding: 0 5%;
@@ -162,10 +162,21 @@
     font-family: 'Playfair Display', serif;
     font-size: clamp(1rem, 1.8vw, 1.22rem);
     font-weight: 700; color: var(--white);
-    line-height: 1.2; margin-bottom: 4px;
+    line-height: 1.2; margin-bottom: 6px;
   }
+  /* CHANGED: spotlight-sub now bright white and bold for easy reading */
   .spotlight-sub {
-    font-size: 0.78rem; color: rgba(255,255,255,0.6); line-height: 1.4;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.4;
+  }
+  /* NEW: Phone numbers inside spotlight are large, bright white, and bold */
+  .spotlight-phone {
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
   }
   .spotlight-badge {
     flex-shrink: 0;
@@ -417,6 +428,27 @@
   #form-msg.success { background: #d1fae5; color: #065f46; display: block; }
   #form-msg.error { background: #fee2e2; color: #991b1b; display: block; }
 
+  /* CHANGED: Emergency phone numbers in contact section — dark navy on white pill, very high contrast */
+  .emergency-phone-link {
+    display: inline-block;
+    color: #1a2744 !important;
+    background: #ffffff;
+    border: 2px solid #1a2744;
+    border-radius: 5px;
+    font-weight: 900 !important;
+    font-size: 1.1rem !important;
+    text-decoration: none;
+    padding: 4px 12px;
+    margin: 3px 0;
+    letter-spacing: 0.3px;
+    transition: background .2s, border-color .2s;
+  }
+  .emergency-phone-link:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy) !important;
+  }
+
   /* FOOTER */
   footer { background: var(--navy); padding: 48px 5% 24px; color: rgba(255,255,255,0.6); }
   .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 24px; }
@@ -501,7 +533,6 @@
     <span class="heritage-bar-dot"></span>
     <span class="heritage-bar-item">Family Business · Greater Kansas City Area</span>
     <span class="heritage-bar-dot"></span>
-    <!-- duplicate for seamless loop -->
     <span class="heritage-bar-item">🏅 Established 1993</span>
     <span class="heritage-bar-dot"></span>
     <span class="heritage-bar-item">Over 30 Years of Excellence</span>
@@ -517,14 +548,17 @@
   </div>
 </div>
 
-<!-- TOP SPOTLIGHT: 24Hr Emergency Flood only -->
+<!-- TOP SPOTLIGHT -->
 <div class="top-spotlight top-spotlight--single">
   <a href="tel:+19132072033" class="spotlight-card">
     <div class="spotlight-icon spotlight-icon--flood">🌊</div>
     <div class="spotlight-text">
       <div class="spotlight-label spotlight-label--teal">Emergency · Always Available</div>
       <div class="spotlight-title">24-Hour Emergency Flood Service</div>
-      <div class="spotlight-sub">Call now: (913) 207-2033 &nbsp;·&nbsp; (913) 207-6958</div>
+      <!-- CHANGED: phone numbers are now large, bright white, bold -->
+      <div class="spotlight-sub">
+        Call now: &nbsp;<span class="spotlight-phone">(913) 207-2033</span>&nbsp;&nbsp;·&nbsp;&nbsp;<span class="spotlight-phone">(913) 207-6958</span>
+      </div>
     </div>
     <div class="spotlight-badge spotlight-badge--teal">Call 24/7</div>
   </a>
@@ -795,14 +829,14 @@
             </span>
           </div>
         </div>
+        <!-- CHANGED: Emergency numbers use high-contrast white pill style for easy reading -->
         <div class="contact-detail">
           <div class="contact-icon">🌊</div>
           <div>
             <strong>24-Hour Emergency Flood Service</strong>
-            <span>
-              <a href="tel:+19132072033" style="color:var(--gold);font-weight:700;text-decoration:none;">(913) 207-2033</a>
-              &nbsp;·&nbsp;
-              <a href="tel:+19132076958" style="color:var(--gold);font-weight:700;text-decoration:none;">(913) 207-6958</a>
+            <span style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+              <a href="tel:+19132072033" class="emergency-phone-link">(913) 207-2033</a>
+              <a href="tel:+19132076958" class="emergency-phone-link">(913) 207-6958</a>
             </span>
           </div>
         </div>
@@ -878,7 +912,8 @@
 
 <a href="tel:+19132072033" class="float-cta">📞 (913) 207-2033</a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
 document.querySelectorAll('.reveal').forEach(el => el.classList.add('hidden'));
@@ -922,4 +957,12 @@ window.addEventListener('scroll', () => {
   const nav = document.querySelector('nav');
   if (window.scrollY > 30) {
     nav.style.background = 'rgba(26,39,68,0.92)';
-    nav.style.backdropFilter =
+    nav.style.backdropFilter = 'blur(12px)';
+  } else {
+    nav.style.background = 'var(--navy)';
+    nav.style.backdropFilter = 'none';
+  }
+});
+</script>
+</body>
+</html>
