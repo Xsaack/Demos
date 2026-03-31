@@ -170,13 +170,18 @@
     color: rgba(255,255,255,0.75);
     line-height: 1.4;
   }
-  /* NEW: Phone numbers inside spotlight are large, bright white, and bold */
+  /* NEW: Phone numbers inside spotlight — dark background, very large, easy to read */
   .spotlight-phone {
+    display: inline-block;
     color: #ffffff;
-    font-size: 1.05rem;
+    background: rgba(0,0,0,0.55);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 6px;
+    font-size: 1.25rem;
     font-weight: 900;
-    letter-spacing: 0.5px;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+    padding: 3px 12px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
   }
   .spotlight-badge {
     flex-shrink: 0;
@@ -428,19 +433,20 @@
   #form-msg.success { background: #d1fae5; color: #065f46; display: block; }
   #form-msg.error { background: #fee2e2; color: #991b1b; display: block; }
 
-  /* CHANGED: Emergency phone numbers in contact section — dark navy on white pill, very high contrast */
+  /* CHANGED: Emergency phone numbers in contact section — dark navy, large, very readable */
   .emergency-phone-link {
     display: inline-block;
-    color: #1a2744 !important;
-    background: #ffffff;
+    color: #ffffff !important;
+    background: #1a2744;
     border: 2px solid #1a2744;
-    border-radius: 5px;
+    border-radius: 6px;
     font-weight: 900 !important;
-    font-size: 1.1rem !important;
+    font-size: 1.3rem !important;
     text-decoration: none;
-    padding: 4px 12px;
+    padding: 6px 16px;
     margin: 3px 0;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 3px 10px rgba(26,39,68,0.25);
     transition: background .2s, border-color .2s;
   }
   .emergency-phone-link:hover {
