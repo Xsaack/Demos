@@ -101,111 +101,65 @@
     100% { transform: translateX(-50%); }
   }
 
-  /* TOP SPOTLIGHT STRIP */
+  /* TOP SPOTLIGHT STRIP — medium prominence */
   .top-spotlight {
     margin-top: calc(80px + 32px);
-    background: linear-gradient(135deg, #0d1a3a 0%, var(--navy) 60%, #0f2040 100%);
-    border-bottom: 3px solid var(--gold);
+    background: linear-gradient(135deg, #0d1a3a 0%, #1a2744 100%);
+    border-bottom: 2px solid rgba(42,157,143,0.45);
     padding: 0 5%;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
-    gap: 0;
-    min-height: 96px;
-    position: relative;
-    overflow: hidden;
-  }
-  .top-spotlight::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 50% 120%, rgba(201,162,39,0.1) 0%, transparent 60%);
-    pointer-events: none;
   }
   .spotlight-card {
-    flex: 1;
-    max-width: 580px;
     display: flex;
     align-items: center;
-    gap: 18px;
-    padding: 22px 32px;
-    position: relative;
+    gap: 14px;
+    padding: 12px 24px;
     text-decoration: none;
     color: inherit;
-    transition: background .25s;
+    transition: background .2s;
+    border-radius: 4px;
   }
   .spotlight-card:hover { background: rgba(255,255,255,0.04); }
-  .spotlight-card + .spotlight-card {
-    border-left: 1px solid rgba(255,255,255,0.12);
-  }
   .spotlight-icon {
     flex-shrink: 0;
-    width: 52px; height: 52px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
   }
-  .spotlight-icon--restretch {
-    background: rgba(201,162,39,0.15);
-    border: 2px solid rgba(201,162,39,0.5);
-  }
-  .spotlight-icon--flood {
-    background: rgba(42,157,143,0.15);
-    border: 2px solid rgba(42,157,143,0.5);
-  }
-  .spotlight-text { flex: 1; }
   .spotlight-label {
-    font-size: 0.62rem; font-weight: 700; letter-spacing: 2.5px;
-    text-transform: uppercase; color: var(--gold); margin-bottom: 3px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal);
+    white-space: nowrap;
   }
-  .spotlight-label--teal { color: var(--teal); }
-  .spotlight-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1rem, 1.8vw, 1.22rem);
-    font-weight: 700; color: var(--white);
-    line-height: 1.2; margin-bottom: 6px;
+  .spotlight-divider {
+    width: 1px; height: 18px;
+    background: rgba(255,255,255,0.2);
+    flex-shrink: 0;
   }
-  /* CHANGED: spotlight-sub now bright white and bold for easy reading */
-  .spotlight-sub {
-    font-size: 0.88rem;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.4;
+  .spotlight-phones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-  /* NEW: Phone numbers inside spotlight — dark background, very large, easy to read */
   .spotlight-phone {
-    display: inline-block;
-    color: #ffffff;
-    background: rgba(0,0,0,0.55);
-    border: 2px solid rgba(255,255,255,0.5);
-    border-radius: 6px;
-    font-size: 1.25rem;
-    font-weight: 900;
-    letter-spacing: 1px;
-    padding: 3px 12px;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    color: rgba(255,255,255,0.92);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .spotlight-phones-sep {
+    color: rgba(255,255,255,0.3);
+    font-size: 0.85rem;
   }
   .spotlight-badge {
     flex-shrink: 0;
-    padding: 6px 14px; border-radius: 20px;
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
+    padding: 4px 12px; border-radius: 12px;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 1px;
     text-transform: uppercase; white-space: nowrap;
-  }
-  .spotlight-badge--gold {
-    background: var(--gold); color: var(--navy);
-  }
-  .spotlight-badge--teal {
-    background: var(--teal); color: white;
-    animation: pulse-teal 2s ease-in-out infinite;
-  }
-  .top-spotlight--single {
-    justify-content: center;
-  }
-  .top-spotlight--single .spotlight-card {
-    max-width: 760px;
-    justify-content: center;
-  }
-  @keyframes pulse-teal {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(42,157,143,0.5); }
-    50% { box-shadow: 0 0 0 8px rgba(42,157,143,0); }
+    background: rgba(42,157,143,0.25);
+    color: var(--teal);
+    border: 1px solid rgba(42,157,143,0.5);
   }
 
   /* HERO */
@@ -433,7 +387,6 @@
   #form-msg.success { background: #d1fae5; color: #065f46; display: block; }
   #form-msg.error { background: #fee2e2; color: #991b1b; display: block; }
 
-  /* CHANGED: Emergency phone numbers in contact section — dark navy, large, very readable */
   .emergency-phone-link {
     display: inline-block;
     color: #ffffff !important;
@@ -481,9 +434,8 @@
     .nav-links { display: none; position: fixed; top: 116px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 998; }
     .nav-links.open { display: flex; }
     .hamburger { display: flex; }
-    .top-spotlight { flex-direction: column; min-height: auto; padding: 0; }
-    .spotlight-card { padding: 16px 20px; max-width: 100%; }
-    .spotlight-card + .spotlight-card { border-left: none; border-top: 1px solid rgba(255,255,255,0.12); }
+    .top-spotlight { padding: 0 16px; }
+    .spotlight-card { padding: 7px 8px; gap: 8px; }
     .spotlight-badge { display: none; }
     .hero-content { grid-template-columns: 1fr; }
     .hero-card { display: none; }
@@ -554,19 +506,19 @@
   </div>
 </div>
 
-<!-- TOP SPOTLIGHT -->
-<div class="top-spotlight top-spotlight--single">
+<!-- TOP SPOTLIGHT — compact, subtle emergency strip -->
+<div class="top-spotlight">
   <a href="tel:+19132072033" class="spotlight-card">
-    <div class="spotlight-icon spotlight-icon--flood">🌊</div>
-    <div class="spotlight-text">
-      <div class="spotlight-label spotlight-label--teal">Emergency · Always Available</div>
-      <div class="spotlight-title">24-Hour Emergency Flood Service</div>
-      <!-- CHANGED: phone numbers are now large, bright white, bold -->
-      <div class="spotlight-sub">
-        Call now: &nbsp;<span class="spotlight-phone">(913) 207-2033</span>&nbsp;&nbsp;·&nbsp;&nbsp;<span class="spotlight-phone">(913) 207-6958</span>
-      </div>
+    <span class="spotlight-icon">🌊</span>
+    <span class="spotlight-label">24-Hour Emergency Flood Service</span>
+    <div class="spotlight-divider"></div>
+    <div class="spotlight-phones">
+      <span class="spotlight-phone">(913) 207-2033</span>
+      <span class="spotlight-phones-sep">·</span>
+      <span class="spotlight-phone">(913) 207-6958</span>
     </div>
-    <div class="spotlight-badge spotlight-badge--teal">Call 24/7</div>
+    <div class="spotlight-divider"></div>
+    <span class="spotlight-badge">Call 24/7</span>
   </a>
 </div>
 
@@ -835,7 +787,6 @@
             </span>
           </div>
         </div>
-        <!-- CHANGED: Emergency numbers use high-contrast white pill style for easy reading -->
         <div class="contact-detail">
           <div class="contact-icon">🌊</div>
           <div>
