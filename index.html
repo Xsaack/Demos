@@ -101,7 +101,7 @@
     100% { transform: translateX(-50%); }
   }
 
-  /* TOP SPOTLIGHT STRIP — medium prominence */
+  /* TOP SPOTLIGHT STRIP */
   .top-spotlight {
     margin-top: calc(80px + 32px);
     background: linear-gradient(135deg, #0d1a3a 0%, #1a2744 100%);
@@ -141,8 +141,9 @@
     align-items: center;
     gap: 8px;
   }
+  /* UPDATED: spotlight phone numbers now gold/yellow */
   .spotlight-phone {
-    color: rgba(255,255,255,0.92);
+    color: var(--gold-light);
     font-size: 0.95rem;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -387,6 +388,7 @@
   #form-msg.success { background: #d1fae5; color: #065f46; display: block; }
   #form-msg.error { background: #fee2e2; color: #991b1b; display: block; }
 
+  /* UPDATED: emergency phone links now white with gold hover */
   .emergency-phone-link {
     display: inline-block;
     color: #ffffff !important;
@@ -506,7 +508,7 @@
   </div>
 </div>
 
-<!-- TOP SPOTLIGHT — compact, subtle emergency strip -->
+<!-- TOP SPOTLIGHT -->
 <div class="top-spotlight">
   <a href="tel:+19132072033" class="spotlight-card">
     <span class="spotlight-icon">🌊</span>
@@ -783,7 +785,8 @@
           <div>
             <strong>Phone</strong>
             <span>
-              <a href="tel:+19132072033" style="color:var(--gold);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a>
+              <!-- UPDATED: phone number now gold/yellow -->
+              <a href="tel:+19132072033" style="color:var(--gold-light);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a>
             </span>
           </div>
         </div>
@@ -792,6 +795,7 @@
           <div>
             <strong>24-Hour Emergency Flood Service</strong>
             <span style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+              <!-- Emergency numbers: white text on navy background, gold on hover -->
               <a href="tel:+19132072033" class="emergency-phone-link">(913) 207-2033</a>
               <a href="tel:+19132076958" class="emergency-phone-link">(913) 207-6958</a>
             </span>
@@ -803,7 +807,7 @@
         </div>
         <div class="contact-detail">
           <div class="contact-icon">📧</div>
-          <div><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection#6c0b1e0909021f0f0d1e1c09182c09140d011c0009420f0301" style="color:inherit;text-decoration:none"><span class="__cf_email__" data-cfemail="2641544343485545475456435266435e474b564a430845494b">[email&#160;protected]</span></a></span></div>
+          <div><strong>Email</strong><span><a href="mailto:greenscarpet@email.com" style="color:inherit;text-decoration:none">greenscarpet@email.com</a></span></div>
         </div>
         <div class="contact-detail">
           <div class="contact-icon">⏰</div>
@@ -869,7 +873,6 @@
 
 <a href="tel:+19132072033" class="float-cta">📞 (913) 207-2033</a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
