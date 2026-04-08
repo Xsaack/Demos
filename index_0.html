@@ -348,6 +348,10 @@
   .float-cta { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: var(--gold); color: var(--navy); border: none; border-radius: 50px; padding: 14px 24px; font-weight: 700; font-size: 0.85rem; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; transition: all .25s; text-decoration: none; letter-spacing: 0.5px; }
   .float-cta:hover { background: var(--gold-light); transform: translateY(-3px); }
 
+  @keyframes wave-bob {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-6px) rotate(5deg); }
+  }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .reveal { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
@@ -434,13 +438,18 @@
 <!-- EMERGENCY BANNER -->
 <div class="top-spotlight">
   <a href="tel:+19132072033" class="spotlight-card">
-    <span class="spotlight-label">Emergency &nbsp;·&nbsp; Always Available</span>
-    <span class="spotlight-title">24-Hour Emergency Flood Service</span>
-    <div class="spotlight-phones-row">
-      <span class="spotlight-phones-label">Call now:</span>
-      <span class="spotlight-phone">(913) 207-2033</span>
-      <span class="spotlight-phones-sep">·</span>
-      <span class="spotlight-phone">(913) 207-6958</span>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div style="font-size:3rem;line-height:1;flex-shrink:0;animation:wave-bob 2s ease-in-out infinite;">🌊</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <span class="spotlight-label">Emergency &nbsp;·&nbsp; Always Available</span>
+        <span class="spotlight-title">24-Hour Emergency Flood Service</span>
+        <div class="spotlight-phones-row">
+          <span class="spotlight-phones-label">Call now:</span>
+          <span class="spotlight-phone">(913) 207-2033</span>
+          <span class="spotlight-phones-sep">·</span>
+          <span class="spotlight-phone">(913) 207-6958</span>
+        </div>
+      </div>
     </div>
   </a>
 </div>
