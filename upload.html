@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Photos · Green's Carpet Cleaning</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --gold: #c9a227;
+    --gold-light: #e8c44a;
+    --white: #ffffff;
+    --gray-light: #f0f2f5;
+    --gray-mid: #dde2ea;
+    --text-mid: #4a5568;
+    --teal: #2a9d8f;
+    --red: #dc2626;
+    --green: #16a34a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Lato',sans-serif; background:var(--gray-light); min-height:100vh; }
+
+  /* HEADER */
+  .header {
+    background:var(--navy);
+    padding:24px 5%;
+    display:flex; align-items:center; justify-content:space-between;
+    box-shadow:0 2px 20px rgba(0,0,0,0.3);
+  }
+  .header-logo { display:flex; align-items:center; gap:14px; text-decoration:none; }
+  .header-logo img { height:60px; filter:brightness(0) invert(1); }
+  .header-title { color:var(--gold-light); font-family:'Playfair Display',serif; font-size:1.1rem; font-style:italic; }
+  .header-back { color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.82rem; letter-spacing:1px; text-transform:uppercase; border:1px solid rgba(255,255,255,0.2); padding:7px 16px; border-radius:4px; transition:all .2s; }
+  .header-back:hover { color:var(--gold); border-color:var(--gold); }
+
+  /* LOGIN GATE */
+  .login-gate {
+    max-width:420px; margin:80px auto; padding:0 20px;
+  }
+  .login-card {
+    background:var(--white); border-radius:20px; padding:48px 40px;
+    box-shadow:0 8px 40px rgba(26,39,68,0.15); text-align:center;
+  }
+  .login-icon { font-size:3rem; margin-bottom:16px; }
+  .login-card h2 { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--navy); margin-bottom:8px; }
+  .login-card p { color:var(--text-mid); font-size:0.9rem; margin-bottom:28px; }
+  .login-input {
+    width:100%; padding:14px 18px; border:2px solid var(--gray-mid);
+    border-radius:10px; font-size:1rem; font-family:'Lato',sans-serif;
+    color:var(--navy); background:var(--gray-light); outline:none;
+    transition:border-color .2s; margin-bottom:16px; text-align:center;
+    letter-spacing:4px;
+  }
+  .login-input:focus { border-color:var(--navy); background:white; }
+  .login-btn {
+    width:100%; padding:14px; background:var(--gold); color:var(--navy);
+    border:none; border-radius:10px; font-weight:700; font-size:1rem;
+    cursor:pointer; letter-spacing:1px; text-transform:uppercase;
+    transition:all .2s;
+  }
+  .login-btn:hover { background:var(--gold-light); transform:translateY(-2px); }
+  .login-error { color:var(--red); font-size:0.85rem; margin-top:12px; display:none; }
+
+  /* UPLOAD PANEL */
+  .upload-panel { display:none; max-width:900px; margin:0 auto; padding:40px 20px 80px; }
+
+  .panel-title { text-align:center; margin-bottom:40px; }
+  .panel-title h1 { font-family:'Playfair Display',serif; font-size:2rem; color:var(--navy); margin-bottom:8px; }
+  .panel-title p { color:var(--text-mid); font-size:0.95rem; }
+
+  /* DROP ZONE */
+  .drop-zone {
+    border:3px dashed var(--gray-mid); border-radius:20px;
+    padding:60px 40px; text-align:center; cursor:pointer;
+    background:var(--white); transition:all .25s; margin-bottom:32px;
+  }
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color:var(--gold); background:rgba(201,162,39,0.05);
+  }
+  .drop-icon { font-size:3rem; margin-bottom:16px; }
+  .drop-zone h3 { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--navy); margin-bottom:8px; }
+  .drop-zone p { color:var(--text-mid); font-size:0.88rem; margin-bottom:20px; }
+  .drop-btn {
+    background:var(--navy); color:white; border:none; border-radius:8px;
+    padding:12px 28px; font-weight:700; font-size:0.88rem; cursor:pointer;
+    letter-spacing:1px; text-transform:uppercase; transition:all .2s;
+  }
+  .drop-btn:hover { background:var(--gold); color:var(--navy); }
+  #fileInput { display:none; }
+
+  /* FORM FIELDS */
+  .upload-form { background:var(--white); border-radius:16px; padding:32px; margin-bottom:32px; box-shadow:0 2px 16px rgba(26,39,68,0.07); }
+  .upload-form h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--navy); margin-bottom:20px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:0.78rem; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width:100%; padding:11px 14px; border:2px solid var(--gray-mid);
+    border-radius:8px; font-family:'Lato',sans-serif; font-size:0.9rem;
+    color:var(--navy); background:var(--gray-light); outline:none; transition:border-color .2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--navy); background:white; }
+  .form-group textarea { resize:vertical; min-height:80px; }
+
+  /* PREVIEW GRID */
+  .preview-section { margin-bottom:32px; display:none; }
+  .preview-section h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--navy); margin-bottom:16px; }
+  .preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; }
+  .preview-item {
+    position:relative; border-radius:10px; overflow:hidden;
+    aspect-ratio:1; background:var(--gray-light);
+    box-shadow:0 2px 8px rgba(26,39,68,0.1);
+  }
+  .preview-item img { width:100%; height:100%; object-fit:cover; display:block; }
+  .preview-remove {
+    position:absolute; top:6px; right:6px;
+    background:rgba(220,38,38,0.9); color:white;
+    border:none; border-radius:50%; width:26px; height:26px;
+    cursor:pointer; font-size:0.8rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .preview-status {
+    position:absolute; inset:0; background:rgba(26,39,68,0.7);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; opacity:0; transition:opacity .2s;
+  }
+  .preview-status.visible { opacity:1; }
+  .preview-status .status-icon { font-size:1.8rem; }
+  .preview-status .status-bar-wrap { width:80%; background:rgba(255,255,255,0.2); border-radius:4px; height:4px; }
+  .preview-status .status-bar { height:4px; background:var(--gold); border-radius:4px; width:0%; transition:width .3s; }
+
+  /* SUBMIT */
+  .submit-btn {
+    width:100%; padding:16px; background:var(--gold); color:var(--navy);
+    border:none; border-radius:12px; font-weight:700; font-size:1rem;
+    cursor:pointer; letter-spacing:1px; text-transform:uppercase;
+    transition:all .25s; box-shadow:0 4px 20px rgba(201,162,39,0.35);
+  }
+  .submit-btn:hover { background:var(--gold-light); transform:translateY(-2px); }
+  .submit-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+  /* SUCCESS TOAST */
+  .toast {
+    position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px);
+    background:var(--navy); color:white; padding:16px 28px; border-radius:12px;
+    font-weight:700; font-size:0.95rem; box-shadow:0 8px 30px rgba(0,0,0,0.3);
+    transition:transform .4s ease; z-index:9999; white-space:nowrap;
+    border-left:4px solid var(--gold);
+  }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  /* UPLOADED LIST */
+  .uploaded-section { background:var(--white); border-radius:16px; padding:32px; margin-top:32px; box-shadow:0 2px 16px rgba(26,39,68,0.07); display:none; }
+  .uploaded-section h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--navy); margin-bottom:16px; }
+  .uploaded-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
+  .uploaded-thumb { border-radius:8px; overflow:hidden; aspect-ratio:1; }
+  .uploaded-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+
+  @media(max-width:600px) {
+    .form-row { grid-template-columns:1fr; }
+    .login-card { padding:36px 24px; }
+    .drop-zone { padding:40px 20px; }
+    .upload-form { padding:24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <a class="header-logo" href="index.html">
+    <img src="imgen/logo.png" alt="Green's">
+    <span class="header-title">Photo Upload Portal</span>
+  </a>
+  <a href="gallery.html" class="header-back">← Gallery</a>
+</div>
+
+<!-- LOGIN GATE -->
+<div class="login-gate" id="loginGate">
+  <div class="login-card">
+    <div class="login-icon">🔒</div>
+    <h2>Team Access</h2>
+    <p>Enter the upload password to add new photos to the gallery.</p>
+    <input type="password" class="login-input" id="passInput" placeholder="••••••••" onkeydown="if(event.key==='Enter') checkPass()">
+    <button class="login-btn" onclick="checkPass()">Enter</button>
+    <div class="login-error" id="loginError">❌ Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- UPLOAD PANEL -->
+<div class="upload-panel" id="uploadPanel">
+
+  <div class="panel-title">
+    <h1>📸 Upload New Photos</h1>
+    <p>Add completed work photos — they'll appear instantly in the gallery.</p>
+  </div>
+
+  <!-- DROP ZONE -->
+  <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+    <div class="drop-icon">🖼️</div>
+    <h3>Drop photos here</h3>
+    <p>or click to select from your phone or computer<br><small>JPG, PNG, WEBP — up to 10MB each — multiple files OK</small></p>
+    <button class="drop-btn" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">Select Photos</button>
+  </div>
+  <input type="file" id="fileInput" multiple accept="image/*" onchange="handleFiles(this.files)">
+
+  <!-- PREVIEW -->
+  <div class="preview-section" id="previewSection">
+    <h3>Selected Photos (<span id="photoCount">0</span>)</h3>
+    <div class="preview-grid" id="previewGrid"></div>
+  </div>
+
+  <!-- FORM -->
+  <div class="upload-form">
+    <h3>Photo Details (optional)</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="photoTitle" placeholder="e.g. Carpet Cleaning - Living Room">
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="photoCategory">
+          <option value="completed">Completed Work</option>
+          <option value="carpet">Carpet Cleaning</option>
+          <option value="upholstery">Upholstery</option>
+          <option value="Re-Stretching">Re-Stretching</option>
+          <option value="stain">Stain Removal</option>
+          <option value="water">Water Damage</option>
+          <option value="tile">Wood Floor</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description (optional)</label>
+      <textarea id="photoDesc" placeholder="Brief description of the job..."></textarea>
+    </div>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="uploadAll()" disabled>
+    📤 Upload Photos to Gallery
+  </button>
+
+  <!-- UPLOADED RESULTS -->
+  <div class="uploaded-section" id="uploadedSection">
+    <h3>✅ Uploaded Successfully</h3>
+    <div class="uploaded-grid" id="uploadedGrid"></div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIG — replace with your Cloudinary credentials ──
+  const CLOUD_NAME   = 'dkbomqqdl';   // e.g. 'dxyz123'
+  const UPLOAD_PRESET = 'Imagenes'; // e.g. 'greens_gallery'
+  const UPLOAD_PASSWORD = 'greens2024';       // change this password!
+  // ────────────────────────────────────────────────────────
+
+  let selectedFiles = [];
+
+  // ── LOGIN ──
+  function checkPass() {
+    const val = document.getElementById('passInput').value;
+    if (val === UPLOAD_PASSWORD) {
+      document.getElementById('loginGate').style.display = 'none';
+      document.getElementById('uploadPanel').style.display = 'block';
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('passInput').value = '';
+      document.getElementById('passInput').focus();
+    }
+  }
+
+  // ── DRAG & DROP ──
+  function handleDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('dragover'); }
+  function handleDragLeave()  { document.getElementById('dropZone').classList.remove('dragover'); }
+  function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('dropZone').classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  }
+
+  // ── FILE SELECTION ──
+  function handleFiles(files) {
+    Array.from(files).forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      selectedFiles.push(file);
+      addPreview(file, selectedFiles.length - 1);
+    });
+    updateCount();
+  }
+
+  function addPreview(file, idx) {
+    const section = document.getElementById('previewSection');
+    const grid    = document.getElementById('previewGrid');
+    section.style.display = 'block';
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      const item = document.createElement('div');
+      item.className = 'preview-item';
+      item.id = 'preview-' + idx;
+      item.innerHTML = `
+        <img src="${e.target.result}" alt="">
+        <button class="preview-remove" onclick="removeFile(${idx})">✕</button>
+        <div class="preview-status" id="status-${idx}">
+          <div class="status-icon" id="icon-${idx}">⏳</div>
+          <div class="status-bar-wrap"><div class="status-bar" id="bar-${idx}"></div></div>
+        </div>
+      `;
+      grid.appendChild(item);
+    };
+    reader.readAsDataURL(file);
+    updateCount();
+  }
+
+  function removeFile(idx) {
+    selectedFiles[idx] = null;
+    const el = document.getElementById('preview-' + idx);
+    if (el) el.remove();
+    updateCount();
+  }
+
+  function updateCount() {
+    const active = selectedFiles.filter(f => f !== null).length;
+    document.getElementById('photoCount').textContent = active;
+    document.getElementById('submitBtn').disabled = active === 0;
+  }
+
+  // ── UPLOAD ──
+  async function uploadAll() {
+    const files = selectedFiles.filter(f => f !== null);
+    if (!files.length) return;
+
+    if (CLOUD_NAME === 'YOUR_CLOUD_NAME') {
+      showToast('⚠️ Configure your Cloudinary credentials first!');
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Uploading...';
+
+    const title    = document.getElementById('photoTitle').value.trim();
+    const category = document.getElementById('photoCategory').value;
+    const desc     = document.getElementById('photoDesc').value.trim();
+
+    let successCount = 0;
+    const uploadedUrls = [];
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      if (!file) continue;
+
+      const statusEl = document.getElementById('status-' + i);
+      const iconEl   = document.getElementById('icon-' + i);
+      const barEl    = document.getElementById('bar-' + i);
+      if (statusEl) statusEl.classList.add('visible');
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+        formData.append('folder', 'greens_gallery');
+        if (title)    formData.append('context', `title=${title}|category=${category}|description=${desc}`);
+        if (category) formData.append('tags', category);
+
+        const xhr = new XMLHttpRequest();
+        xhr.upload.addEventListener('progress', e => {
+          if (e.lengthComputable && barEl) {
+            barEl.style.width = Math.round((e.loaded / e.total) * 100) + '%';
+          }
+        });
+
+        const result = await new Promise((resolve, reject) => {
+          xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
+          xhr.onload = () => {
+            if (xhr.status === 200) resolve(JSON.parse(xhr.responseText));
+            else reject(new Error('Upload failed'));
+          };
+          xhr.onerror = () => reject(new Error('Network error'));
+          xhr.send(formData);
+        });
+
+        if (iconEl) iconEl.textContent = '✅';
+        if (barEl)  barEl.style.background = '#16a34a';
+        uploadedUrls.push(result.secure_url);
+        successCount++;
+
+      } catch (err) {
+        console.error('Upload error:', err);
+        if (iconEl) iconEl.textContent = '❌';
+        if (barEl)  barEl.style.background = '#dc2626';
+      }
+    }
+
+    // Show uploaded thumbnails
+    if (uploadedUrls.length > 0) {
+      const section = document.getElementById('uploadedSection');
+      const grid    = document.getElementById('uploadedGrid');
+      section.style.display = 'block';
+      uploadedUrls.forEach(url => {
+        const thumb = document.createElement('div');
+        thumb.className = 'uploaded-thumb';
+        thumb.innerHTML = `<img src="${url}" alt="Uploaded">`;
+        grid.appendChild(thumb);
+      });
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    showToast(`✅ ${successCount} photo${successCount !== 1 ? 's' : ''} uploaded successfully!`);
+
+    btn.textContent = '📤 Upload Photos to Gallery';
+    btn.disabled = false;
+    selectedFiles = [];
+    updateCount();
+  }
+
+  // ── TOAST ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+</script>
+</body>
+</html>
