@@ -101,88 +101,85 @@
     100% { transform: translateX(-50%); }
   }
 
-  /* TOP SPOTLIGHT STRIP — new section just below heritage bar */
+  /* ============================================
+     EMERGENCY BANNER — estilo tipo imagen
+     ============================================ */
   .top-spotlight {
-    margin-top: calc(80px + 32px); /* nav + heritage bar */
-    background: linear-gradient(135deg, #0d1a3a 0%, var(--navy) 60%, #0f2040 100%);
+    margin-top: calc(80px + 32px);
+    background: linear-gradient(135deg, #0d1a3a 0%, #1a2744 100%);
     border-bottom: 3px solid var(--gold);
-    padding: 0 5%;
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    gap: 0;
-    min-height: 96px;
-    position: relative;
-    overflow: hidden;
-  }
-  .top-spotlight::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 50% 120%, rgba(201,162,39,0.1) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .spotlight-card {
-    flex: 1;
-    max-width: 580px;
+    border-top: 3px solid var(--gold);
+    padding: 20px 5%;
     display: flex;
     align-items: center;
-    gap: 18px;
-    padding: 22px 32px;
-    position: relative;
+    justify-content: center;
+  }
+
+  .spotlight-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 0;
     text-decoration: none;
     color: inherit;
-    transition: background .25s;
+    max-width: 700px;
+    width: 100%;
   }
-  .spotlight-card:hover { background: rgba(255,255,255,0.04); }
-  .spotlight-card + .spotlight-card {
-    border-left: 1px solid rgba(255,255,255,0.12);
-  }
-  .spotlight-icon {
-    flex-shrink: 0;
-    width: 52px; height: 52px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
-  }
-  .spotlight-icon--restretch {
-    background: rgba(201,162,39,0.15);
-    border: 2px solid rgba(201,162,39,0.5);
-  }
-  .spotlight-icon--flood {
-    background: rgba(42,157,143,0.15);
-    border: 2px solid rgba(42,157,143,0.5);
-  }
-  .spotlight-text { flex: 1; }
+
   .spotlight-label {
-    font-size: 0.62rem; font-weight: 700; letter-spacing: 2.5px;
-    text-transform: uppercase; color: var(--gold); margin-bottom: 3px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-  .spotlight-label--teal { color: var(--teal); }
+  .spotlight-label::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: pulse-dot 1.5s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
   .spotlight-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1rem, 1.8vw, 1.22rem);
-    font-weight: 700; color: var(--white);
-    line-height: 1.2; margin-bottom: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.2;
+    letter-spacing: 0.3px;
   }
-  .spotlight-sub {
-    font-size: 0.78rem; color: rgba(255,255,255,0.6); line-height: 1.4;
+
+  .spotlight-phones-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
   }
-  .spotlight-badge {
-    flex-shrink: 0;
-    padding: 6px 14px; border-radius: 20px;
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase; white-space: nowrap;
+  .spotlight-phones-label {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 400;
   }
-  .spotlight-badge--gold {
-    background: var(--gold); color: var(--navy);
+  .spotlight-phone {
+    color: rgba(255,255,255,0.9);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
   }
-  .spotlight-badge--teal {
-    background: var(--teal); color: white;
-    animation: pulse-teal 2s ease-in-out infinite;
-  }
-  @keyframes pulse-teal {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(42,157,143,0.5); }
-    50% { box-shadow: 0 0 0 8px rgba(42,157,143,0); }
+  .spotlight-phones-sep {
+    color: rgba(255,255,255,0.3);
+    font-size: 0.85rem;
   }
 
   /* HERO */
@@ -202,28 +199,13 @@
   .hero-title em { color: var(--gold); font-style: normal; }
   .hero-tagline { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 32px; animation: fadeUp .7s .2s ease both; }
   .hero-slogan {
-    display: inline-block;
-    margin-bottom: 32px;
-    padding: 14px 28px;
-    border-left: 4px solid var(--gold);
-    background: rgba(201,162,39,0.1);
-    border-radius: 0 8px 8px 0;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.05rem, 2vw, 1.35rem);
-    font-style: italic;
-    font-weight: 700;
-    color: var(--gold-light);
-    letter-spacing: 0.5px;
-    animation: fadeUp .7s .25s ease both;
-    position: relative;
+    display: inline-block; margin-bottom: 32px; padding: 14px 28px;
+    border-left: 4px solid var(--gold); background: rgba(201,162,39,0.1);
+    border-radius: 0 8px 8px 0; font-family: 'Playfair Display', serif;
+    font-size: clamp(1.05rem, 2vw, 1.35rem); font-style: italic; font-weight: 700;
+    color: var(--gold-light); letter-spacing: 0.5px; animation: fadeUp .7s .25s ease both;
   }
-  .slogan-quote {
-    font-size: 1.8em;
-    line-height: 0;
-    vertical-align: -0.4em;
-    color: var(--gold);
-    opacity: 0.7;
-  }
+  .slogan-quote { font-size: 1.8em; line-height: 0; vertical-align: -0.4em; color: var(--gold); opacity: 0.7; }
   .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp .7s .3s ease both; }
   .btn-primary { background: var(--gold); color: var(--navy); padding: 14px 32px; border-radius: 4px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: all .25s; display: inline-block; }
   .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,162,39,0.4); }
@@ -254,72 +236,20 @@
   .services-header { text-align: center; margin-bottom: 56px; }
   .services-header .section-subtitle { margin: 0 auto; }
   .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-
-  .service-card {
-    border-radius: 12px; overflow: hidden;
-    position: relative; display: block;
-    text-decoration: none; color: inherit;
-    height: 320px;
-    box-shadow: 0 4px 20px rgba(26,39,68,0.15);
-    transition: transform .35s ease, box-shadow .35s ease;
-  }
+  .service-card { border-radius: 12px; overflow: hidden; position: relative; display: block; text-decoration: none; color: inherit; height: 320px; box-shadow: 0 4px 20px rgba(26,39,68,0.15); transition: transform .35s ease, box-shadow .35s ease; }
   .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(26,39,68,0.25); }
-  .service-card::before {
-    content: '';
-    position: absolute; inset: 0; z-index: 1;
-    background: linear-gradient(to top, rgba(5,12,35,0.97) 0%, rgba(5,12,35,0.82) 50%, rgba(5,12,35,0.45) 100%);
-    opacity: 0;
-    transition: opacity .4s ease;
-  }
+  .service-card::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(5,12,35,0.97) 0%, rgba(5,12,35,0.82) 50%, rgba(5,12,35,0.45) 100%); opacity: 0; transition: opacity .4s ease; }
   .service-card:hover::before { opacity: 1; }
-  .service-card::after {
-    content: '';
-    position: absolute; inset: 0; z-index: 1;
-    background: linear-gradient(to top, rgba(5,12,35,0.88) 0%, rgba(5,12,35,0.3) 45%, transparent 70%);
-    transition: opacity .4s ease;
-  }
+  .service-card::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(5,12,35,0.88) 0%, rgba(5,12,35,0.3) 45%, transparent 70%); transition: opacity .4s ease; }
   .service-card:hover::after { opacity: 0; }
   .service-icon { display: none; }
   .service-card > *:not(.service-icon):not(.service-card--water-bg) { position: relative; z-index: 2; }
-  .service-card h3 {
-    position: absolute !important; bottom: 24px; left: 24px; right: 24px;
-    font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700;
-    color: white !important; margin: 0;
-    transition: opacity .3s ease, transform .4s ease;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    transform: translateY(0);
-  }
+  .service-card h3 { position: absolute !important; bottom: 24px; left: 24px; right: 24px; font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: white !important; margin: 0; transition: opacity .3s ease, transform .4s ease; text-shadow: 0 2px 8px rgba(0,0,0,0.5); transform: translateY(0); }
   .service-card:hover h3 { opacity: 0; transform: translateY(-8px); }
-  .service-card .card-hover-content {
-    position: absolute !important;
-    inset: 0; z-index: 2;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: flex-start;
-    padding: 28px;
-    opacity: 0; transform: translateY(10px);
-    transition: opacity .4s ease .05s, transform .4s ease .05s;
-  }
+  .service-card .card-hover-content { position: absolute !important; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 28px; opacity: 0; transform: translateY(10px); transition: opacity .4s ease .05s, transform .4s ease .05s; }
   .service-card:hover .card-hover-content { opacity: 1; transform: translateY(0); }
-  .service-card .card-hover-content h4 {
-    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
-    color: var(--gold-light) !important; margin: 0 0 12px 0;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  }
-  .service-card .card-hover-content p {
-    position: static !important;
-    font-size: 0.88rem !important; color: rgba(255,255,255,0.9) !important;
-    line-height: 1.7; margin: 0 !important;
-    opacity: 1 !important; transform: none !important;
-  }
-  .service-card > p {
-    position: absolute !important; top: 80px; left: 24px; right: 24px;
-    font-size: 0.88rem !important; color: rgba(255,255,255,0.88) !important;
-    line-height: 1.65; margin: 0;
-    opacity: 0; transform: translateY(10px);
-    transition: opacity .4s ease .1s, transform .4s ease .1s;
-  }
-  .service-card:hover > p { opacity: 1; transform: translateY(0); }
-
+  .service-card .card-hover-content h4 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--gold-light) !important; margin: 0 0 12px 0; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+  .service-card .card-hover-content p { position: static !important; font-size: 0.88rem !important; color: rgba(255,255,255,0.9) !important; line-height: 1.7; margin: 0 !important; opacity: 1 !important; transform: none !important; }
   .service-card--carpet     { background: url("imgen/imagen4.png")  center center / cover no-repeat; }
   .service-card--upholstery { background: url("imgen/imagen8.png")  center center / cover no-repeat; }
   .service-card--restretch  { background: url("imgen/imagen5.png")  center center / cover no-repeat; }
@@ -328,7 +258,7 @@
   .service-card--water      { background: url("imgen/imagen1.png")  center center / cover no-repeat; }
   .service-card--residential{ background: url("imgen/imagen11.png") center center / cover no-repeat; }
   .service-card--military   { background: url("imgen/imagen12.png") center center / cover no-repeat; }
-  .service-card--water-bg   { display: none; }
+  .restretch-badge { position: absolute; top: 16px; left: 16px; z-index: 3; background: var(--gold); color: var(--navy); font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
 
   /* ABOUT */
   .about { background: var(--white); }
@@ -401,6 +331,8 @@
   #form-msg { display: none; padding: 12px 16px; border-radius: 8px; margin-top: 14px; font-size: 0.9rem; font-weight: 700; }
   #form-msg.success { background: #d1fae5; color: #065f46; display: block; }
   #form-msg.error { background: #fee2e2; color: #991b1b; display: block; }
+  .emergency-phone-link { display: inline-block; color: #ffffff !important; background: #1a2744; border: 2px solid #1a2744; border-radius: 6px; font-weight: 900 !important; font-size: 1.3rem !important; text-decoration: none; padding: 6px 16px; margin: 3px 0; letter-spacing: 0.5px; box-shadow: 0 3px 10px rgba(26,39,68,0.25); transition: background .2s, border-color .2s; }
+  .emergency-phone-link:hover { background: var(--gold); border-color: var(--gold); color: var(--navy) !important; }
 
   /* FOOTER */
   footer { background: var(--navy); padding: 48px 5% 24px; color: rgba(255,255,255,0.6); }
@@ -428,10 +360,8 @@
     .nav-links { display: none; position: fixed; top: 116px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 20px 5%; gap: 16px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 998; }
     .nav-links.open { display: flex; }
     .hamburger { display: flex; }
-    .top-spotlight { flex-direction: column; min-height: auto; padding: 0; }
-    .spotlight-card { padding: 16px 20px; max-width: 100%; }
-    .spotlight-card + .spotlight-card { border-left: none; border-top: 1px solid rgba(255,255,255,0.12); }
-    .spotlight-badge { display: none; }
+    .top-spotlight { padding: 16px 20px; }
+    .spotlight-title { font-size: 1.15rem; }
     .hero-content { grid-template-columns: 1fr; }
     .hero-card { display: none; }
     .about-grid { grid-template-columns: 1fr; }
@@ -486,7 +416,6 @@
     <span class="heritage-bar-dot"></span>
     <span class="heritage-bar-item">Family Business · Greater Kansas City Area</span>
     <span class="heritage-bar-dot"></span>
-    <!-- duplicate for seamless loop -->
     <span class="heritage-bar-item">🏅 Established 1993</span>
     <span class="heritage-bar-dot"></span>
     <span class="heritage-bar-item">Over 30 Years of Excellence</span>
@@ -502,25 +431,17 @@
   </div>
 </div>
 
-<!-- TOP SPOTLIGHT: Carpet Re-stretching + 24Hr Flood -->
+<!-- EMERGENCY BANNER -->
 <div class="top-spotlight">
-  <a href="#contact" class="spotlight-card">
-    <div class="spotlight-icon spotlight-icon--restretch">↔️</div>
-    <div class="spotlight-text">
-      <div class="spotlight-label">Featured Service</div>
-      <div class="spotlight-title">Carpet Re-stretching</div>
-      <div class="spotlight-sub">Eliminate ripples, bubbles &amp; wrinkles — flawless finish guaranteed</div>
-    </div>
-    <div class="spotlight-badge spotlight-badge--gold">Book Now</div>
-  </a>
   <a href="tel:+19132072033" class="spotlight-card">
-    <div class="spotlight-icon spotlight-icon--flood">🌊</div>
-    <div class="spotlight-text">
-      <div class="spotlight-label spotlight-label--teal">Emergency · Always Available</div>
-      <div class="spotlight-title">24-Hour Emergency Flood Service</div>
-      <div class="spotlight-sub">Call now: (913) 207-2033 &nbsp;·&nbsp; (913) 207-6958</div>
+    <span class="spotlight-label">Emergency &nbsp;·&nbsp; Always Available</span>
+    <span class="spotlight-title">24-Hour Emergency Flood Service</span>
+    <div class="spotlight-phones-row">
+      <span class="spotlight-phones-label">Call now:</span>
+      <span class="spotlight-phone">(913) 207-2033</span>
+      <span class="spotlight-phones-sep">·</span>
+      <span class="spotlight-phone">(913) 207-6958</span>
     </div>
-    <div class="spotlight-badge spotlight-badge--teal">Call 24/7</div>
   </a>
 </div>
 
@@ -530,20 +451,12 @@
   <div class="hero-content">
     <div>
       <div class="hero-badge">🏅 Est. 1993 · Bridgepoint Certified Technician</div>
-      <h1 class="hero-title">
-        Cleaning That<br><em>Restores</em><br>Your Home
-      </h1>
-      <p class="hero-tagline">
-        Green's Carpet &amp; Upholstery Cleaning in Bonner Springs, KS — trusted since 1993. Professional carpet cleaning, upholstery care, water damage restoration, and more.
-      </p>
-      <div class="hero-slogan">
-        <span class="slogan-quote">"</span> Remember you walk on our reputation<span class="slogan-quote">"</span>
-      </div>
+      <h1 class="hero-title">Cleaning That<br><em>Restores</em><br>Your Home</h1>
+      <p class="hero-tagline">Green's Carpet &amp; Upholstery Cleaning in Bonner Springs, KS — trusted since 1993. Professional carpet cleaning, upholstery care, water damage restoration, and more.</p>
+      <div class="hero-slogan"><span class="slogan-quote">"</span> Remember you walk on our reputation<span class="slogan-quote">"</span></div>
       <div class="hero-buttons">
         <a href="tel:+19132072033" class="btn-primary">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:6px">
-            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
-          </svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:6px"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
           Call (913) 207-2033
         </a>
         <a href="#contact" class="btn-outline">Request Service</a>
@@ -562,7 +475,7 @@
         <a href="#services" class="service-pill">🧹 Carpet Cleaning</a>
         <a href="#services" class="service-pill">🛋️ Upholstery Cleaning</a>
         <a href="#services" class="service-pill">💧 Water Damage / Restoration</a>
-        <a href="#services" class="service-pill">↔️ Carpet Restretching</a>
+        <a href="#services" class="service-pill">↔️ Carpet Re-Stretching</a>
         <a href="#services" class="service-pill">🔧 Carpet Repair</a>
         <a href="#services" class="service-pill">🧼 Stain Removal</a>
         <a href="#services" class="service-pill">🏠 Residential Service</a>
@@ -585,62 +498,14 @@
       <p class="section-subtitle">We offer complete solutions to make your carpets and upholstery look and feel like new again.</p>
     </div>
     <div class="services-grid">
-      <a href="#contact" class="service-card service-card--carpet reveal">
-        <h3>Carpet Cleaning</h3>
-        <div class="card-hover-content">
-          <h4>Carpet Cleaning</h4>
-          <p>We remove deep dirt, stains, and allergens using a high-powered truck-mounted steam unit. Visible results, fast drying.</p>
-        </div>
-      </a>
-      <a href="#contact" class="service-card service-card--upholstery reveal">
-        <h3>Upholstery Cleaning</h3>
-        <div class="card-hover-content">
-          <h4>Upholstery Cleaning</h4>
-          <p>Sofas, chairs, headboards and more. We remove stains, odors, and bacteria without damaging fabrics, leaving your furniture fresh and renewed.</p>
-        </div>
-      </a>
-      <a href="#contact" class="service-card service-card--restretch reveal">
-        <h3>Carpet Restretching</h3>
-        <div class="card-hover-content">
-          <h4>Carpet Restretching</h4>
-          <p>Ripples, bubbles, or wrinkles? We use power stretchers to eliminate looseness, reinstall tack strips and trim excess carpet for a perfect finish.</p>
-        </div>
-      </a>
-      <a href="#contact" class="service-card service-card--repair reveal">
-        <h3>Carpet Repair</h3>
-        <div class="card-hover-content">
-          <h4>Carpet Repair</h4>
-          <p>Tears, burns, seams coming apart, or damaged sections? We patch and repair your carpet to restore its look and extend its life.</p>
-        </div>
-      </a>
-      <a href="#contact" class="service-card service-card--stain reveal">
-        <h3>Stain Removal</h3>
-        <div class="card-hover-content">
-          <h4>Stain Removal</h4>
-          <p>Pet stains, rust, red stains, blood, ink and more. Specialized treatments to eliminate even the toughest stains from carpets and upholstery.</p>
-        </div>
-      </a>
-      <a href="#contact" class="service-card service-card--water reveal">
-        <h3>Water Damage / Restoration</h3>
-        <div class="card-hover-content">
-          <h4>Water Damage / Restoration</h4>
-          <p>Burst pipes, floods, storm damage. We extract water fast and fully dry the space using air movers, scrubbers and dehumidifiers to prevent mold.</p>
-        </div>
-      </a>
-      <a href="#contact" class="service-card service-card--residential reveal">
-        <h3>Residential & Commercial</h3>
-        <div class="card-hover-content">
-          <h4>Residential & Commercial</h4>
-          <p>Serving Bonner Springs, KS and the Greater Kansas City area. Punctuality and professionalism guaranteed on every visit.</p>
-        </div>
-      </a>
-      <a href="#contact" class="service-card service-card--military reveal">
-        <h3>Military Discounts</h3>
-        <div class="card-hover-content">
-          <h4>Military Discounts</h4>
-          <p>We appreciate your service. Special discounts available for active military personnel and veterans on all our services.</p>
-        </div>
-      </a>
+      <a href="#contact" class="service-card service-card--carpet reveal"><h3>Carpet Cleaning</h3><div class="card-hover-content"><h4>Carpet Cleaning</h4><p>We remove deep dirt, stains, and allergens using a high-powered truck-mounted steam unit. Visible results, fast drying.</p></div></a>
+      <a href="#contact" class="service-card service-card--upholstery reveal"><h3>Upholstery Cleaning</h3><div class="card-hover-content"><h4>Upholstery Cleaning</h4><p>Sofas, chairs, headboards and more. We remove stains, odors, and bacteria without damaging fabrics, leaving your furniture fresh and renewed.</p></div></a>
+      <a href="#contact" class="service-card service-card--restretch reveal"><div class="restretch-badge">↔️ Popular Service</div><h3>Carpet Re-stretching</h3><div class="card-hover-content"><h4>Carpet Re-stretching</h4><p>Ripples, bubbles, or wrinkles ruining the look of your floors? We use professional power stretchers to pull your carpet tight, reinstall tack strips, and trim any excess — leaving a flawless, like-new finish.</p></div></a>
+      <a href="#contact" class="service-card service-card--repair reveal"><h3>Carpet Repair</h3><div class="card-hover-content"><h4>Carpet Repair</h4><p>Tears, burns, seams coming apart, or damaged sections? We patch and repair your carpet to restore its look and extend its life.</p></div></a>
+      <a href="#contact" class="service-card service-card--stain reveal"><h3>Stain Removal</h3><div class="card-hover-content"><h4>Stain Removal</h4><p>Pet stains, rust, red stains, blood, ink and more. Specialized treatments to eliminate even the toughest stains from carpets and upholstery.</p></div></a>
+      <a href="#contact" class="service-card service-card--water reveal"><h3>Water Damage / Restoration</h3><div class="card-hover-content"><h4>Water Damage / Restoration</h4><p>Burst pipes, floods, storm damage. We extract water fast and fully dry the space using air movers, scrubbers and dehumidifiers to prevent mold.</p></div></a>
+      <a href="#contact" class="service-card service-card--residential reveal"><h3>Residential & Commercial</h3><div class="card-hover-content"><h4>Residential & Commercial</h4><p>Serving Bonner Springs, KS and the Greater Kansas City area. Punctuality and professionalism guaranteed on every visit.</p></div></a>
+      <a href="#contact" class="service-card service-card--military reveal"><h3>Military Discounts</h3><div class="card-hover-content"><h4>Military Discounts</h4><p>We appreciate your service. Special discounts available for active military personnel and veterans on all our services.</p></div></a>
     </div>
   </div>
 </section>
@@ -658,10 +523,7 @@
             <p style="font-size:1.1rem; color:var(--gold); font-family:'Playfair Display',serif; font-style:italic">" Remember you walk on our reputation"</p>
           </div>
         </div>
-        <div class="about-float">
-          <strong>🏆</strong>
-          <span>Bridgepoint<br>Certified</span>
-        </div>
+        <div class="about-float"><strong>🏆</strong><span>Bridgepoint<br>Certified</span></div>
       </div>
       <div class="about-content reveal">
         <p class="section-label">About Us</p>
@@ -690,26 +552,10 @@
       <p class="section-subtitle">Simple, efficient, and with guaranteed results at every step.</p>
     </div>
     <div class="process-steps">
-      <div class="process-step reveal">
-        <div class="step-num">1</div>
-        <h4>Contact Us</h4>
-        <p>Call or send us an email describing your needs. We respond quickly.</p>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">2</div>
-        <h4>Assessment</h4>
-        <p>We inspect the area and determine the best treatment for your situation.</p>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">3</div>
-        <h4>Treatment</h4>
-        <p>We apply the service using professional equipment and high-quality products.</p>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">4</div>
-        <h4>Results</h4>
-        <p>Clean, restored carpets and upholstery — ready to enjoy.</p>
-      </div>
+      <div class="process-step reveal"><div class="step-num">1</div><h4>Contact Us</h4><p>Call or send us an email describing your needs. We respond quickly.</p></div>
+      <div class="process-step reveal"><div class="step-num">2</div><h4>Assessment</h4><p>We inspect the area and determine the best treatment for your situation.</p></div>
+      <div class="process-step reveal"><div class="step-num">3</div><h4>Treatment</h4><p>We apply the service using professional equipment and high-quality products.</p></div>
+      <div class="process-step reveal"><div class="step-num">4</div><h4>Results</h4><p>Clean, restored carpets and upholstery — ready to enjoy.</p></div>
     </div>
   </div>
 </section>
@@ -723,21 +569,9 @@
       <p class="section-subtitle">Trusted service in Bonner Springs and the entire Kansas City area.</p>
     </div>
     <div class="trust-grid">
-      <div class="trust-card reveal">
-        <div class="stars">★★★★★</div>
-        <p>"They did an incredible job on my carpets. The waves and wrinkles disappeared completely. Very professional and on time."</p>
-        <div class="reviewer"><div class="reviewer-avatar">MR</div><div><div class="reviewer-name">Maria R.</div><div class="reviewer-loc">Bonner Springs, KS</div></div></div>
-      </div>
-      <div class="trust-card reveal">
-        <div class="stars">★★★★★</div>
-        <p>"We had a water leak and Green's came out quickly. They extracted the water and dried everything perfectly. They saved our home."</p>
-        <div class="reviewer"><div class="reviewer-avatar">JL</div><div><div class="reviewer-name">James L.</div><div class="reviewer-loc">Kansas City Area</div></div></div>
-      </div>
-      <div class="trust-card reveal">
-        <div class="stars">★★★★★</div>
-        <p>"The sofa looks brand new. They are certified and it shows — they know exactly what to do with every type of fabric. Highly recommended."</p>
-        <div class="reviewer"><div class="reviewer-avatar">SP</div><div><div class="reviewer-name">Sandra P.</div><div class="reviewer-loc">Bonner Springs, KS</div></div></div>
-      </div>
+      <div class="trust-card reveal"><div class="stars">★★★★★</div><p>"They did an incredible job on my carpets. The waves and wrinkles disappeared completely. Very professional and on time."</p><div class="reviewer"><div class="reviewer-avatar">MR</div><div><div class="reviewer-name">Maria R.</div><div class="reviewer-loc">Bonner Springs, KS</div></div></div></div>
+      <div class="trust-card reveal"><div class="stars">★★★★★</div><p>"We had a water leak and Green's came out quickly. They extracted the water and dried everything perfectly. They saved our home."</p><div class="reviewer"><div class="reviewer-avatar">JL</div><div><div class="reviewer-name">James L.</div><div class="reviewer-loc">Kansas City Area</div></div></div></div>
+      <div class="trust-card reveal"><div class="stars">★★★★★</div><p>"The sofa looks brand new. They are certified and it shows — they know exactly what to do with every type of fabric. Highly recommended."</p><div class="reviewer"><div class="reviewer-avatar">SP</div><div><div class="reviewer-name">Sandra P.</div><div class="reviewer-loc">Bonner Springs, KS</div></div></div></div>
     </div>
   </div>
 </section>
@@ -779,46 +613,13 @@
         <p class="section-label">Get In Touch</p>
         <h2 class="section-title">Let's Talk About Your Project</h2>
         <p class="section-subtitle" style="margin-bottom:32px">We're ready to help. We respond quickly to all inquiries.</p>
-        <div class="contact-detail">
-          <div class="contact-icon">📞</div>
-          <div>
-            <strong>Phone</strong>
-            <span>
-              <a href="tel:+19132072033" style="color:var(--gold);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a>
-            </span>
-          </div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-icon">🌊</div>
-          <div>
-            <strong>24-Hour Emergency Flood Service</strong>
-            <span>
-              <a href="tel:+19132072033" style="color:var(--gold);font-weight:700;text-decoration:none;">(913) 207-2033</a>
-              &nbsp;·&nbsp;
-              <a href="tel:+19132076958" style="color:var(--gold);font-weight:700;text-decoration:none;">(913) 207-6958</a>
-            </span>
-          </div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-icon">📍</div>
-          <div><strong>Location</strong><span>Bonner Springs, KS 66012<br>Greater Kansas City Area</span></div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-icon">📧</div>
-          <div><strong>Email</strong><span><a href="mailto:greenscarpet@example.com" style="color:inherit;text-decoration:none">greenscarpet@example.com</a></span></div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-icon">⏰</div>
-          <div><strong>Service Hours</strong><span>Mon–Sat: 7:00 AM – 7:00 PM<br>Sun: By appointment</span></div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-icon">🎖️</div>
-          <div><strong>Military Discounts</strong><span>Available for active military and veterans</span></div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-icon"><i class="fa-brands fa-facebook" style="font-size:1.3rem;color:#1877f2;"></i></div>
-          <div><strong>Facebook</strong><span><a href="https://www.facebook.com/GreensCarpetandUpholsteryCleaning" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">Green's Carpet & Upholstery Cleaning</a></span></div>
-        </div>
+        <div class="contact-detail"><div class="contact-icon">📞</div><div><strong>Phone</strong><span><a href="tel:+19132072033" style="color:var(--gold-light);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a></span></div></div>
+        <div class="contact-detail"><div class="contact-icon">🌊</div><div><strong>24-Hour Emergency Flood Service</strong><span style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;"><a href="tel:+19132072033" class="emergency-phone-link">(913) 207-2033</a><a href="tel:+19132076958" class="emergency-phone-link">(913) 207-6958</a></span></div></div>
+        <div class="contact-detail"><div class="contact-icon">📍</div><div><strong>Location</strong><span>Bonner Springs, KS 66012<br>Greater Kansas City Area</span></div></div>
+        <div class="contact-detail"><div class="contact-icon">📧</div><div><strong>Email</strong><span><a href="mailto:greenscarpet@email.com" style="color:inherit;text-decoration:none">greenscarpet@email.com</a></span></div></div>
+        <div class="contact-detail"><div class="contact-icon">⏰</div><div><strong>Service Hours</strong><span>Mon–Sat: 7:00 AM – 7:00 PM<br>Sun: By appointment</span></div></div>
+        <div class="contact-detail"><div class="contact-icon">🎖️</div><div><strong>Military Discounts</strong><span>Available for active military and veterans</span></div></div>
+        <div class="contact-detail"><div class="contact-icon"><i class="fa-brands fa-facebook" style="font-size:1.3rem;color:#1877f2;"></i></div><div><strong>Facebook</strong><span><a href="https://www.facebook.com/GreensCarpetandUpholsteryCleaning" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">Green's Carpet & Upholstery Cleaning</a></span></div></div>
       </div>
       <div class="contact-form-card reveal">
         <h3>Send Us a Message</h3>
@@ -834,7 +635,7 @@
             <option value="">Select a service...</option>
             <option>Carpet Cleaning</option>
             <option>Upholstery Cleaning</option>
-            <option>Carpet Restretching</option>
+            <option>Carpet Re-Stretching</option>
             <option>Carpet Repair</option>
             <option>Stain Removal</option>
             <option>Water Damage / Restoration</option>
@@ -885,43 +686,17 @@ function sendEmail() {
   const service = document.getElementById('service').value;
   const message = document.getElementById('message').value.trim();
   const msg = document.getElementById('form-msg');
-  if (!fname || !email || !message) {
-    msg.className = 'error';
-    msg.textContent = 'Please fill in your name, email, and message.';
-    return;
-  }
+  if (!fname || !email || !message) { msg.className = 'error'; msg.textContent = 'Please fill in your name, email, and message.'; return; }
   const btn = document.querySelector('.contact-form-card .btn-primary');
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-  emailjs.send('alfombras', 'template_alfombras', {
-    fname, lname, email,
-    phone: phone || 'Not provided',
-    service: service || 'Not specified',
-    message
-  }).then(() => {
-    msg.className = 'success';
-    msg.textContent = '✅ Message sent! We will get back to you soon.';
-    btn.textContent = 'Send Message ✉️';
-    btn.disabled = false;
-    ['fname','lname','email','phone','service','message'].forEach(id => document.getElementById(id).value = '');
-  }).catch(() => {
-    msg.className = 'error';
-    msg.textContent = '❌ Something went wrong. Please try again or call us directly.';
-    btn.textContent = 'Send Message ✉️';
-    btn.disabled = false;
-  });
+  btn.textContent = 'Sending...'; btn.disabled = true;
+  emailjs.send('alfombras', 'template_alfombras', { fname, lname, email, phone: phone || 'Not provided', service: service || 'Not specified', message })
+    .then(() => { msg.className = 'success'; msg.textContent = '✅ Message sent! We will get back to you soon.'; btn.textContent = 'Send Message ✉️'; btn.disabled = false; ['fname','lname','email','phone','service','message'].forEach(id => document.getElementById(id).value = ''); })
+    .catch(() => { msg.className = 'error'; msg.textContent = '❌ Something went wrong. Please try again or call us directly.'; btn.textContent = 'Send Message ✉️'; btn.disabled = false; });
 }
 window.addEventListener('scroll', () => {
   const nav = document.querySelector('nav');
-  if (window.scrollY > 30) {
-    nav.style.background = 'rgba(26,39,68,0.92)';
-    nav.style.backdropFilter = 'blur(12px)';
-    nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
-  } else {
-    nav.style.background = 'var(--navy)';
-    nav.style.backdropFilter = 'none';
-    nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
-  }
+  if (window.scrollY > 30) { nav.style.background = 'rgba(26,39,68,0.92)'; nav.style.backdropFilter = 'blur(12px)'; }
+  else { nav.style.background = 'var(--navy)'; nav.style.backdropFilter = 'none'; }
 });
 </script>
 </body>
