@@ -625,7 +625,7 @@
         <div class="contact-detail"><div class="contact-icon">📞</div><div><strong>Phone</strong><span><a href="tel:+19132072033" style="color:var(--gold-light);font-weight:700;font-size:1.1rem;text-decoration:none;">(913) 207-2033</a></span></div></div>
         <div class="contact-detail"><div class="contact-icon">🌊</div><div><strong>24-Hour Emergency Flood Service</strong><span style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;"><a href="tel:+19132072033" class="emergency-phone-link">(913) 207-2033</a><a href="tel:+19132076958" class="emergency-phone-link">(913) 207-6958</a></span></div></div>
         <div class="contact-detail"><div class="contact-icon">📍</div><div><strong>Location</strong><span>Bonner Springs, KS 66012<br>Greater Kansas City Area</span></div></div>
-        <div class="contact-detail"><div class="contact-icon">📧</div><div><strong>Email</strong><span><a href="mailto:greenscarpet@email.com" style="color:inherit;text-decoration:none">greenscarpet@email.com</a></span></div></div>
+        <div class="contact-detail"><div class="contact-icon">📧</div><div><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection#44233621212a37272536342130042129252d286a272b29" style="color:inherit;text-decoration:none"><span class="__cf_email__" data-cfemail="6b0c190e0e0518080a191b0e1f2b0e060a020745080406">[email&#160;protected]</span></a></span></div></div>
         <div class="contact-detail"><div class="contact-icon">⏰</div><div><strong>Service Hours</strong><span>Mon–Sat: 7:00 AM – 7:00 PM<br>Sun: By appointment</span></div></div>
         <div class="contact-detail"><div class="contact-icon">🎖️</div><div><strong>Military Discounts</strong><span>Available for active military and veterans</span></div></div>
         <div class="contact-detail"><div class="contact-icon"><i class="fa-brands fa-facebook" style="font-size:1.3rem;color:#1877f2;"></i></div><div><strong>Facebook</strong><span><a href="https://www.facebook.com/GreensCarpetandUpholsteryCleaning" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">Green's Carpet & Upholstery Cleaning</a></span></div></div>
@@ -681,7 +681,7 @@
 
 <a href="tel:+19132072033" class="float-cta">📞 (913) 207-2033</a>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
 document.querySelectorAll('.reveal').forEach(el => el.classList.add('hidden'));
@@ -695,18 +695,48 @@ function sendEmail() {
   const service = document.getElementById('service').value;
   const message = document.getElementById('message').value.trim();
   const msg = document.getElementById('form-msg');
-  if (!fname || !email || !message) { msg.className = 'error'; msg.textContent = 'Please fill in your name, email, and message.'; return; }
+  if (!fname || !email || !message) {
+    msg.className = 'error';
+    msg.textContent = 'Please fill in your name, email, and message.';
+    return;
+  }
   const btn = document.querySelector('.contact-form-card .btn-primary');
-  btn.textContent = 'Sending...'; btn.disabled = true;
-  emailjs.send('alfombras', 'template_alfombras', { fname, lname, email, phone: phone || 'Not provided', service: service || 'Not specified', message })
-    .then(() => { msg.className = 'success'; msg.textContent = '✅ Message sent! We will get back to you soon.'; btn.textContent = 'Send Message ✉️'; btn.disabled = false; ['fname','lname','email','phone','service','message'].forEach(id => document.getElementById(id).value = ''); })
-    .catch(() => { msg.className = 'error'; msg.textContent = '❌ Something went wrong. Please try again or call us directly.'; btn.textContent = 'Send Message ✉️'; btn.disabled = false; });
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  emailjs.send('alfombrados', 'template_alfombras', {
+    to_email: 'isaac.twelve@gmail.com',
+    fname: fname,
+    lname: lname,
+    email: email,
+    reply_to: email,
+    phone: phone || 'Not provided',
+    service: service || 'Not specified',
+    message: message
+  })
+  .then(() => {
+    msg.className = 'success';
+    msg.textContent = '\u2705 Message sent! We will get back to you soon.';
+    btn.textContent = 'Send Message \u2709\ufe0f';
+    btn.disabled = false;
+    ['fname','lname','email','phone','message'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('service').value = '';
+  })
+  .catch((err) => {
+    console.error('EmailJS error:', err);
+    const fallback = 'mailto:isaac.twelve@gmail.com'
+      + '?subject=' + encodeURIComponent('Service Request - ' + (service || 'General'))
+      + '&body=' + encodeURIComponent(
+          'Name: ' + fname + ' ' + lname +
+          '\nEmail: ' + email +
+          '\nPhone: ' + (phone || 'N/A') +
+          '\nService: ' + (service || 'N/A') +
+          '\n\nMessage:\n' + message
+        );
+    msg.className = 'error';
+    msg.innerHTML = '\u274c Something went wrong. Please call us or <a href="' + fallback + '" style="color:#991b1b;font-weight:700;text-decoration:underline;">click here to email us directly</a>.';
+    btn.textContent = 'Send Message \u2709\ufe0f';
+    btn.disabled = false;
+  });
 }
 window.addEventListener('scroll', () => {
-  const nav = document.querySelector('nav');
-  if (window.scrollY > 30) { nav.style.background = 'rgba(26,39,68,0.92)'; nav.style.backdropFilter = 'blur(12px)'; }
-  else { nav.style.background = 'var(--navy)'; nav.style.backdropFilter = 'none'; }
-});
-</script>
-</body>
-</html>
+  const nav = document.query
