@@ -7,14 +7,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --navy: #1a2744; --navy-light: #243560; --gold: #c9a227; --gold-light: #e8c44a;
-      --white: #ffffff; --gray-light: #f0f2f5; --gray-mid: #dde2ea;
-      --text-dark: #1a2744; --text-mid: #4a5568; --teal: #2a9d8f;
+      --navy: #1a2744;
+      --navy-light: #243560;
+      --gold: #c9a227;
+      --gold-light: #e8c44a;
+      --white: #ffffff;
+      --gray-light: #f0f2f5;
+      --gray-mid: #dde2ea;
+      --text-dark: #1a2744;
+      --text-mid: #4a5568;
+      --teal: #2a9d8f;
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Lato', sans-serif; color: var(--text-dark); background: var(--white); overflow-x: hidden; }
 
+    /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
       background: var(--navy);
@@ -24,110 +33,219 @@
     }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img { height: 180px; width: auto; filter: brightness(0) invert(1); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a {
       color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem;
       letter-spacing: 1px; text-transform: uppercase;
       position: relative; padding-bottom: 4px;
       transition: color .25s ease;
     }
-    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 50%; right: 50%; height: 2px; background: var(--gold); transition: left .25s ease, right .25s ease; border-radius: 2px; }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 50%; right: 50%;
+      height: 2px; background: var(--gold);
+      transition: left .25s ease, right .25s ease; border-radius: 2px;
+    }
     .nav-links a:hover { color: var(--gold-light); }
     .nav-links a:hover::after { left: 0; right: 0; }
     .nav-links a.active { color: var(--gold); }
     .nav-links a.active::after { left: 0; right: 0; }
-    .nav-cta { background: var(--gold); color: var(--navy) !important; padding: 8px 20px; border-radius: 4px; font-weight: 700 !important; }
+    .nav-cta {
+      background: var(--gold); color: var(--navy) !important; padding: 8px 20px;
+      border-radius: 4px; font-weight: 700 !important;
+    }
     .nav-cta::after { display: none !important; }
     .nav-cta:hover { background: var(--gold-light) !important; }
-    .nav-upload { color: var(--gold-light) !important; border: 1.5px solid rgba(201,162,39,0.5) !important; border-radius: 4px !important; padding: 6px 14px !important; font-size: 0.78rem !important; transition: all .2s !important; }
-    .nav-upload::after { display: none !important; }
-    .nav-upload:hover { background: rgba(201,162,39,0.15) !important; border-color: var(--gold) !important; }
-    .nav-phone { display: inline-flex; align-items: center; gap: 8px; color: var(--gold-light) !important; font-weight: 700 !important; font-size: 1rem; text-decoration: none; border: 1.5px solid rgba(201,162,39,0.4); border-radius: 4px; padding: 7px 16px; transition: all .25s; }
+    .nav-phone {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--gold-light) !important; font-weight: 700 !important;
+      font-size: 1rem; text-decoration: none;
+      border: 1.5px solid rgba(201,162,39,0.4); border-radius: 4px;
+      padding: 7px 16px; transition: all .25s;
+    }
     .nav-phone::after { display: none !important; }
+    .nav-phone:hover { background: rgba(201,162,39,0.12) !important; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
     .hamburger span { width: 26px; height: 2px; background: white; border-radius: 2px; }
 
-    .heritage-bar { position: fixed; top: 80px; left: 0; right: 0; z-index: 999; background: var(--gold); padding: 6px 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .heritage-bar-inner { display: flex; align-items: center; gap: 40px; white-space: nowrap; animation: marquee 28s linear infinite; }
-    .heritage-bar-item { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--navy); }
+    /* ── HERITAGE BAR ── */
+    .heritage-bar {
+      position: fixed; top: 80px; left: 0; right: 0; z-index: 999;
+      background: var(--gold); padding: 6px 0;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .heritage-bar-inner {
+      display: flex; align-items: center; gap: 40px;
+      white-space: nowrap; animation: marquee 28s linear infinite;
+    }
+    .heritage-bar-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--navy);
+    }
     .heritage-bar-dot { width: 4px; height: 4px; background: var(--navy); border-radius: 50%; opacity: 0.5; }
     @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-    .page-header { margin-top: 0; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); padding: 186px 5% 70px; text-align: center; position: relative; overflow: hidden; }
-    .page-header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(201,162,39,0.12) 0%, transparent 70%); }
+    /* ── PAGE HEADER ── */
+    .page-header {
+      margin-top: 0;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      padding: 186px 5% 70px; text-align: center; position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(201,162,39,0.12) 0%, transparent 70%);
+    }
     .page-header-inner { position: relative; z-index: 1; }
     .page-header p { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 12px; }
     .page-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; color: white; margin-bottom: 16px; }
     .page-header span { font-size: 1rem; color: rgba(255,255,255,0.6); line-height: 1.7; }
 
+    /* ── SECTION ── */
     .section { padding: 80px 5%; }
     .max-w { max-width: 1200px; margin: 0 auto; }
     .section-label { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 12px; }
     .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 900; color: var(--navy); margin-bottom: 48px; }
 
+    /* ── FILTER TABS ── */
     .filter-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
-    .filter-tab { padding: 8px 20px; border-radius: 100px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; border: 2px solid var(--gray-mid); background: var(--white); color: var(--text-mid); transition: all .2s; }
+    .filter-tab {
+      padding: 8px 20px; border-radius: 100px; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; border: 2px solid var(--gray-mid);
+      background: var(--white); color: var(--text-mid); transition: all .2s;
+    }
     .filter-tab:hover { border-color: var(--gold); color: var(--navy); }
     .filter-tab.active { background: var(--navy); border-color: var(--navy); color: white; }
 
+    /* ── BEFORE/AFTER GRID ── */
     .ba-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px; }
-    .ba-card { border-radius: 14px; overflow: hidden; box-shadow: 0 4px 20px rgba(26,39,68,0.1); transition: transform .3s, box-shadow .3s; background: var(--white); }
+
+    .ba-card {
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(26,39,68,0.1);
+      transition: transform .3s, box-shadow .3s;
+      background: var(--white);
+    }
     .ba-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(26,39,68,0.16); }
-    .ba-slider { position: relative; width: 100%; height: 260px; overflow: hidden; cursor: col-resize; user-select: none; }
-    .ba-after { position: absolute; inset: 0; background: center center / cover no-repeat var(--gray-light); }
-    .ba-before { position: absolute; inset: 0; background: center center / cover no-repeat var(--gray-mid); clip-path: inset(0 50% 0 0); transition: clip-path .05s linear; }
-    .ba-divider { position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; background: white; transform: translateX(-50%); box-shadow: 0 0 8px rgba(0,0,0,0.3); z-index: 3; pointer-events: none; transition: left .05s linear; }
-    .ba-handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; color: var(--navy); z-index: 4; pointer-events: none; letter-spacing: -1px; transition: left .05s linear; }
-    .ba-label { position: absolute; bottom: 12px; z-index: 5; background: rgba(26,39,68,0.75); color: white; font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; pointer-events: none; }
-    .ba-label-before { left: 12px; } .ba-label-after { right: 12px; }
+
+    .ba-slider {
+      position: relative; width: 100%; height: 260px;
+      overflow: hidden; cursor: col-resize; user-select: none;
+    }
+    .ba-after {
+      position: absolute; inset: 0;
+      background: center center / cover no-repeat var(--gray-light);
+    }
+    .ba-before {
+      position: absolute; inset: 0;
+      background: center center / cover no-repeat var(--gray-mid);
+      clip-path: inset(0 50% 0 0);
+      transition: clip-path .05s linear;
+    }
+    .ba-divider {
+      position: absolute; top: 0; bottom: 0; left: 50%;
+      width: 3px; background: white; transform: translateX(-50%);
+      box-shadow: 0 0 8px rgba(0,0,0,0.3); z-index: 3; pointer-events: none;
+      transition: left .05s linear;
+    }
+    .ba-handle {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px; height: 40px; border-radius: 50%;
+      background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 900; color: var(--navy);
+      z-index: 4; pointer-events: none; letter-spacing: -1px;
+      transition: left .05s linear;
+    }
+    .ba-label {
+      position: absolute; bottom: 12px; z-index: 5;
+      background: rgba(26,39,68,0.75); color: white;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+      pointer-events: none;
+    }
+    .ba-label-before { left: 12px; }
+    .ba-label-after  { right: 12px; }
+
     .ba-info { padding: 20px 24px; }
     .ba-info h4 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-    .ba-info p { font-size: 0.83rem; color: var(--text-mid); line-height: 1.55; }
-    .ba-tag { display: inline-block; margin-top: 10px; background: var(--gray-light); color: var(--navy); font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
-    .ba-placeholder { width: 100%; height: 260px; background: linear-gradient(135deg, var(--gray-light), var(--gray-mid)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text-mid); position: absolute; inset: 0; z-index: 0; }
+    .ba-info p  { font-size: 0.83rem; color: var(--text-mid); line-height: 1.55; }
+    .ba-tag {
+      display: inline-block; margin-top: 10px;
+      background: var(--gray-light); color: var(--navy);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 4px;
+    }
+
+    .ba-placeholder {
+      width: 100%; height: 260px;
+      background: linear-gradient(135deg, var(--gray-light), var(--gray-mid));
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px; color: var(--text-mid);
+      position: absolute; inset: 0; z-index: 0;
+    }
     .ba-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.4; }
     .ba-placeholder p { font-size: 0.82rem; opacity: 0.6; font-style: italic; }
 
+    /* ── VIDEO SECTION ── */
     .videos-section { background: var(--gray-light); }
     .video-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
-    .video-card { background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 20px rgba(26,39,68,0.08); transition: transform .3s, box-shadow .3s; }
+    .video-card {
+      background: var(--white); border-radius: 14px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(26,39,68,0.08);
+      transition: transform .3s, box-shadow .3s; width: 100%;
+    }
     .video-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,39,68,0.14); }
-    .video-thumb { position: relative; width: 100%; padding-top: 56.25%; background: var(--navy); overflow: hidden; }
-    .video-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; display: block; }
+
+    .video-thumb {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: var(--navy);
+      overflow: hidden;
+    }
+    .video-thumb img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; transition: transform .4s ease;
+      display: block;
+    }
     .video-card:hover .video-thumb img { transform: scale(1.05); }
-    .video-overlay { position: absolute; inset: 0; background: rgba(26,39,68,0.45); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; transition: background .3s; text-decoration: none; }
+    .video-overlay {
+      position: absolute; inset: 0;
+      background: rgba(26,39,68,0.45);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; transition: background .3s; text-decoration: none;
+    }
     .video-card:hover .video-overlay { background: rgba(26,39,68,0.25); }
-    .play-circle { width: 64px; height: 64px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: var(--navy); box-shadow: 0 4px 20px rgba(0,0,0,0.35); transition: transform .3s, box-shadow .3s; }
+    .play-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--gold); display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: var(--navy);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+      transition: transform .3s, box-shadow .3s;
+    }
     .video-card:hover .play-circle { transform: scale(1.12); box-shadow: 0 8px 28px rgba(201,162,39,0.55); }
-    .shorts-badge { background: var(--gold); color: var(--navy); font-size: 0.66rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; }
+    .shorts-badge {
+      background: var(--gold); color: var(--navy);
+      font-size: 0.66rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 4px;
+    }
     .video-info { padding: 18px 20px; }
     .video-info h4 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
     .video-info p { font-size: 0.82rem; color: var(--text-mid); line-height: 1.55; }
-    .watch-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.78rem; font-weight: 700; color: var(--gold); text-decoration: none; transition: color .2s; }
+    .watch-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 10px; font-size: 0.78rem; font-weight: 700;
+      color: var(--gold); text-decoration: none; transition: color .2s;
+    }
     .watch-link:hover { color: var(--navy); }
 
-    .completed-section { background: var(--gray-light); }
-    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .photo-card { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(26,39,68,0.1); background: var(--white); transition: transform .3s, box-shadow .3s; }
-    .photo-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(26,39,68,0.16); }
-    .photo-card-img-wrap { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; background: linear-gradient(135deg, var(--navy), var(--navy-light)); }
-    .photo-card-img-wrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity .3s; }
-    .photo-card-img-wrap img.loaded { opacity: 1; }
-    .photo-card-img-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; transition: opacity .3s; }
-    .photo-card-img-wrap.has-image .photo-card-img-placeholder { opacity: 0; pointer-events: none; }
-    .photo-card-img-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.4; }
-    .photo-card-img-placeholder p { font-size: 0.82rem; color: rgba(255,255,255,0.45); font-style: italic; }
-    .photo-card-info { padding: 16px 20px; }
-    .photo-card-info h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-    .photo-card-info p { font-size: 0.8rem; color: var(--text-mid); line-height: 1.5; }
-    .photo-card-tag { display: inline-block; margin-top: 8px; background: var(--navy); color: var(--gold); font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
-
-    /* NEW UPLOADS SECTION */
-    .new-uploads-section { background: var(--white); }
-    .new-tag { background: var(--teal); color: white; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; display: inline-block; margin-top: 8px; }
-
-    .cta-banner { background: linear-gradient(135deg, var(--navy), #0f1a33); padding: 70px 5%; text-align: center; position: relative; overflow: hidden; }
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--navy), #0f1a33);
+      padding: 70px 5%; text-align: center; position: relative; overflow: hidden;
+    }
     .cta-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(201,162,39,0.1) 0%, transparent 70%); }
     .cta-banner-inner { position: relative; z-index: 1; }
     .cta-banner p.label { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 12px; }
@@ -136,6 +254,7 @@
     .btn-primary { background: var(--gold); color: var(--navy); padding: 14px 36px; border-radius: 4px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; transition: all .25s; display: inline-block; }
     .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,162,39,0.4); }
 
+    /* ── FOOTER ── */
     footer { background: var(--navy); padding: 48px 5% 24px; color: rgba(255,255,255,0.6); }
     .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 24px; }
     .footer-logo img { height: 100px; width: auto; filter: brightness(0) invert(1); }
@@ -144,13 +263,62 @@
     .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.8rem; transition: color .2s; }
     .footer-links a:hover { color: var(--gold); }
     .footer-bottom { max-width: 1200px; margin: 0 auto; text-align: center; font-size: 0.78rem; }
+
     .float-cta { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: var(--gold); color: var(--navy); border: none; border-radius: 50px; padding: 14px 24px; font-weight: 700; font-size: 0.85rem; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; transition: all .25s; text-decoration: none; }
     .float-cta:hover { background: var(--gold-light); transform: translateY(-3px); }
+
     .reveal { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
     .reveal.hidden { opacity: 0; transform: translateY(30px); }
     .reveal.visible { opacity: 1; transform: none; }
 
-    @media(max-width: 1100px) { .video-grid { grid-template-columns: repeat(2, 1fr); } }
+    /* ── COMPLETED WORKS ── */
+    .completed-section { background: var(--gray-light); }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .photo-card {
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 16px rgba(26,39,68,0.1);
+      background: var(--white);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .photo-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(26,39,68,0.16); }
+    .photo-card-img-wrap {
+      position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    }
+    .photo-card-img-wrap img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      opacity: 0; transition: opacity .3s;
+    }
+    .photo-card-img-wrap img.loaded { opacity: 1; }
+    .photo-card-img-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px; transition: opacity .3s;
+    }
+    .photo-card-img-wrap.has-image .photo-card-img-placeholder { opacity: 0; pointer-events: none; }
+    .photo-card-img-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.4; }
+    .photo-card-img-placeholder p { font-size: 0.82rem; color: rgba(255,255,255,0.45); font-style: italic; }
+    .photo-card-info { padding: 16px 20px; }
+    .photo-card-info h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .photo-card-info p { font-size: 0.8rem; color: var(--text-mid); line-height: 1.5; }
+    .photo-card-tag {
+      display: inline-block; margin-top: 8px;
+      background: var(--navy); color: var(--gold);
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 4px;
+    }
+
+    @media(max-width: 1100px) {
+      .video-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width: 600px) {
+      .video-grid { grid-template-columns: 1fr; }
+    }
     @media(max-width: 768px) {
       .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
       .nav-phone { display: none; }
@@ -158,15 +326,19 @@
       .nav-links.open { display: flex; }
       .hamburger { display: flex; }
       .ba-grid { grid-template-columns: 1fr; }
-      .video-grid { grid-template-columns: 1fr; }
     }
-    @media(max-width: 480px) { .photo-grid { grid-template-columns: 1fr; } }
+    @media(max-width: 480px) {
+      .photo-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <a class="nav-logo" href="index.html"><img src="imgen/logo.png" alt="Green's Carpet & Upholstery Cleaning"></a>
+  <a class="nav-logo" href="index.html">
+    <img src="imgen/logo.png" alt="Green's Carpet & Upholstery Cleaning">
+  </a>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">Home</a></li>
     <li><a href="index.html#services">Services</a></li>
@@ -175,34 +347,51 @@
     <li><a href="gallery.html" class="active">Gallery</a></li>
     <li><a href="#completed">Completed Works</a></li>
     <li><a href="index.html#contact" class="nav-cta">Contact Us</a></li>
-    <li><a href="upload.html" class="nav-upload">📸 Upload</a></li>
   </ul>
   <div class="nav-right">
     <a href="tel:+19132072033" class="nav-phone">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.02 1.18 2 2 0 012 .02h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+      </svg>
       (913) 207-2033
     </a>
-    <div class="hamburger" id="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
+    <div class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
 
+<!-- HERITAGE BAR -->
 <div class="heritage-bar">
   <div class="heritage-bar-inner">
-    <span class="heritage-bar-item">🏅 Established 1993</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Over 30 Years of Excellence</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Bonner Springs, KS</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Bridgepoint Certified</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Trusted Since 1993</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Family Business · Greater Kansas City Area</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">🏅 Established 1993</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Over 30 Years of Excellence</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Bonner Springs, KS</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Bridgepoint Certified</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Trusted Since 1993</span><span class="heritage-bar-dot"></span>
-    <span class="heritage-bar-item">Family Business · Greater Kansas City Area</span><span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">🏅 Established 1993</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Over 30 Years of Excellence</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Bonner Springs, KS</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Bridgepoint Certified</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Trusted Since 1993</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Family Business · Greater Kansas City Area</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">🏅 Established 1993</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Over 30 Years of Excellence</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Bonner Springs, KS</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Bridgepoint Certified</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Trusted Since 1993</span>
+    <span class="heritage-bar-dot"></span>
+    <span class="heritage-bar-item">Family Business · Greater Kansas City Area</span>
+    <span class="heritage-bar-dot"></span>
   </div>
 </div>
 
+<!-- PAGE HEADER -->
 <div class="page-header">
   <div class="page-header-inner">
     <p>Our Work</p>
@@ -216,6 +405,7 @@
   <div class="max-w">
     <p class="section-label">Photo Gallery</p>
     <h2 class="section-title">Before & After Results</h2>
+
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="filterCards('all', this)">All</button>
       <button class="filter-tab" onclick="filterCards('carpet', this)">Carpet Cleaning</button>
@@ -225,26 +415,195 @@
       <button class="filter-tab" onclick="filterCards('water', this)">Water Damage</button>
       <button class="filter-tab" onclick="filterCards('tile', this)">Wood floor</button>
     </div>
-    <div class="ba-grid" id="baGrid">
-      <div class="ba-card reveal" data-category="carpet"><div class="ba-slider" id="slider-1"><div class="ba-after" style="background-image:url('imgen/after_carpet_1.jpg');"><div class="ba-placeholder" id="ph-after-1"><div class="ph-icon">📸</div><p>After photo here</p></div></div><div class="ba-before" style="background-image:url('imgen/before_carpet_1.jpg');" id="before-1"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div></div><div class="ba-divider" id="divider-1"></div><div class="ba-handle" id="handle-1">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Deep Carpet Cleaning</h4><p>Heavy soiling removed using truck-mounted hot water extraction.</p><span class="ba-tag">Carpet Cleaning</span></div></div>
-      <div class="ba-card reveal" data-category="stain"><div class="ba-slider" id="slider-2"><div class="ba-after" style="background-image:url('imgen/after_stain_1.png');"></div><div class="ba-before" style="background-image:url('imgen/before_stain_1.jpg');" id="before-2"></div><div class="ba-divider" id="divider-2"></div><div class="ba-handle" id="handle-2">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Pet Stain Removal</h4><p>Complete elimination of pet stains and odor from living room carpet.</p><span class="ba-tag">Stain Removal</span></div></div>
-      <div class="ba-card reveal" data-category="stain"><div class="ba-slider" id="slider-8"><div class="ba-after" style="background-image:url('imgen/after_stain_coffee.png');"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div></div><div class="ba-before" style="background-image:url('imgen/before_stain_coffee.png');" id="before-8"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div></div><div class="ba-divider" id="divider-8"></div><div class="ba-handle" id="handle-8">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Coffee Stain Removal</h4><p>Deep coffee stains fully eliminated from carpet fibers.</p><span class="ba-tag">Stain Removal</span></div></div>
-      <div class="ba-card reveal" data-category="stain"><div class="ba-slider" id="slider-9"><div class="ba-after" style="background-image:url('imgen/after_stain_wine.png');"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div></div><div class="ba-before" style="background-image:url('imgen/before_stain_wine.png');" id="before-9"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div></div><div class="ba-divider" id="divider-9"></div><div class="ba-handle" id="handle-9">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Wine Stain Removal</h4><p>Stubborn red wine stains completely removed.</p><span class="ba-tag">Stain Removal</span></div></div>
-      <div class="ba-card reveal" data-category="upholstery"><div class="ba-slider" id="slider-3"><div class="ba-after" style="background-image:url('imgen/after_upholstery_1.jpg');"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div></div><div class="ba-before" style="background-image:url('imgen/before_upholstery_1.jpg');" id="before-3"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div></div><div class="ba-divider" id="divider-3"></div><div class="ba-handle" id="handle-3">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Carpet Repair</h4><p>Stains, odors, and embedded dirt fully removed.</p><span class="ba-tag">Carpet Cleaning</span></div></div>
-      <div class="ba-card reveal" data-category="Re-Stretching"><div class="ba-slider" id="slider-4"><div class="ba-after" style="background-image:url('imgen/after_restretching_1.jpg');"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div></div><div class="ba-before" style="background-image:url('imgen/before_restretching_1.jpg');" id="before-4"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div></div><div class="ba-divider" id="divider-4"></div><div class="ba-handle" id="handle-4">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Carpet Re-Stretching</h4><p>Ripples and bubbles completely eliminated using power stretchers.</p><span class="ba-tag">Re-Stretching</span></div></div>
-      <div class="ba-card reveal" data-category="water"><div class="ba-slider" id="slider-5"><div class="ba-after" style="background-image:url('imgen/after_water_1.jpg');"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div></div><div class="ba-before" style="background-image:url('imgen/before_water_1.jpg');" id="before-5"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div></div><div class="ba-divider" id="divider-5"></div><div class="ba-handle" id="handle-5">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Water Damage Restoration</h4><p>Full water extraction and drying after a burst pipe.</p><span class="ba-tag">Water Damage</span></div></div>
-      <div class="ba-card reveal" data-category="carpet"><div class="ba-slider" id="slider-6"><div class="ba-after" style="background-image:url('imgen/after_carpet_2.jpg');"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div></div><div class="ba-before" style="background-image:url('imgen/before_carpet_2.jpg');" id="before-6"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div></div><div class="ba-divider" id="divider-6"></div><div class="ba-handle" id="handle-6">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Commercial Carpet Cleaning</h4><p>Office hallway carpet deep cleaned — heavy traffic dirt fully removed.</p><span class="ba-tag">Carpet Cleaning</span></div></div>
-      <div class="ba-card reveal" data-category="tile"><div class="ba-slider" id="slider-7"><div class="ba-after" style="background-image:url('imgen/after_tile_1.jpg');"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div></div><div class="ba-before" style="background-image:url('imgen/before_tile_1.jpg');" id="before-7"><div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div></div><div class="ba-divider" id="divider-7"></div><div class="ba-handle" id="handle-7">◀▶</div><div class="ba-label ba-label-before">Before</div><div class="ba-label ba-label-after">After</div></div><div class="ba-info"><h4>Wood Floor</h4><p>Deep cleaning restores hardwood floors to their original beauty.</p><span class="ba-tag">Wood floor</span></div></div>
-    </div>
-  </div>
-</section>
 
-<!-- NEW UPLOADED PHOTOS FROM CLOUDINARY -->
-<section class="section new-uploads-section" id="new-uploads" style="display:none;">
-  <div class="max-w">
-    <p class="section-label">📸 Recently Added</p>
-    <h2 class="section-title">Latest Work Photos</h2>
-    <div class="photo-grid" id="cloudinary-grid"></div>
+    <div class="ba-grid" id="baGrid">
+
+      <!-- Slider 1 — Deep Carpet Cleaning -->
+      <div class="ba-card reveal" data-category="carpet">
+        <div class="ba-slider" id="slider-1">
+          <div class="ba-after" style="background-image: url('imgen/after_carpet_1.jpg');">
+            <div class="ba-placeholder" id="ph-after-1"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_carpet_1.jpg');" id="before-1">
+            <div class="ba-placeholder" id="ph-before-1"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-1"></div>
+          <div class="ba-handle" id="handle-1">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Deep Carpet Cleaning</h4>
+          <p>Heavy soiling removed using truck-mounted hot water extraction.</p>
+          <span class="ba-tag">Carpet Cleaning</span>
+        </div>
+      </div>
+
+      <!-- Slider 2 — Pet Stain Removal -->
+      <div class="ba-card reveal" data-category="stain">
+        <div class="ba-slider" id="slider-2">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_1.png');"></div>
+          <div class="ba-before" style="background-image: url('imgen/before_stain_1.jpg');" id="before-2"></div>
+          <div class="ba-divider" id="divider-2"></div>
+          <div class="ba-handle" id="handle-2">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Pet Stain Removal</h4>
+          <p>Complete elimination of pet stains and odor from living room carpet.</p>
+          <span class="ba-tag">Stain Removal</span>
+        </div>
+      </div>
+
+      <!-- Slider 8 — Coffee Stain Removal -->
+      <div class="ba-card reveal" data-category="stain">
+        <div class="ba-slider" id="slider-8">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_coffee.png');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_stain_coffee.png');" id="before-8">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-8"></div>
+          <div class="ba-handle" id="handle-8">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Coffee Stain Removal</h4>
+          <p>Deep coffee stains fully eliminated from carpet fibers — no residue left behind.</p>
+          <span class="ba-tag">Stain Removal</span>
+        </div>
+      </div>
+
+      <!-- Slider 9 — Wine Stain Removal -->
+      <div class="ba-card reveal" data-category="stain">
+        <div class="ba-slider" id="slider-9">
+          <div class="ba-after" style="background-image: url('imgen/after_stain_wine.png');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_stain_wine.png');" id="before-9">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-9"></div>
+          <div class="ba-handle" id="handle-9">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Wine Stain Removal</h4>
+          <p>Stubborn red wine stains completely removed — carpet restored to its original color.</p>
+          <span class="ba-tag">Stain Removal</span>
+        </div>
+      </div>
+
+      <!-- Slider 3 — Carpet Repair -->
+      <div class="ba-card reveal" data-category="upholstery">
+        <div class="ba-slider" id="slider-3">
+          <div class="ba-after" style="background-image: url('imgen/after_upholstery_1.jpg');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_upholstery_1.jpg');" id="before-3">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-3"></div>
+          <div class="ba-handle" id="handle-3">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Carpet repair</h4>
+          <p>Carpet repair — stains, odors, and embedded dirt fully removed.</p>
+          <span class="ba-tag">Carpet Cleaning</span>
+        </div>
+      </div>
+
+      <!-- Slider 4 — Carpet Re-Stretching -->
+      <div class="ba-card reveal" data-category="Re-Stretching">
+        <div class="ba-slider" id="slider-4">
+          <div class="ba-after" style="background-image: url('imgen/after_restretching_1.jpg');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_restretching_1.jpg');" id="before-4">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-4"></div>
+          <div class="ba-handle" id="handle-4">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Carpet Re-Stretching</h4>
+          <p>Ripples and bubbles completely eliminated using power stretchers.</p>
+          <span class="ba-tag">Re-Stretching</span>
+        </div>
+      </div>
+
+      <!-- Slider 5 — Water Damage -->
+      <div class="ba-card reveal" data-category="water">
+        <div class="ba-slider" id="slider-5">
+          <div class="ba-after" style="background-image: url('imgen/after_water_1.jpg');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_water_1.jpg');" id="before-5">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-5"></div>
+          <div class="ba-handle" id="handle-5">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Water Damage Restoration</h4>
+          <p>Full water extraction and drying after a burst pipe — mold prevented.</p>
+          <span class="ba-tag">Water Damage</span>
+        </div>
+      </div>
+
+      <!-- Slider 6 — Commercial Carpet -->
+      <div class="ba-card reveal" data-category="carpet">
+        <div class="ba-slider" id="slider-6">
+          <div class="ba-after" style="background-image: url('imgen/after_carpet_2.jpg');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_carpet_2.jpg');" id="before-6">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-6"></div>
+          <div class="ba-handle" id="handle-6">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Commercial Carpet Cleaning</h4>
+          <p>Office hallway carpet deep cleaned — heavy traffic dirt fully removed.</p>
+          <span class="ba-tag">Carpet Cleaning</span>
+        </div>
+      </div>
+
+      <!-- Slider 7 — Wood Floor -->
+      <div class="ba-card reveal" data-category="tile">
+        <div class="ba-slider" id="slider-7">
+          <div class="ba-after" style="background-image: url('imgen/after_tile_1.jpg');">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>After photo here</p></div>
+          </div>
+          <div class="ba-before" style="background-image: url('imgen/before_tile_1.jpg');" id="before-7">
+            <div class="ba-placeholder"><div class="ph-icon">📸</div><p>Before photo here</p></div>
+          </div>
+          <div class="ba-divider" id="divider-7"></div>
+          <div class="ba-handle" id="handle-7">◀▶</div>
+          <div class="ba-label ba-label-before">Before</div>
+          <div class="ba-label ba-label-after">After</div>
+        </div>
+        <div class="ba-info">
+          <h4>Wood floor</h4>
+          <p>Deep cleaning restores hardwood floors to their original beauty — dirt, grime, and buildup fully removed.</p>
+          <span class="ba-tag">Wood floor</span>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -254,10 +613,89 @@
     <p class="section-label">In Action</p>
     <h2 class="section-title">Video Gallery</h2>
     <div class="video-grid">
-      <div class="video-card reveal"><div class="video-thumb"><img src="https://i.ytimg.com/vi/Nt4Yhm9MAM8/maxresdefault.jpg" alt="Carpet Cleaning Process" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/Nt4Yhm9MAM8/hqdefault.jpg'"><a class="video-overlay" href="https://youtube.com/shorts/Nt4Yhm9MAM8" target="_blank" rel="noopener"><div class="play-circle">▶</div><span class="shorts-badge">YouTube Shorts</span></a></div><div class="video-info"><h4>Carpet Cleaning Process</h4><p>Watch our truck-mounted extraction system in action.</p><a class="watch-link" href="https://youtube.com/shorts/Nt4Yhm9MAM8" target="_blank" rel="noopener">▶ Watch on YouTube</a></div></div>
-      <div class="video-card reveal"><div class="video-thumb"><img src="https://i.ytimg.com/vi/EcZmlWKD0hg/maxresdefault.jpg" alt="Water Damage" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/EcZmlWKD0hg/hqdefault.jpg'"><a class="video-overlay" href="https://youtube.com/shorts/EcZmlWKD0hg" target="_blank" rel="noopener"><div class="play-circle">▶</div><span class="shorts-badge">YouTube Shorts</span></a></div><div class="video-info"><h4>Water Damage / Restoration</h4><p>Water damage restoration removes moisture and restores your space.</p><a class="watch-link" href="https://youtube.com/shorts/EcZmlWKD0hg" target="_blank" rel="noopener">▶ Watch on YouTube</a></div></div>
-      <div class="video-card reveal"><div class="video-thumb"><img src="https://i.ytimg.com/vi/YUNPGDRa6j0/maxresdefault.jpg" alt="Carpet Deep Cleaning" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/YUNPGDRa6j0/hqdefault.jpg'"><a class="video-overlay" href="https://youtube.com/shorts/YUNPGDRa6j0" target="_blank" rel="noopener"><div class="play-circle">▶</div><span class="shorts-badge">YouTube Shorts</span></a></div><div class="video-info"><h4>Carpet Deep Cleaning</h4><p>A sofa that looked beyond saving — brought back to life in one visit.</p><a class="watch-link" href="https://youtube.com/shorts/YUNPGDRa6j0" target="_blank" rel="noopener">▶ Watch on YouTube</a></div></div>
-      <div class="video-card reveal"><div class="video-thumb"><iframe src="https://www.youtube.com/embed/4f9FtAJu6As" title="Deep Cleaning" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe></div><div class="video-info"><h4>Deep Cleaning</h4><p>See how we tackle the toughest dirt and grime with a full deep cleaning treatment.</p><a class="watch-link" href="https://youtu.be/4f9FtAJu6As" target="_blank" rel="noopener">▶ Watch on YouTube</a></div></div>
+
+      <!-- Video 1 -->
+      <div class="video-card reveal">
+        <div class="video-thumb">
+          <img
+            src="https://i.ytimg.com/vi/Nt4Yhm9MAM8/maxresdefault.jpg"
+            alt="Carpet Cleaning Process"
+            loading="lazy"
+            onerror="this.src='https://i.ytimg.com/vi/Nt4Yhm9MAM8/hqdefault.jpg'"
+          >
+          <a class="video-overlay" href="https://youtube.com/shorts/Nt4Yhm9MAM8" target="_blank" rel="noopener">
+            <div class="play-circle">▶</div>
+            <span class="shorts-badge">YouTube Shorts</span>
+          </a>
+        </div>
+        <div class="video-info">
+          <h4>Carpet Cleaning Process</h4>
+          <p>Watch our truck-mounted extraction system in action on a heavily soiled carpet.</p>
+          <a class="watch-link" href="https://youtube.com/shorts/Nt4Yhm9MAM8" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card reveal">
+        <div class="video-thumb">
+          <img
+            src="https://i.ytimg.com/vi/EcZmlWKD0hg/maxresdefault.jpg"
+            alt="Water Damage / Restoration"
+            loading="lazy"
+            onerror="this.src='https://i.ytimg.com/vi/EcZmlWKD0hg/hqdefault.jpg'"
+          >
+          <a class="video-overlay" href="https://youtube.com/shorts/EcZmlWKD0hg" target="_blank" rel="noopener">
+            <div class="play-circle">▶</div>
+            <span class="shorts-badge">YouTube Shorts</span>
+          </a>
+        </div>
+        <div class="video-info">
+          <h4>Water Damage / Restoration</h4>
+          <p>Water damage restoration removes moisture, repairs affected areas, and restores your space to its original condition.</p>
+          <a class="watch-link" href="https://youtube.com/shorts/EcZmlWKD0hg" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card reveal">
+        <div class="video-thumb">
+          <img
+            src="https://i.ytimg.com/vi/YUNPGDRa6j0/maxresdefault.jpg"
+            alt="Carpet Deep Cleaning"
+            loading="lazy"
+            onerror="this.src='https://i.ytimg.com/vi/YUNPGDRa6j0/hqdefault.jpg'"
+          >
+          <a class="video-overlay" href="https://youtube.com/shorts/YUNPGDRa6j0" target="_blank" rel="noopener">
+            <div class="play-circle">▶</div>
+            <span class="shorts-badge">YouTube Shorts</span>
+          </a>
+        </div>
+        <div class="video-info">
+          <h4>Carpet Deep Cleaning</h4>
+          <p>A sofa that looked beyond saving — brought back to life in one visit.</p>
+          <a class="watch-link" href="https://youtube.com/shorts/YUNPGDRa6j0" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card reveal">
+        <div class="video-thumb">
+          <iframe
+            src="https://www.youtube.com/embed/4f9FtAJu6As"
+            title="Deep Cleaning"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            style="position:absolute; inset:0; width:100%; height:100%; border:none;"
+          ></iframe>
+        </div>
+        <div class="video-info">
+          <h4>Deep Cleaning</h4>
+          <p>See how we tackle the toughest dirt and grime with a full deep cleaning treatment — results that speak for themselves.</p>
+          <a class="watch-link" href="https://youtu.be/4f9FtAJu6As" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -267,17 +705,89 @@
   <div class="max-w">
     <p class="section-label">Completed Work</p>
     <h2 class="section-title">Finished Results</h2>
+
     <div class="photo-grid">
-      <div class="photo-card reveal"><div class="photo-card-img-wrap"><img src="imgen/done_1.jpg" alt="Carpet Cleaning Completed" onload="this.classList.add('loaded');this.parentElement.classList.add('has-image');"><div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div></div><div class="photo-card-info"><h4>Carpet Cleaning Completed</h4><p>Living room carpet fully restored and dried.</p><span class="photo-card-tag">Carpet Cleaning</span></div></div>
-      <div class="photo-card reveal"><div class="photo-card-img-wrap"><img src="imgen/done_2.jpg" alt="Upholstery Restoration" onload="this.classList.add('loaded');this.parentElement.classList.add('has-image');"><div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div></div><div class="photo-card-info"><h4>Upholstery Restoration</h4><p>Sofa and chairs professionally cleaned and refreshed.</p><span class="photo-card-tag">Upholstery</span></div></div>
-      <div class="photo-card reveal"><div class="photo-card-img-wrap"><img src="imgen/done_3.jpg" alt="Grout and tile" onload="this.classList.add('loaded');this.parentElement.classList.add('has-image');"><div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div></div><div class="photo-card-info"><h4>Grout and Tile Cleaning</h4><p>Kitchen tile and grout looking brand new.</p><span class="photo-card-tag">Grout and tile</span></div></div>
-      <div class="photo-card reveal"><div class="photo-card-img-wrap"><img src="imgen/done_4.jpg" alt="Stain Removal Done" onload="this.classList.add('loaded');this.parentElement.classList.add('has-image');"><div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div></div><div class="photo-card-info"><h4>Stain Removal — Done</h4><p>Tough pet stains fully eliminated, no trace left.</p><span class="photo-card-tag">Stain Removal</span></div></div>
-      <div class="photo-card reveal"><div class="photo-card-img-wrap"><img src="imgen/done_5.jpg" alt="Carpet Re-Stretching" onload="this.classList.add('loaded');this.parentElement.classList.add('has-image');"><div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div></div><div class="photo-card-info"><h4>Carpet Re-Stretching Complete</h4><p>All ripples removed — carpet flat and tight again.</p><span class="photo-card-tag">Re-Stretching</span></div></div>
-      <div class="photo-card reveal"><div class="photo-card-img-wrap"><img src="imgen/done_9.png" alt="Water Damage Restored" onload="this.classList.add('loaded');this.parentElement.classList.add('has-image');"><div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div></div><div class="photo-card-info"><h4>Water Damage — Restored</h4><p>Full recovery after water damage — dry and fresh.</p><span class="photo-card-tag">Water Damage</span></div></div>
+
+      <div class="photo-card reveal">
+        <div class="photo-card-img-wrap">
+          <img src="imgen/done_1.jpg" alt="Carpet Cleaning Completed" onload="this.classList.add('loaded'); this.parentElement.classList.add('has-image');">
+          <div class="photo-card-img-placeholder">
+            <div class="ph-icon">📸</div>
+            <p>Photo goes here</p>
+          </div>
+        </div>
+        <div class="photo-card-info">
+          <h4>Carpet Cleaning Completed</h4>
+          <p>Living room carpet fully restored and dried.</p>
+          <span class="photo-card-tag">Carpet Cleaning</span>
+        </div>
+      </div>
+
+      <div class="photo-card reveal">
+        <div class="photo-card-img-wrap">
+          <img src="imgen/done_2.jpg" alt="Upholstery Restoration" onload="this.classList.add('loaded'); this.parentElement.classList.add('has-image');">
+          <div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div>
+        </div>
+        <div class="photo-card-info">
+          <h4>Upholstery Restoration</h4>
+          <p>Sofa and chairs professionally cleaned and refreshed.</p>
+          <span class="photo-card-tag">Upholstery</span>
+        </div>
+      </div>
+
+      <div class="photo-card reveal">
+        <div class="photo-card-img-wrap">
+          <img src="imgen/done_3.jpg" alt="Grout and tile" onload="this.classList.add('loaded'); this.parentElement.classList.add('has-image');">
+          <div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div>
+        </div>
+        <div class="photo-card-info">
+          <h4>Grout and tile cleaning and sealer</h4>
+          <p>Kitchen tile and grout looking brand new.</p>
+          <span class="photo-card-tag">Grout and tile</span>
+        </div>
+      </div>
+
+      <div class="photo-card reveal">
+        <div class="photo-card-img-wrap">
+          <img src="imgen/done_4.jpg" alt="Stain Removal Done" onload="this.classList.add('loaded'); this.parentElement.classList.add('has-image');">
+          <div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div>
+        </div>
+        <div class="photo-card-info">
+          <h4>Stain Removal — Done</h4>
+          <p>Tough pet stains fully eliminated, no trace left.</p>
+          <span class="photo-card-tag">Stain Removal</span>
+        </div>
+      </div>
+
+      <div class="photo-card reveal">
+        <div class="photo-card-img-wrap">
+          <img src="imgen/done_5.jpg" alt="Carpet Re-Stretching Complete" onload="this.classList.add('loaded'); this.parentElement.classList.add('has-image');">
+          <div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div>
+        </div>
+        <div class="photo-card-info">
+          <h4>Carpet Re-Stretching Complete</h4>
+          <p>All ripples removed — carpet flat and tight again.</p>
+          <span class="photo-card-tag">Re-Stretching</span>
+        </div>
+      </div>
+
+      <div class="photo-card reveal">
+        <div class="photo-card-img-wrap">
+          <img src="imgen/done_9.png" alt="Water Damage Restored" onload="this.classList.add('loaded'); this.parentElement.classList.add('has-image');">
+          <div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Photo goes here</p></div>
+        </div>
+        <div class="photo-card-info">
+          <h4>Water Damage — Restored</h4>
+          <p>Full recovery after water damage — dry and fresh.</p>
+          <span class="photo-card-tag">Water Damage</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
+<!-- CTA -->
 <div class="cta-banner">
   <div class="cta-banner-inner">
     <p class="label">Ready for results like these?</p>
@@ -287,12 +797,20 @@
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo"><img src="imgen/logo.png" alt="Green's Carpet & Upholstery Cleaning"><div class="footer-tagline">" Remember you walk on our reputation"</div></div>
+    <div class="footer-logo">
+      <img src="imgen/logo.png" alt="Green's Carpet & Upholstery Cleaning">
+      <div class="footer-tagline">" Remember you walk on our reputation"</div>
+    </div>
     <div class="footer-links">
-      <a href="index.html">Home</a><a href="index.html#services">Services</a><a href="index.html#about">About Us</a>
-      <a href="index.html#process">Our Process</a><a href="gallery.html">Gallery</a><a href="index.html#contact">Contact</a>
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#about">About Us</a>
+      <a href="index.html#process">Our Process</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="index.html#contact">Contact</a>
     </div>
   </div>
   <div class="footer-bottom">Copyright © 2025 Greens Carpet & Upholstery Cleaning, all rights reserved. · Est. 1993 · Bonner Springs, KS 66012</div>
@@ -301,16 +819,21 @@
 <a href="tel:+19132072033" class="float-cta">📞 (913) 207-2033</a>
 
 <script>
-const CLOUD_NAME = 'dkbomqqdl';
-
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 
+// Fix: hide placeholders when background images load successfully
 document.querySelectorAll('.ba-after, .ba-before').forEach(el => {
-  const match = el.style.backgroundImage.match(/url\(['"]?(.*?)['"]?\)/);
-  if (!match) return;
+  const raw = el.style.backgroundImage;
+  const match = raw.match(/url\(['"]?(.*?)['"]?\)/);
+  if (!match || !match[1]) return;
+  const url = match[1];
   const img = new Image();
-  img.onload = () => { el.classList.add('has-image'); el.querySelectorAll('.ba-placeholder').forEach(ph => ph.style.display='none'); };
-  img.src = match[1];
+  img.onload = () => {
+    el.classList.add('has-image');
+    // Hide ALL placeholders inside this element (covers both before and after sides)
+    el.querySelectorAll('.ba-placeholder').forEach(ph => ph.style.display = 'none');
+  };
+  img.src = url;
 });
 
 document.querySelectorAll('.reveal').forEach(el => el.classList.add('hidden'));
@@ -323,73 +846,41 @@ function filterCards(category, btn) {
   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.ba-card').forEach(card => {
-    card.style.display = (category === 'all' || card.dataset.category === category) ? '' : 'none';
+    if (category === 'all' || card.dataset.category === category) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
   });
 }
 
 function initSlider(id) {
-  const slider = document.getElementById('slider-' + id);
-  const before = document.getElementById('before-' + id);
+  const slider  = document.getElementById('slider-' + id);
+  const before  = document.getElementById('before-' + id);
   const divider = document.getElementById('divider-' + id);
-  const handle = document.getElementById('handle-' + id);
+  const handle  = document.getElementById('handle-' + id);
   if (!slider) return;
+
   let dragging = false;
+
   function setPos(x) {
     const rect = slider.getBoundingClientRect();
     let pct = Math.min(Math.max((x - rect.left) / rect.width, 0.05), 0.95);
-    before.style.clipPath = `inset(0 ${(100-pct*100).toFixed(1)}% 0 0)`;
-    divider.style.left = handle.style.left = (pct*100).toFixed(1) + '%';
+    const pctStr = (pct * 100).toFixed(1) + '%';
+    before.style.clipPath  = `inset(0 ${(100 - pct * 100).toFixed(1)}% 0 0)`;
+    divider.style.left     = pctStr;
+    handle.style.left      = pctStr;
   }
-  slider.addEventListener('mousedown', e => { dragging=true; setPos(e.clientX); });
-  slider.addEventListener('touchstart', e => { dragging=true; setPos(e.touches[0].clientX); }, {passive:true});
-  window.addEventListener('mousemove', e => { if(dragging) setPos(e.clientX); });
-  window.addEventListener('touchmove', e => { if(dragging) setPos(e.touches[0].clientX); }, {passive:true});
-  window.addEventListener('mouseup', () => dragging=false);
-  window.addEventListener('touchend', () => dragging=false);
-}
-[1,2,3,4,5,6,7,8,9].forEach(initSlider);
 
-// Load photos uploaded via Cloudinary
-async function loadCloudinaryPhotos() {
-  try {
-    const res = await fetch('https://res.cloudinary.com/' + CLOUD_NAME + '/image/list/greens_gallery.json');
-    if (!res.ok) return;
-    const data = await res.json();
-    if (!data.resources || data.resources.length === 0) return;
-
-    const section = document.getElementById('new-uploads');
-    const grid = document.getElementById('cloudinary-grid');
-    section.style.display = 'block';
-
-    data.resources.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-
-    data.resources.forEach(img => {
-      const url = 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/q_auto,f_auto,w_600/' + img.public_id;
-      const title = img.context && img.context.custom && img.context.custom.title ? img.context.custom.title : 'Completed Work';
-      const desc = img.context && img.context.custom && img.context.custom.description ? img.context.custom.description : 'Recent job by Green\'s Carpet & Upholstery Cleaning.';
-      const card = document.createElement('div');
-      card.className = 'photo-card reveal';
-      card.innerHTML = `
-        <div class="photo-card-img-wrap">
-          <img src="${url}" alt="${title}" onload="this.classList.add('loaded');this.parentElement.classList.add('has-image');">
-          <div class="photo-card-img-placeholder"><div class="ph-icon">📸</div><p>Loading...</p></div>
-        </div>
-        <div class="photo-card-info">
-          <h4>${title}</h4>
-          <p>${desc}</p>
-          <span class="new-tag">✨ New</span>
-        </div>
-      `;
-      grid.appendChild(card);
-      card.classList.add('hidden');
-      observer.observe(card);
-    });
-  } catch(e) {
-    console.log('Cloudinary:', e);
-  }
+  slider.addEventListener('mousedown',  e => { dragging = true; setPos(e.clientX); });
+  slider.addEventListener('touchstart', e => { dragging = true; setPos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('mousemove',  e => { if (dragging) setPos(e.clientX); });
+  window.addEventListener('touchmove',  e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('mouseup',  () => dragging = false);
+  window.addEventListener('touchend', () => dragging = false);
 }
 
-window.addEventListener('DOMContentLoaded', loadCloudinaryPhotos);
+[1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(initSlider);
 </script>
 </body>
 </html>
