@@ -652,7 +652,7 @@
           </select>
         </div>
         <div class="form-group"><label>Message</label><textarea id="message" placeholder="Tell us about your project, approximate area, etc."></textarea></div>
-        <button class="btn-primary" onclick="sendEmail()" style="width:100%">Send Message ✉️</button>
+        <button class="btn-primary" onclick="sendEmail()" type="button" style="width:100%">Send Message ✉️</button>
         <div id="form-msg"></div>
       </div>
     </div>
@@ -688,6 +688,7 @@ document.querySelectorAll('.reveal').forEach(el => el.classList.add('hidden'));
 const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('hidden'); e.target.classList.add('visible'); } }), { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 function sendEmail() {
+  console.log('sendEmail called');
   const fname = document.getElementById('fname').value.trim();
   const lname = document.getElementById('lname').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -723,6 +724,7 @@ function sendEmail() {
   })
   .catch((err) => {
     console.error('EmailJS error:', err);
+    alert('Error: ' + JSON.stringify(err));
     const fallback = 'mailto:isaac.twelve@gmail.com'
       + '?subject=' + encodeURIComponent('Service Request - ' + (service || 'General'))
       + '&body=' + encodeURIComponent(
@@ -739,4 +741,15 @@ function sendEmail() {
   });
 }
 window.addEventListener('scroll', () => {
-  const nav = document.query
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 30) {
+    nav.style.background = 'rgba(26,39,68,0.92)';
+    nav.style.backdropFilter = 'blur(12px)';
+  } else {
+    nav.style.background = 'var(--navy)';
+    nav.style.backdropFilter = 'none';
+  }
+});
+</script>
+</body>
+</html>
