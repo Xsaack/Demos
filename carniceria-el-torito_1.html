@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CARNICERÍA // EL TORITO</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #ff003c;
+    --red-dim: rgba(255,0,60,0.12);
+    --bg: #080808;
+    --bg2: #0e0e0e;
+    --bg3: #141414;
+    --text: #e0e0e0;
+    --muted: #555;
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'Rajdhani', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    overflow-x: hidden;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--red); }
+
+  /* SCANLINES */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,0,60,0.015) 3px, rgba(255,0,60,0.015) 4px);
+    pointer-events: none; z-index: 9999;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    position: sticky; top: 0; z-index: 200;
+    background: var(--bg);
+    border-bottom: 1px solid #1a1a1a;
+    padding: 10px 3vw;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: #fff;
+    white-space: nowrap;
+    text-shadow: 0 0 20px rgba(255,0,60,0.4);
+    flex-shrink: 0;
+  }
+  .brand span { color: var(--red); }
+
+  /* SEARCH BOX */
+  .search-wrap {
+    flex: 1;
+    position: relative;
+    max-width: 700px;
+  }
+  .search-icon {
+    position: absolute; left: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--red); font-size: 20px;
+    pointer-events: none;
+  }
+  #search-input {
+    width: 100%;
+    background: var(--bg2);
+    border: 1.5px solid #222;
+    border-bottom-color: var(--red);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 1rem;
+    padding: 11px 44px 11px 42px;
+    outline: none;
+    letter-spacing: 1.5px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  #search-input:focus {
+    border-color: var(--red);
+    box-shadow: 0 4px 24px rgba(255,0,60,0.18);
+  }
+  #search-input::placeholder { color: #2a2a2a; }
+  .clear-btn {
+    position: absolute; right: 10px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    color: #333; font-size: 18px;
+    cursor: pointer; padding: 4px 6px;
+    display: none;
+    transition: color 0.15s;
+  }
+  .clear-btn:hover { color: var(--red); }
+  .clear-btn.show { display: block; }
+
+  .kbd-hint {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    color: #2a2a2a;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* STATUS BAR */
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 7px 3vw;
+    background: var(--bg2);
+    border-bottom: 1px solid #111;
+  }
+  .status-text {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 8px #00ff88;
+    animation: blink 1.5s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.2} }
+  .refresh-btn {
+    background: transparent;
+    border: 1px solid #222;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .refresh-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* FILTER CHIPS */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 3vw;
+    border-bottom: 1px solid #111;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    color: #2a2a2a;
+    letter-spacing: 3px;
+    margin-right: 4px;
+  }
+  .chip {
+    background: transparent;
+    border: 1px solid #1e1e1e;
+    color: #444;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: all 0.12s;
+    user-select: none;
+  }
+  .chip:hover { border-color: #444; color: #888; }
+  .chip.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .results-count {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: #2a2a2a;
+    letter-spacing: 2px;
+    margin-left: auto;
+  }
+  .results-count span { color: var(--red); }
+
+  /* MAIN */
+  .main { padding: 0 3vw 4rem; }
+
+  /* QUICK TAGS */
+  .quick-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px 0 10px;
+    border-bottom: 1px solid #111;
+    margin-bottom: 1.5rem;
+  }
+  .quick-tag {
+    background: transparent;
+    border: 1px solid #1a1a1a;
+    color: #333;
+    font-family: var(--mono);
+    font-size: 0.52rem;
+    letter-spacing: 1.5px;
+    padding: 4px 11px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .quick-tag:hover { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+  .quick-tag-label {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    color: #1e1e1e;
+    letter-spacing: 3px;
+    align-self: center;
+    margin-right: 4px;
+  }
+
+  /* PRODUCT GRID */
+  .cat-section { margin-bottom: 2.5rem; }
+  .cat-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 1rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #141414;
+    position: relative;
+  }
+  .cat-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 50px; height: 1px;
+    background: var(--red);
+  }
+  .cat-title {
+    font-family: var(--display);
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    letter-spacing: 3px;
+    color: #fff;
+    line-height: 1;
+  }
+  .cat-count {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    color: #2a2a2a;
+    letter-spacing: 2px;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px;
+    background: #0d0d0d;
+  }
+
+  .product-card {
+    background: var(--bg2);
+    padding: 14px 16px 12px;
+    position: relative;
+    transition: background 0.1s;
+    overflow: hidden;
+  }
+  .product-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .product-card:hover { background: var(--bg3); }
+  .product-card:hover::before { background: var(--red); }
+
+  .product-tag {
+    position: absolute; top: 8px; right: 8px;
+    background: var(--red); color: #fff;
+    font-family: var(--mono); font-size: 0.45rem;
+    padding: 2px 5px; letter-spacing: 1px;
+  }
+  .product-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.35;
+    margin-bottom: 8px;
+    min-height: 2rem;
+  }
+  .product-price {
+    font-family: var(--display);
+    font-size: 2rem;
+    color: var(--red);
+    letter-spacing: 2px;
+    line-height: 1;
+    text-shadow: 0 0 16px rgba(255,0,60,0.25);
+  }
+  .product-unit {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    color: #2a2a2a;
+    letter-spacing: 2px;
+    margin-top: 3px;
+  }
+  .price-bar {
+    width: 100%; height: 2px;
+    background: #111;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .price-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,0,60,0.3), var(--red));
+    position: absolute; left: 0; top: 0;
+  }
+
+  mark {
+    background: rgba(255,0,60,0.22);
+    color: #fff; padding: 0 2px;
+    border-radius: 1px;
+  }
+
+  /* EMPTY STATE */
+  .empty-state { display: none; padding: 4rem 2rem; text-align: center; }
+  .empty-state.show { display: block; }
+  .empty-code {
+    font-family: var(--display);
+    font-size: 3.5rem;
+    color: #1a1a1a;
+    letter-spacing: 8px;
+    margin-bottom: 0.8rem;
+  }
+  .empty-msg { font-family: var(--mono); font-size: 0.65rem; color: #2a2a2a; letter-spacing: 3px; }
+  .empty-suggestions {
+    margin-top: 1.5rem;
+    display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+  }
+
+  /* BACK TO TOP */
+  .back-top {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    width: 38px; height: 38px;
+    background: var(--red); color: #fff; border: none;
+    cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 1000;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  }
+  .back-top.show { opacity: 1; transform: translateY(0); }
+  .back-top:hover { background: #cc0030; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid #1a1a1a;
+    padding: 2rem 3vw;
+    display: flex; flex-wrap: wrap; gap: 2rem;
+    justify-content: space-between;
+  }
+  .footer-info {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    line-height: 2.2;
+  }
+  .footer-info a { color: var(--red); text-decoration: none; }
+  .footer-info a:hover { text-decoration: underline; }
+  .footer-note { font-family: var(--mono); font-size: 0.5rem; color: #1e1e1e; letter-spacing: 2px; margin-top: 0.8rem; }
+
+  @media (max-width: 600px) {
+    .brand { font-size: 1.2rem; }
+    .product-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .kbd-hint { display: none; }
+    .top-bar { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="brand">EL<span>.</span>TORITO</div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input id="search-input" type="text"
+      placeholder="BUSCAR: ARRACHERA, MILANESA, POLLO..."
+      autocomplete="off" spellcheck="false" autofocus>
+    <button class="clear-btn" id="clear-btn" title="Limpiar">✕</button>
+  </div>
+  <div class="kbd-hint">[ / ] BUSCAR</div>
+</header>
+
+<div class="meta-bar">
+  <div class="status-text">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">CARGANDO...</span>
+    <span id="last-update" style="color:#222"></span>
+  </div>
+  <button class="refresh-btn" id="refresh-btn" onclick="loadPrices(true)">⟳ ACTUALIZAR</button>
+</div>
+
+<div class="filter-bar">
+  <span class="filter-label">CAT:</span>
+  <div id="filter-btns">
+    <button class="chip active" data-cat="all">TODO</button>
+    <button class="chip" data-cat="res">🐄 RES</button>
+    <button class="chip" data-cat="puerco">🐷 PUERCO</button>
+    <button class="chip" data-cat="pollo">🐔 POLLO</button>
+    <button class="chip" data-cat="borrego">🐑 BORREGO</button>
+  </div>
+  <div class="results-count" id="results-count"></div>
+</div>
+
+<main class="main">
+  <div class="quick-tags" id="quick-tags">
+    <span class="quick-tag-label">RÁPIDO:</span>
+    <button class="quick-tag" data-q="arrachera">ARRACHERA</button>
+    <button class="quick-tag" data-q="milanesa">MILANESA</button>
+    <button class="quick-tag" data-q="pollo">POLLO</button>
+    <button class="quick-tag" data-q="pastor">PASTOR</button>
+    <button class="quick-tag" data-q="rib eye">RIB EYE</button>
+    <button class="quick-tag" data-q="bistec">BISTEC</button>
+    <button class="quick-tag" data-q="costilla">COSTILLA</button>
+    <button class="quick-tag" data-q="molida">MOLIDA</button>
+    <button class="quick-tag" data-q="chorizo">CHORIZO</button>
+    <button class="quick-tag" data-q="lengua">LENGUA</button>
+    <button class="quick-tag" data-q="tripa">TRIPA</button>
+    <button class="quick-tag" data-q="pechuga">PECHUGA</button>
+  </div>
+
+  <div id="products-container"></div>
+
+  <div class="empty-state" id="empty-state">
+    <div class="empty-code">404</div>
+    <div class="empty-msg">// SIN RESULTADOS</div>
+    <div class="empty-suggestions" id="empty-suggestions"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-info">
+    📍 KANSAS CITY — 1409 Central Ave, KS 66102 &nbsp;·&nbsp; <a href="tel:9132331794">(913) 233-1794</a><br>
+    📍 TOPEKA — 3000 NW Topeka Blvd, KS 66617 &nbsp;·&nbsp; <a href="tel:7857838180">(785) 783-8180</a><br>
+    Fuente: <a href="https://en.supermarteltorito.com/menu?menu=carniceria--meat-market" target="_blank">supermarteltorito.com</a>
+    <div class="footer-note">// PRECIOS SUJETOS A CAMBIO SIN PREVIO AVISO</div>
+  </div>
+</footer>
+
+<button class="back-top" id="back-top" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── FALLBACK DATA ──
+const FALLBACK = {
+  res: [
+    {n:"CHAMORRO DE RES",p:4.79},{n:"COSTILLA DE RES PARA ASAR DELGADA",p:8.29},
+    {n:"GROUND BEEF / MOLIDA DE RES",p:5.69},{n:"PATA DE RES",p:4.49},
+    {n:"HIGADO DE RES",p:2.69},{n:"SUADERO DE RES",p:5.89},
+    {n:"COLA DE RES",p:9.99},{n:"T-BONE DE RES",p:9.49},
+    {n:"TRIPA CRUDA",p:3.59},{n:"CACHETE DE RES",p:5.25},
+    {n:"LABIO DE RES",p:4.29},{n:"BEEF MENUDO",p:3.39},
+    {n:"CABEZA DE RES",p:49.99,t:"PIEZA"},{n:"CUETE DE RES",p:6.29},
+    {n:"TROZO DE RES",p:6.39},{n:"MENUDO PANAL",p:7.99},
+    {n:"ESPINAZO DE RES",p:3.79},{n:"BISTEC PICADO DE RES",p:6.39},
+    {n:"MILANESA",p:6.79},{n:"MILANESA DE RES EMPANIZADA",p:7.59},
+    {n:"DESHEBRADA",p:6.69},{n:"DIEZMILLO",p:7.99},
+    {n:"AGUAYON DE RES",p:6.79},{n:"ARRACHERA",p:11.99,t:"★"},
+    {n:"BISTEC DE RES",p:6.39},{n:"RIB EYE",p:14.99,t:"★"},
+    {n:"MENUDO LIMBRILLO",p:5.59},{n:"CECINA FRESCA DE RES",p:8.29},
+    {n:"HAMBURGUESA",p:6.99},{n:"PICAÑA",p:10.49},
+    {n:"CHULETA DEL SIETE",p:7.29},{n:"TOP SIRLOIN",p:10.49},
+    {n:"LENGUA DE RES",p:7.69},{n:"LOMO SIN HUESO / BONELESS TOP SIRLOIN",p:10.99},
+    {n:"COSTILLA DE RES",p:8.29},{n:"TENDON",p:6.99},
+    {n:"CESINA DE RES",p:8.29},{n:"TUETANO",p:3.15},
+  ],
+  puerco: [
+    {n:"ADOBADA DE PUERCO",p:5.69},{n:"BISTEC DE PUERCO",p:3.79},
+    {n:"BUCHE",p:3.69},{n:"CABEZA DE PUERCO",p:17.99,t:"PIEZA"},
+    {n:"CECINA DE PUERCO",p:5.49},{n:"CHAMORRO DE PUERCO",p:2.99},
+    {n:"CHORIZO-LONGANIZA",p:5.69},{n:"CHORIZO SECO",p:6.99},
+    {n:"CHULETA AHUMADA",p:4.79},{n:"CHULETA SIN HUESO",p:3.49},
+    {n:"CHULETA NATURAL",p:3.99},{n:"CODILLO",p:2.99},
+    {n:"CHULETA DE LOMO",p:3.49},{n:"COSTILLA DE PUERCO",p:3.99},
+    {n:"CUERITO CURTIDO",p:4.69},{n:"DISCADA",p:5.69},
+    {n:"ESPALDILLA DE PUERCO",p:3.49},{n:"ESPINAZO CARNUDO",p:2.99},
+    {n:"ESPINAZO HUESUDO",p:2.19},{n:"LENGUA DE PUERCO",p:2.89},
+    {n:"LOMO SIN HUESO",p:3.79},{n:"MANTECA PUERCO",p:2.69},
+    {n:"MOLIDA DE PUERCO",p:3.59},{n:"AL PASTOR",p:5.69,t:"★"},
+    {n:"PATA DE PUERCO",p:2.49},{n:"PORK BELLY",p:4.99},
+    {n:"PORK BUTTS",p:3.49},{n:"TROZO ENTERO DE PUERCO",p:3.19},
+    {n:"TROCITOS DE PUERCO",p:3.79},{n:"OREJAS",p:3.49},
+  ],
+  pollo: [
+    {n:"ALITAS ADOBADAS",p:5.99},{n:"ALITAS DE POLLO CRUDAS",p:3.59},
+    {n:"BISTEC DE PECHUGA",p:4.99},{n:"DISCADA DE POLLO",p:4.49},
+    {n:"PATA DE POLLO",p:2.49},{n:"PIERNA DE POLLO",p:1.89},
+    {n:"PIERNA DE POLLO ADOBADA",p:2.89},{n:"PIERNA SIN HUESO",p:3.49},
+    {n:"PIERNA SIN HUESO MARINADA",p:3.89},{n:"PIERNA Y MUSLO",p:1.99},
+    {n:"PIERNA Y MUSLO ADOBADA",p:2.79},{n:"PIERNA Y MUSLO SIN HUESO MARINADA",p:4.49},
+    {n:"PECHUGA ENTERA SIN HUESO",p:4.49},{n:"PECHUGA EMPANIZADA",p:5.49},
+    {n:"PECHUGA CON HUESO",p:3.99},{n:"FAJITAS DE POLLO",p:4.49},
+    {n:"MOLLEJAS DE POLLO",p:1.99},{n:"BISTEC EMPANIZADO DE PECHUGA",p:5.99},
+    {n:"PIERNA Y MUSLO SIN HUESO",p:3.49},{n:"PECHUGA EN BISTEC",p:4.99},
+  ],
+  borrego: [
+    {n:"PIERNA DE BORREGO",p:6.99},{n:"BORREGO ENTERO",p:6.49},
+    {n:"PIERNA DE CHIVO",p:7.79},{n:"CHIVO ENTERO",p:7.29},
+  ]
+};
+
+const CAT_META = {
+  res:     { label:"RES / BEEF",      num:"01" },
+  puerco:  { label:"PUERCO / PORK",   num:"02" },
+  pollo:   { label:"POLLO / CHICKEN", num:"03" },
+  borrego: { label:"BORREGO & CHIVO", num:"04" },
+};
+
+// ── STATE ──
+let DATA = JSON.parse(JSON.stringify(FALLBACK));
+let activeFilter = 'all';
+let searchQuery = '';
+let isLoading = false;
+let priceMin = 0, priceMax = 0;
+let SEARCH_INDEX = [];
+
+// Strip accents for accent-insensitive matching
+function norm(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+function buildIndex() {
+  SEARCH_INDEX = [];
+  for (const [cat, items] of Object.entries(DATA)) {
+    for (const item of items) {
+      const normalized = norm(item.n);
+      SEARCH_INDEX.push({ item, cat, normalized, tokens: normalized.split(/\s+/) });
+    }
+  }
+}
+
+// Multi-tier search: exact > token-starts-with > partial
+function searchItems(q) {
+  if (!q.trim()) return null;
+  const raw = norm(q.trim());
+  const qTokens = raw.split(/\s+/).filter(Boolean);
+  if (!qTokens.length) return null;
+
+  const exact = [], startsWith = [], partial = [];
+  for (const e of SEARCH_INDEX) {
+    if (activeFilter !== 'all' && e.cat !== activeFilter) continue;
+    if (e.normalized.includes(raw)) { exact.push(e); continue; }
+    if (qTokens.every(qt => e.tokens.some(t => t.startsWith(qt)))) { startsWith.push(e); continue; }
+    if (qTokens.some(qt => e.tokens.some(t => t.includes(qt)))) partial.push(e);
+  }
+  return [...exact, ...startsWith, ...partial];
+}
+
+// ── RENDER ──
+function render() {
+  const q = searchQuery.trim();
+  const container = document.getElementById('products-container');
+  const emptyEl = document.getElementById('empty-state');
+  const countEl = document.getElementById('results-count');
+  container.innerHTML = '';
+
+  const results = searchItems(q);
+  const grouped = { res:[], puerco:[], pollo:[], borrego:[] };
+
+  if (results === null) {
+    for (const [cat, items] of Object.entries(DATA)) {
+      if (activeFilter !== 'all' && activeFilter !== cat) continue;
+      grouped[cat] = items.map(item => ({ item, cat }));
+    }
+  } else {
+    for (const e of results) {
+      if (activeFilter !== 'all' && e.cat !== activeFilter) continue;
+      grouped[e.cat].push(e);
+    }
+  }
+
+  const total = Object.values(grouped).reduce((s,a) => s+a.length, 0);
+  countEl.innerHTML = total > 0 ? `<span>${total}</span> PRODUCTO${total!==1?'S':''}` : '';
+
+  if (total === 0) {
+    emptyEl.classList.add('show');
+    const sugEl = document.getElementById('empty-suggestions');
+    sugEl.innerHTML = '';
+    if (q) {
+      const qt = norm(q);
+      const suggestions = SEARCH_INDEX
+        .filter(e => e.tokens.some(t => qt.split(/\s+/).some(qw => t.includes(qw) || qw.includes(t))))
+        .slice(0, 6);
+      suggestions.forEach(e => {
+        const btn = document.createElement('button');
+        btn.className = 'quick-tag';
+        btn.textContent = e.item.n;
+        btn.onclick = () => setSearch(e.item.n);
+        sugEl.appendChild(btn);
+      });
+    }
+    return;
+  }
+  emptyEl.classList.remove('show');
+
+  // Highlight regex (safe)
+  const hlRe = q ? new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi') : null;
+  const highlight = str => hlRe ? str.replace(hlRe, '<mark>$1</mark>') : str;
+
+  // Global price range for bars
+  const allP = Object.values(grouped).flat().filter(e => e.item.t !== 'PIEZA').map(e => e.item.p);
+  const gMin = allP.length ? Math.min(...allP) : 0;
+  const gMax = allP.length ? Math.max(...allP) : 1;
+
+  let first = true;
+  for (const [cat, entries] of Object.entries(grouped)) {
+    if (!entries.length) continue;
+    if (!first) {
+      const sep = document.createElement('div');
+      sep.style.cssText = 'height:1px;background:#111;margin:2rem 0';
+      container.appendChild(sep);
+    }
+    first = false;
+
+    const meta = CAT_META[cat];
+    const section = document.createElement('div');
+    section.className = 'cat-section';
+    section.innerHTML = `
+      <div class="cat-header">
+        <div class="cat-title">${meta.label}</div>
+        <div class="cat-count">[${entries.length}]</div>
+      </div>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'product-grid';
+
+    for (const { item } of entries) {
+      const pct = gMax > gMin ? ((item.p - gMin)/(gMax - gMin)*100).toFixed(0) : 50;
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        ${item.t ? `<span class="product-tag">${item.t}</span>` : ''}
+        <div class="product-name">${highlight(item.n)}</div>
+        <div class="product-price">$${item.p.toFixed(2)}</div>
+        <div class="product-unit">${item.t === 'PIEZA' ? 'POR PIEZA' : 'POR LIBRA / LB'}</div>
+        <div class="price-bar"><div class="price-bar-fill" style="width:${pct}%"></div></div>`;
+      grid.appendChild(card);
+    }
+
+    section.appendChild(grid);
+    container.appendChild(section);
+  }
+}
+
+// ── SEARCH HELPERS ──
+function setSearch(val) {
+  const input = document.getElementById('search-input');
+  input.value = val;
+  searchQuery = val;
+  document.getElementById('clear-btn').classList.toggle('show', !!val);
+  render();
+  input.focus();
+}
+
+// ── FETCH / PROXIES ──
+async function loadPrices(force = false) {
+  if (isLoading) return;
+  isLoading = true;
+  setStatus('loading', 'OBTENIENDO PRECIOS...');
+  document.getElementById('refresh-btn').textContent = '⟳ CARGANDO...';
+
+  const TARGET = 'https://en.supermarteltorito.com/menu?menu=carniceria--meat-market';
+  const ENC = encodeURIComponent(TARGET);
+  const PROXIES = [
+    `https://api.allorigins.win/raw?url=${ENC}`,
+    `https://corsproxy.io/?${ENC}`,
+    `https://api.codetabs.com/v1/proxy?quest=${ENC}`,
+    `https://thingproxy.freeboard.io/fetch/${TARGET}`,
+    `https://proxy.cors.sh/${TARGET}`,
+    `https://cors-anywhere.herokuapp.com/${TARGET}`,
+    `https://yacdn.org/proxy/${TARGET}`,
+    `https://crossorigin.me/${TARGET}`,
+    `https://api.proxyscope.net/fetch?url=${ENC}`,
+    `https://cors.eu.org/${TARGET}`,
+  ];
+
+  let parsed = null, proxyUsed = null;
+  for (let i = 0; i < PROXIES.length; i++) {
+    try {
+      setStatus('loading', `PROXY ${i+1}/${PROXIES.length}...`);
+      const res = await fetch(PROXIES[i], { signal: AbortSignal.timeout(7000) });
+      if (!res.ok) continue;
+      const html = await res.text();
+      if (!html || html.length < 500) continue;
+      parsed = parseMenuHTML(html);
+      if (parsed && Object.values(parsed).some(a => a.length > 0)) {
+        proxyUsed = PROXIES[i].split('/')[2];
+        break;
+      }
+    } catch(e) { /* next */ }
+  }
+
+  if (parsed && Object.values(parsed).some(a => a.length > 0)) {
+    for (const cat in parsed) { if (parsed[cat].length > 0) DATA[cat] = parsed[cat]; }
+    setStatus('ok', `ACTUALIZADO VÍA ${proxyUsed||'PROXY'}`);
+  } else {
+    setStatus('warn', 'DATOS EN CACHÉ — SIN CONEXIÓN');
+  }
+
+  const ts = new Date().toLocaleString('es-MX',{hour:'2-digit',minute:'2-digit',month:'short',day:'numeric'});
+  document.getElementById('last-update').textContent = `· ${ts}`;
+  document.getElementById('refresh-btn').textContent = '⟳ ACTUALIZAR';
+  isLoading = false;
+  buildIndex();
+  render();
+}
+
+// ── PARSER ──
+function parseMenuHTML(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const result = { res:[], puerco:[], pollo:[], borrego:[] };
+  const text = doc.body ? doc.body.innerText : html;
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  let currentCat = null;
+  const catMap = {
+    'RES':['res'],'BEEF':['res'],
+    'PORK':['puerco'],'PUERCO':['puerco'],
+    'CHICKEN':['pollo'],'POLLO':['pollo'],
+    'LAMB':['borrego'],'GOAT':['borrego'],'BORREGO':['borrego'],'CHIVO':['borrego']
+  };
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].toUpperCase();
+    for (const [key, cats] of Object.entries(catMap)) {
+      if (line.includes(key) && line.length < 40) { currentCat = cats[0]; break; }
+    }
+    const m = lines[i].match(/\$(\d+\.\d{2})/);
+    if (m && currentCat && i > 0) {
+      let ni = i - 1;
+      while (ni > 0 && (lines[ni].match(/STYLE|REGULAR|MARINADE|PREPARED|Show More|SELECT/i) || lines[ni].length < 3)) ni--;
+      const name = lines[ni].replace(/^★\s*/,'').trim();
+      const isCode = /[{}()=><;]|IF\s*\(|function|var |let |const |scroll|window\.|document\.|\.length|=>/.test(name);
+      if (name && name.length > 2 && name.length < 80 && !isCode && !name.match(/PRECIO|PRICE|SELECT|SELECCIONE|SCROLLBAR|PADDING|MARGIN|WIDTH|HEIGHT|STYLE|CLASS/i)) {
+        const price = parseFloat(m[1]);
+        const isSpecial = lines[i-1]?.includes('★') || lines[ni]?.includes('★');
+        const isPiece = lines[i+1]?.toUpperCase().includes('PIECE') || lines[i+1]?.toUpperCase().includes('PIEZA');
+        result[currentCat].push({ n: name.toUpperCase(), p: price, t: isPiece ? 'PIEZA' : (isSpecial ? '★' : undefined) });
+      }
+    }
+  }
+  for (const cat in result) {
+    const seen = new Set();
+    result[cat] = result[cat].filter(item => {
+      if (seen.has(item.n)) return false;
+      seen.add(item.n); return item.p > 0 && item.p < 200;
+    });
+  }
+  return result;
+}
+
+// ── STATUS ──
+function setStatus(type, msg) {
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  const c = {ok:'#00ff88', warn:'#ffaa00', loading:'#4488ff', error:'#ff003c'}[type]||'#ff003c';
+  dot.style.background = c; dot.style.boxShadow = `0 0 8px ${c}`;
+  txt.textContent = msg;
+}
+
+// ── EVENTS ──
+document.getElementById('search-input').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  document.getElementById('clear-btn').classList.toggle('show', !!searchQuery);
+  render();
+});
+
+document.getElementById('clear-btn').addEventListener('click', () => setSearch(''));
+
+document.getElementById('filter-btns').addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.cat;
+  render();
+});
+
+document.getElementById('quick-tags').addEventListener('click', e => {
+  const btn = e.target.closest('.quick-tag');
+  if (btn) setSearch(btn.dataset.q);
+});
+
+document.addEventListener('keydown', e => {
+  const input = document.getElementById('search-input');
+  if (e.key === '/' && document.activeElement !== input) {
+    e.preventDefault(); input.focus(); input.select();
+  }
+  if (e.key === 'Escape') { setSearch(''); input.blur(); }
+});
+
+window.addEventListener('scroll', () => {
+  document.getElementById('back-top').classList.toggle('show', window.scrollY > 500);
+});
+
+// ── INIT ──
+buildIndex();
+render();
+loadPrices();
+setInterval(() => { if (!document.hidden) loadPrices(); }, 30 * 60 * 1000);
+</script>
+</body>
+</html>
