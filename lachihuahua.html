@@ -132,11 +132,37 @@
   .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; line-height: 1.15; margin-bottom: 16px; }
   .section-sub { font-size: 1.05rem; color: var(--brown); font-weight: 600; max-width: 520px; line-height: 1.7; }
 
-  .marquee-wrap { background: var(--hot-pink); padding: 14px 0; overflow: hidden; white-space: nowrap; border-top: 3px solid var(--choco); border-bottom: 3px solid var(--choco); }
+  .marquee-wrap { background: var(--hot-pink); padding: 14px 0; overflow: hidden; white-space: nowrap; border-top: 3px solid var(--choco); border-bottom: 3px solid var(--choco); position: relative; z-index: 999; }
   .marquee-inner { display: inline-flex; gap: 0; animation: marquee 22s linear infinite; }
   @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
   .marquee-item { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1rem; color: white; padding: 0 32px; text-transform: uppercase; letter-spacing: 1px; }
   .marquee-item span { font-size: 1.3rem; }
+
+  /* OFERTAS MARQUEE */
+  .ofertas-marquee-wrap {
+    overflow: hidden; white-space: nowrap;
+    background: linear-gradient(90deg, var(--yellow) 0%, #FFD000 50%, var(--yellow) 100%);
+    border-top: 4px solid var(--choco);
+    border-bottom: 4px solid var(--choco);
+    padding: 18px 0;
+    position: relative;
+  }
+  .ofertas-marquee-wrap::before,
+  .ofertas-marquee-wrap::after {
+    content: ''; position: absolute; top: 0; width: 60px; height: 100%; z-index: 2;
+  }
+  .ofertas-marquee-inner { display: inline-flex; animation: marquee 18s linear infinite; }
+  .ofertas-item {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900; font-size: 1.25rem;
+    color: var(--choco);
+    padding: 0 40px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px rgba(255,255,255,0.4);
+  }
+  .ofertas-item span { font-size: 1.5rem; animation: bounce 1.5s ease-in-out infinite; display: inline-block; }
 
   #menu { background: white; }
   .menu-header { text-align: center; margin-bottom: 60px; }
@@ -218,6 +244,18 @@
   #back-top:hover { transform: scale(1.12); }
   .product-card.hidden { display: none; }
 
+  /* CATEGORY SECTIONS */
+  .cat-section { max-width: 1200px; margin: 0 auto 70px; }
+  .cat-section.hidden { display: none; }
+  .cat-header { display: flex; align-items: center; gap: 20px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 3px dashed rgba(255,61,168,0.25); }
+  .cat-emoji { font-size: 3rem; min-width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: var(--soft-pink); border-radius: 20px; box-shadow: 0 4px 14px rgba(255,61,168,0.15); }
+  .cat-title { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 900; color: var(--choco); margin-bottom: 4px; }
+  .cat-sub { font-size: 0.92rem; color: var(--brown); font-weight: 600; }
+
+  /* PLACEHOLDER IMAGES */
+  .product-img-placeholder { display: flex; align-items: center; justify-content: center; }
+  .placeholder-emoji { font-size: 4.5rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+
   @media(max-width: 900px) {
     nav { padding: 10px 20px; }
     .nav-links { display: none; }
@@ -267,83 +305,25 @@
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-inner">
-    <span class="marquee-item"><span>🍪</span> Double Chocolate Cookie</span>
-    <span class="marquee-item"><span>🍓</span> Strawberry Crunch Cookie</span>
-    <span class="marquee-item"><span>🫐</span> Blueberry Cheesecake Parfait</span>
-    <span class="marquee-item"><span>🟢</span> Pistachio Cookie</span>
-    <span class="marquee-item"><span>🖤</span> Oreo Creme Cookie</span>
-    <span class="marquee-item"><span>❤️</span> Red Velvet Oreo Cookie</span>
-    <span class="marquee-item"><span>🍪</span> Biscoff Cookies</span>
-    <span class="marquee-item"><span>🍰</span> New York Cheesecake Cup</span>
-    <span class="marquee-item"><span>🍫</span> Chocolate Chunk Cookies</span>
-    <span class="marquee-item"><span>🍪</span> Double Chocolate Cookie</span>
-    <span class="marquee-item"><span>🍓</span> Strawberry Crunch Cookie</span>
-    <span class="marquee-item"><span>🫐</span> Blueberry Cheesecake Parfait</span>
-    <span class="marquee-item"><span>🟢</span> Pistachio Cookie</span>
-    <span class="marquee-item"><span>🖤</span> Oreo Creme Cookie</span>
-    <span class="marquee-item"><span>❤️</span> Red Velvet Oreo Cookie</span>
-    <span class="marquee-item"><span>🍪</span> Biscoff Cookies</span>
-    <span class="marquee-item"><span>🍰</span> New York Cheesecake Cup</span>
-    <span class="marquee-item"><span>🍫</span> Chocolate Chunk Cookies</span>
+<!-- MARQUEE OFERTAS -->
+<div class="ofertas-marquee-wrap">
+  <div class="ofertas-marquee-inner">
+    <span class="ofertas-item"><span>🔥</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🔥</span></span>
+    <span class="ofertas-item"><span>🍪</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🍪</span></span>
+    <span class="ofertas-item"><span>✨</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>✨</span></span>
+    <span class="ofertas-item"><span>🎉</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🎉</span></span>
+    <span class="ofertas-item"><span>🔥</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🔥</span></span>
+    <span class="ofertas-item"><span>🍪</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🍪</span></span>
+    <span class="ofertas-item"><span>✨</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>✨</span></span>
+    <span class="ofertas-item"><span>🎉</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🎉</span></span>
+    <span class="ofertas-item"><span>🔥</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🔥</span></span>
+    <span class="ofertas-item"><span>🍪</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🍪</span></span>
+    <span class="ofertas-item"><span>✨</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>✨</span></span>
+    <span class="ofertas-item"><span>🎉</span> ¡NUEVAS OFERTAS TODOS LOS DÍAS! <span>🎉</span></span>
   </div>
 </div>
 
-<!-- MENU -->
-<section id="menu">
-  <div class="menu-header reveal">
-    <span class="section-tag">✦ What we bake</span>
-    <h2 class="section-title">Our Menu</h2>
-    <p class="section-sub" style="margin:0 auto;">Every piece is made fresh, with top-quality ingredients and all the love from our kitchen.</p>
-  </div>
-  <div class="menu-tabs">
-    <button class="tab-btn active" data-cat="all">All</button>
-    <button class="tab-btn" data-cat="cookie">Cookies</button>
-    <button class="tab-btn" data-cat="parfait">Parfaits</button>
-  </div>
-  <div class="products-grid">
-    <div class="product-card reveal" data-cat="cookie">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170510.png" alt="Double Chocolate Marshmallow Cookie" loading="lazy"><div class="product-badge">🔥 Popular</div></div>
-      <div class="product-info"><h3 class="product-name">Double Chocolate Marshmallow Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Loaded with chocolate</li><li>Stuffed with marshmallow</li></ul></div>
-    </div>
-    <div class="product-card reveal" data-cat="cookie">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170513.png" alt="Pistachio Cookie" loading="lazy"><div class="product-badge">✨ Special</div></div>
-      <div class="product-info"><h3 class="product-name">Pistachio Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Real pistachios</li><li>Cream cheese drizzle</li></ul></div>
-    </div>
-    <div class="product-card reveal" data-cat="parfait">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170516.png" alt="Blueberry Cheesecake Parfait" loading="lazy"><div class="product-badge">💜 Favorite</div></div>
-      <div class="product-info"><h3 class="product-name">Blueberry Cheesecake Parfait</h3><ul class="product-feats"><li>Creamy cheesecake filling</li><li>Homemade blueberry jam</li><li>Topped with purple crumb cake</li></ul></div>
-    </div>
-    <div class="product-card reveal" data-cat="cookie">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170518.png" alt="Strawberry Crunch Cookie" loading="lazy"><div class="product-badge">🍓 New</div></div>
-      <div class="product-info"><h3 class="product-name">Strawberry Crunch Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Crunchy strawberries</li><li>Cream cheese frosting</li></ul></div>
-    </div>
-    <div class="product-card reveal" data-cat="cookie">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170521.png" alt="Oreo Creme Cookie" loading="lazy"><div class="product-badge">🖤 Classic</div></div>
-      <div class="product-info"><h3 class="product-name">Oreo Creme Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Topped with Oreo pieces</li><li>Cream cheese frosting</li></ul></div>
-    </div>
-    <div class="product-card reveal" data-cat="cookie">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170524.png" alt="Biscoff Cookies" loading="lazy"><div class="product-badge">🍯 Artisan</div></div>
-      <div class="product-info"><h3 class="product-name">Biscoff Cookies</h3><ul class="product-feats"><li>Thick & chewy</li><li>Loaded with Biscoff flavor</li><li>Homemade style</li></ul></div>
-    </div>
-    <div class="product-card reveal" data-cat="cookie">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170526.png" alt="Red Velvet Oreo Cookie" loading="lazy"><div class="product-badge">❤️ Must Try</div></div>
-      <div class="product-info"><h3 class="product-name">Red Velvet Oreo Cookie</h3><ul class="product-feats"><li>Soft red velvet cookie</li><li>Loaded with Oreo pieces</li><li>Cream cheese drizzle</li></ul></div>
-    </div>
-    <div class="product-card reveal" data-cat="parfait">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170528.png" alt="New York Cheesecake Cup" loading="lazy"><div class="product-badge">🗽 Premium</div></div>
-      <div class="product-info"><h3 class="product-name">New York Cheesecake Cup</h3><ul class="product-feats"><li>Creamy cheesecake</li><li>Fresh strawberries</li><li>Whipped cream & crust</li></ul></div>
-    </div>
-    <div class="product-card reveal" data-cat="cookie">
-      <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170531.png" alt="Chocolate Chunk Cookies" loading="lazy"><div class="product-badge">🍫 Bestseller</div></div>
-      <div class="product-info"><h3 class="product-name">Chocolate Chunk Cookies</h3><ul class="product-feats"><li>Soft & chewy</li><li>Loaded with chocolate chips</li><li>Topped with chocolate chunks</li></ul></div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
+<!-- ABOUT (moved here, right after hero) -->
 <section id="nosotros">
   <div class="about-inner">
     <div class="about-img-grid reveal">
@@ -363,6 +343,289 @@
       </div>
     </div>
   </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-header reveal">
+    <span class="section-tag">✦ What we bake</span>
+    <h2 class="section-title">Our Menu</h2>
+    <p class="section-sub" style="margin:0 auto;">Every piece is made fresh, with top-quality ingredients and all the love from our kitchen.</p>
+  </div>
+  <div class="menu-tabs">
+    <button class="tab-btn" data-cat="cookie">🍪 Cookies</button>
+    <button class="tab-btn" data-cat="cinnamon">🌀 Cinnamon Rolls</button>
+    <button class="tab-btn" data-cat="minicake">🎂 Mini Cakes</button>
+    <button class="tab-btn" data-cat="cheesecake">🍰 Cheesecake</button>
+    <button class="tab-btn" data-cat="icecream">🍦 Ice Cream</button>
+    <button class="tab-btn" data-cat="cupcake">🧁 Cupcakes</button>
+    <button class="tab-btn active" data-cat="all">✦ All</button>
+  </div>
+
+  <!-- COOKIES -->
+  <div class="cat-section" data-section="cookie">
+    <div class="cat-header reveal">
+      <span class="cat-emoji">🍪</span>
+      <div><h3 class="cat-title">Cookies</h3><p class="cat-sub">Jumbo, soft & chewy — made fresh every day</p></div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170510.png" alt="Double Chocolate Marshmallow Cookie" loading="lazy"><div class="product-badge">🔥 Popular</div></div>
+        <div class="product-info"><h3 class="product-name">Double Chocolate Marshmallow</h3><ul class="product-feats"><li>Soft & chewy</li><li>Loaded with chocolate</li><li>Stuffed with marshmallow</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170513.png" alt="Pistachio Cookie" loading="lazy"><div class="product-badge">✨ Special</div></div>
+        <div class="product-info"><h3 class="product-name">Pistachio Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Real pistachios</li><li>Cream cheese drizzle</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170518.png" alt="Strawberry Crunch Cookie" loading="lazy"><div class="product-badge">🍓 New</div></div>
+        <div class="product-info"><h3 class="product-name">Strawberry Crunch Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Crunchy strawberries</li><li>Cream cheese frosting</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170521.png" alt="Oreo Creme Cookie" loading="lazy"><div class="product-badge">🖤 Classic</div></div>
+        <div class="product-info"><h3 class="product-name">Oreo Creme Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Topped with Oreo pieces</li><li>Cream cheese frosting</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170524.png" alt="Biscoff Cookies" loading="lazy"><div class="product-badge">🍯 Artisan</div></div>
+        <div class="product-info"><h3 class="product-name">Biscoff Cookie</h3><ul class="product-feats"><li>Thick & chewy</li><li>Loaded with Biscoff flavor</li><li>Homemade style</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170526.png" alt="Red Velvet Oreo Cookie" loading="lazy"><div class="product-badge">❤️ Must Try</div></div>
+        <div class="product-info"><h3 class="product-name">Red Velvet Oreo Cookie</h3><ul class="product-feats"><li>Soft red velvet cookie</li><li>Loaded with Oreo pieces</li><li>Cream cheese drizzle</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170531.png" alt="Chocolate Chunk Cookies" loading="lazy"><div class="product-badge">🍫 Bestseller</div></div>
+        <div class="product-info"><h3 class="product-name">Chocolate Chunk Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Loaded with chocolate chips</li><li>Topped with chocolate chunks</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#bdbdbd,#212121);"><span class="placeholder-emoji">🖤</span><div class="product-badge">🖤 Indulgent</div></div>
+        <div class="product-info"><h3 class="product-name">Cookies & Cream Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Oreo cookies & cream filling</li><li>Cookies & cream drizzle</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cookie">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#4fc3f7,#1565c0);"><span class="placeholder-emoji">🍪</span><div class="product-badge">🔵 Fun</div></div>
+        <div class="product-info"><h3 class="product-name">Cookie Monster Cookie</h3><ul class="product-feats"><li>Soft & chewy</li><li>Blue-tinted dough</li><li>Loaded with cookie pieces</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CINNAMON ROLLS -->
+  <div class="cat-section" data-section="cinnamon">
+    <div class="cat-header reveal">
+      <span class="cat-emoji">🌀</span>
+      <div><h3 class="cat-title">Cinnamon Rolls</h3><p class="cat-sub">Fluffy, gooey & irresistible — straight from the oven</p></div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ff6b9d,#c0392b);"><span class="placeholder-emoji">❤️</span><div class="product-badge">❤️ Must Try</div></div>
+        <div class="product-info"><h3 class="product-name">Red Velvet Cinnamon Roll</h3><ul class="product-feats"><li>Fluffy red velvet dough</li><li>Classic cinnamon filling</li><li>Cream cheese glaze</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#4fc3f7,#1565c0);"><span class="placeholder-emoji">🍪</span><div class="product-badge">🔵 Fun</div></div>
+        <div class="product-info"><h3 class="product-name">Cookie Monster Cinnamon Roll</h3><ul class="product-feats"><li>Blue-tinted dough</li><li>Oreo & cookie crumble</li><li>Blue cream cheese frosting</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#f48fb1,#e91e63);"><span class="placeholder-emoji">🍓</span><div class="product-badge">🍓 Fresh</div></div>
+        <div class="product-info"><h3 class="product-name">Strawberry Cinnamon Roll</h3><ul class="product-feats"><li>Fluffy soft dough</li><li>Strawberry filling</li><li>Strawberry cream glaze</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe0b2,#ff9800);"><span class="placeholder-emoji">🌀</span><div class="product-badge">⭐ Classic</div></div>
+        <div class="product-info"><h3 class="product-name">Regular Cinnamon Roll</h3><ul class="product-feats"><li>Classic fluffy dough</li><li>Warm cinnamon sugar</li><li>Vanilla cream glaze</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#bdbdbd,#212121);"><span class="placeholder-emoji">🖤</span><div class="product-badge">🖤 Indulgent</div></div>
+        <div class="product-info"><h3 class="product-name">Cookies & Cream Cinnamon Roll</h3><ul class="product-feats"><li>Soft & fluffy dough</li><li>Oreo cookies & cream filling</li><li>Cookies & cream drizzle</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#f8bbd0,#c62828);"><span class="placeholder-emoji">🍓</span><div class="product-badge">🍓 Premium</div></div>
+        <div class="product-info"><h3 class="product-name">Strawberry Cheesecake Cinnamon Roll</h3><ul class="product-feats"><li>Fluffy soft dough</li><li>Cream cheese & strawberry filling</li><li>Strawberry cheesecake glaze</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe0b2,#e65100);"><span class="placeholder-emoji">🍯</span><div class="product-badge">🍯 Artisan</div></div>
+        <div class="product-info"><h3 class="product-name">Caramel Pecans Cinnamon Roll</h3><ul class="product-feats"><li>Fluffy soft dough</li><li>Caramel & pecan filling</li><li>Sticky caramel drizzle</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#d7ccc8,#4e342e);"><span class="placeholder-emoji">🍫</span><div class="product-badge">🍫 Rich</div></div>
+        <div class="product-info"><h3 class="product-name">Alemán Cinnamon Roll</h3><ul class="product-feats"><li>Fluffy soft dough</li><li>German chocolate filling</li><li>Coconut pecan frosting</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cinnamon">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe0b2,#795548);"><span class="placeholder-emoji">🍪</span><div class="product-badge">✨ Special</div></div>
+        <div class="product-info"><h3 class="product-name">Biscoff Cinnamon Roll</h3><ul class="product-feats"><li>Fluffy soft dough</li><li>Biscoff cookie butter filling</li><li>Biscoff glaze & cookie crumble</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINI CAKES -->
+  <div class="cat-section" data-section="minicake">
+    <div class="cat-header reveal">
+      <span class="cat-emoji">🎂</span>
+      <div><h3 class="cat-title">Mini Cakes</h3><p class="cat-sub">Perfectly portioned little cakes packed with big flavor</p></div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal" data-cat="minicake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#f48fb1,#e91e63);"><span class="placeholder-emoji">🍓</span><div class="product-badge">🍓 Fresh</div></div>
+        <div class="product-info"><h3 class="product-name">Strawberry Mini Cake</h3><ul class="product-feats"><li>Moist strawberry sponge</li><li>Fresh strawberry cream</li><li>Berry topping</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="minicake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#8d6e63,#3e2723);"><span class="placeholder-emoji">🍫</span><div class="product-badge">🍫 Rich</div></div>
+        <div class="product-info"><h3 class="product-name">Chocolate Mini Cake</h3><ul class="product-feats"><li>Dense chocolate sponge</li><li>Chocolate ganache</li><li>Chocolate shavings</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="minicake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ef9a9a,#b71c1c);"><span class="placeholder-emoji">❤️</span><div class="product-badge">❤️ Must Try</div></div>
+        <div class="product-info"><h3 class="product-name">Red Velvet Mini Cake</h3><ul class="product-feats"><li>Classic red velvet sponge</li><li>Cream cheese frosting</li><li>Velvet crumb topping</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="minicake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe082,#ff8f00);"><span class="placeholder-emoji">🥛</span><div class="product-badge">✨ Special</div></div>
+        <div class="product-info"><h3 class="product-name">Tres Leches Mini Cake</h3><ul class="product-feats"><li>Three-milk soaked sponge</li><li>Whipped cream topping</li><li>Light & airy texture</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="minicake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#bcaaa4,#795548);"><span class="placeholder-emoji">🥕</span><div class="product-badge">🥕 Homestyle</div></div>
+        <div class="product-info"><h3 class="product-name">Carrot Mini Cake</h3><ul class="product-feats"><li>Spiced carrot sponge</li><li>Cream cheese frosting</li><li>Walnut crumble</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="minicake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#fff9c4,#f9a825);"><span class="placeholder-emoji">🍋</span><div class="product-badge">🍋 Zesty</div></div>
+        <div class="product-info"><h3 class="product-name">Lemon Mini Cake</h3><ul class="product-feats"><li>Bright lemon sponge</li><li>Lemon cream frosting</li><li>Citrus zest topping</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="minicake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ce93d8,#6a1b9a);"><span class="placeholder-emoji">🎉</span><div class="product-badge">🎉 Party</div></div>
+        <div class="product-info"><h3 class="product-name">3 Mix Mini Cake</h3><ul class="product-feats"><li>Three flavors in one</li><li>Assorted layers</li><li>Perfect for sharing</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHEESECAKE -->
+  <div class="cat-section" data-section="cheesecake">
+    <div class="cat-header reveal">
+      <span class="cat-emoji">🍰</span>
+      <div><h3 class="cat-title">Cheesecake</h3><p class="cat-sub">Creamy, rich and dreamy — every slice is heaven</p></div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal" data-cat="cheesecake">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170516.png" alt="Blueberry Cheesecake" loading="lazy"><div class="product-badge">💜 Favorite</div></div>
+        <div class="product-info"><h3 class="product-name">Blueberry Cheesecake</h3><ul class="product-feats"><li>Creamy cheesecake base</li><li>Homemade blueberry jam</li><li>Purple crumb topping</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cheesecake">
+        <div class="product-img-wrap"><img src="Imagen/IMG_20260312_170528.png" alt="New York Cheesecake" loading="lazy"><div class="product-badge">🗽 Premium</div></div>
+        <div class="product-info"><h3 class="product-name">New York Cheesecake</h3><ul class="product-feats"><li>Classic NY style</li><li>Fresh strawberries</li><li>Whipped cream & graham crust</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cheesecake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#d4efdf,#27ae60);"><span class="placeholder-emoji">🍋</span><div class="product-badge">🍋 Zesty</div></div>
+        <div class="product-info"><h3 class="product-name">Lime Cheesecake</h3><ul class="product-feats"><li>Tangy lime filling</li><li>Buttery graham crust</li><li>Whipped cream top</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cheesecake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe0b2,#f57c00);"><span class="placeholder-emoji">🍑</span><div class="product-badge">🍑 Sweet</div></div>
+        <div class="product-info"><h3 class="product-name">Peach Cheesecake</h3><ul class="product-feats"><li>Creamy cheesecake base</li><li>Fresh peach topping</li><li>Light & fruity</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cheesecake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe082,#e65100);"><span class="placeholder-emoji">🥭</span><div class="product-badge">🥭 Tropical</div></div>
+        <div class="product-info"><h3 class="product-name">Mango Cheesecake</h3><ul class="product-feats"><li>Tropical mango filling</li><li>Smooth cheesecake base</li><li>Mango glaze topping</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cheesecake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#bdbdbd,#212121);"><span class="placeholder-emoji">🖤</span><div class="product-badge">🖤 Indulgent</div></div>
+        <div class="product-info"><h3 class="product-name">Oreo Cheesecake</h3><ul class="product-feats"><li>Oreo cookie crust</li><li>Cookies & cream filling</li><li>Oreo crumble topping</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ICE CREAM -->
+  <div class="cat-section" data-section="icecream">
+    <div class="cat-header reveal">
+      <span class="cat-emoji">🍦</span>
+      <div><h3 class="cat-title">Ice Cream</h3><p class="cat-sub">Cool, creamy and refreshing — the perfect sweet treat</p></div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe082,#e65100);"><span class="placeholder-emoji">🥭</span><div class="product-badge">🥭 Tropical</div></div>
+        <div class="product-info"><h3 class="product-name">Mango Ice Cream</h3><ul class="product-feats"><li>Real mango flavor</li><li>Creamy & smooth</li><li>Tropical & refreshing</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#bdbdbd,#212121);"><span class="placeholder-emoji">🖤</span><div class="product-badge">🖤 Classic</div></div>
+        <div class="product-info"><h3 class="product-name">Oreo Ice Cream</h3><ul class="product-feats"><li>Cookies & cream base</li><li>Oreo cookie chunks</li><li>Rich & indulgent</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#f48fb1,#e91e63);"><span class="placeholder-emoji">🍓</span><div class="product-badge">🍓 Fresh</div></div>
+        <div class="product-info"><h3 class="product-name">Strawberry Ice Cream</h3><ul class="product-feats"><li>Real strawberry flavor</li><li>Creamy & fruity</li><li>Sweet berry finish</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe082,#bf360c);"><span class="placeholder-emoji">🌶️</span><div class="product-badge">🔥 Spicy-Sweet</div></div>
+        <div class="product-info"><h3 class="product-name">Mango Chamoy Ice Cream</h3><ul class="product-feats"><li>Sweet mango base</li><li>Chamoy swirl</li><li>Chili-lime kick</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#e0f7fa,#00838f);"><span class="placeholder-emoji">🥥</span><div class="product-badge">🥥 Tropical</div></div>
+        <div class="product-info"><h3 class="product-name">Coco Ice Cream</h3><ul class="product-feats"><li>Real coconut flavor</li><li>Creamy & smooth</li><li>Tropical & refreshing</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#fff9c4,#f9a825);"><span class="placeholder-emoji">🍌</span><div class="product-badge">⭐ Classic</div></div>
+        <div class="product-info"><h3 class="product-name">Plátano Ice Cream</h3><ul class="product-feats"><li>Natural banana flavor</li><li>Smooth & creamy</li><li>Sweet & comforting</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#d7ccc8,#5d4037);"><span class="placeholder-emoji">🌰</span><div class="product-badge">🌰 Artisan</div></div>
+        <div class="product-info"><h3 class="product-name">Nuez Ice Cream</h3><ul class="product-feats"><li>Rich walnut flavor</li><li>Crunchy nut pieces</li><li>Creamy & indulgent</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe0b2,#bf360c);"><span class="placeholder-emoji">🥚</span><div class="product-badge">✨ Special</div></div>
+        <div class="product-info"><h3 class="product-name">Rompope Ice Cream</h3><ul class="product-feats"><li>Traditional rompope flavor</li><li>Creamy & velvety</li><li>Warm spiced notes</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#bcaaa4,#3e2723);"><span class="placeholder-emoji">☕</span><div class="product-badge">☕ Bold</div></div>
+        <div class="product-info"><h3 class="product-name">Capuchino Ice Cream</h3><ul class="product-feats"><li>Rich cappuccino flavor</li><li>Coffee cream swirl</li><li>Bold & smooth</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ffe082,#795548);"><span class="placeholder-emoji">🥜</span><div class="product-badge">🥜 Homestyle</div></div>
+        <div class="product-info"><h3 class="product-name">Cacahuate Ice Cream</h3><ul class="product-feats"><li>Real peanut flavor</li><li>Creamy & nutty</li><li>Rich & satisfying</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#c8e6c9,#2e7d32);"><span class="placeholder-emoji">🍈</span><div class="product-badge">🍈 Fresh</div></div>
+        <div class="product-info"><h3 class="product-name">Melón Ice Cream</h3><ul class="product-feats"><li>Sweet melon flavor</li><li>Light & refreshing</li><li>Perfect for hot days</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#f48fb1,#880e4f);"><span class="placeholder-emoji">🍫</span><div class="product-badge">🍫 Indulgent</div></div>
+        <div class="product-info"><h3 class="product-name">Hershey Ice Cream</h3><ul class="product-feats"><li>Classic Hershey chocolate</li><li>Rich & creamy</li><li>Chocolate lover's dream</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#fce4ec,#e91e63);"><span class="placeholder-emoji">🍓</span><div class="product-badge">🍓 Mexicano</div></div>
+        <div class="product-info"><h3 class="product-name">Fresas con Crema Ice Cream</h3><ul class="product-feats"><li>Sweet fresh strawberries</li><li>Creamy Mexican-style cream</li><li>Light & refreshing</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUPCAKES -->
+  <div class="cat-section" data-section="cupcake">
+    <div class="cat-header reveal">
+      <span class="cat-emoji">🧁</span>
+      <div><h3 class="cat-title">Cupcakes</h3><p class="cat-sub">Fluffy, frosted and full of personality — one bite at a time</p></div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal" data-cat="cupcake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#fff9c4,#f9a825);"><span class="placeholder-emoji">🗽</span><div class="product-badge">🗽 Premium</div></div>
+        <div class="product-info"><h3 class="product-name">New York Cupcake</h3><ul class="product-feats"><li>Classic NY cheesecake flavor</li><li>Graham cracker base</li><li>Cream cheese frosting</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cupcake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#bdbdbd,#212121);"><span class="placeholder-emoji">🖤</span><div class="product-badge">🖤 Classic</div></div>
+        <div class="product-info"><h3 class="product-name">Oreo Cupcake</h3><ul class="product-feats"><li>Soft chocolate base</li><li>Oreo cookie filling</li><li>Cookies & cream frosting</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cupcake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#d4efdf,#27ae60);"><span class="placeholder-emoji">🍋</span><div class="product-badge">🍋 Zesty</div></div>
+        <div class="product-info"><h3 class="product-name">Pay de Limón Cupcake</h3><ul class="product-feats"><li>Tangy lime filling</li><li>Graham cracker crust base</li><li>Lime whipped cream top</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cupcake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#ef9a9a,#b71c1c);"><span class="placeholder-emoji">❤️</span><div class="product-badge">❤️ Must Try</div></div>
+        <div class="product-info"><h3 class="product-name">Red Velvet Cupcake</h3><ul class="product-feats"><li>Classic red velvet sponge</li><li>Cream cheese frosting</li><li>Velvet crumb topping</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cupcake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#f48fb1,#e91e63);"><span class="placeholder-emoji">🍓</span><div class="product-badge">🍓 Fresh</div></div>
+        <div class="product-info"><h3 class="product-name">Strawberry Cupcake</h3><ul class="product-feats"><li>Moist strawberry sponge</li><li>Fresh strawberry cream</li><li>Berry topping</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cupcake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#fff9c4,#f9a825);"><span class="placeholder-emoji">🍋</span><div class="product-badge">🍋 Bright</div></div>
+        <div class="product-info"><h3 class="product-name">Lemon Cupcake</h3><ul class="product-feats"><li>Bright lemon sponge</li><li>Lemon cream frosting</li><li>Citrus zest topping</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="cupcake">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#bcaaa4,#795548);"><span class="placeholder-emoji">🥕</span><div class="product-badge">🥕 Homestyle</div></div>
+        <div class="product-info"><h3 class="product-name">Carrot Cupcake</h3><ul class="product-feats"><li>Spiced carrot sponge</li><li>Cream cheese frosting</li><li>Walnut crumble topping</li></ul></div>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <!-- REVIEWS -->
@@ -422,8 +685,8 @@
   <p class="footer-tagline">Sweets made with love · Freshly baked</p>
   <div class="footer-links">
     <a href="#inicio">Home</a>
-    <a href="#menu">Menu</a>
     <a href="#nosotros">About Us</a>
+    <a href="#menu">Menu</a>
     <a href="#reviews">Reviews</a>
     <a href="#contacto">Contact</a>
   </div>
@@ -450,17 +713,17 @@
   });
 
   const tabs = document.querySelectorAll('.tab-btn');
-  const cards = document.querySelectorAll('.product-card');
+  const sections = document.querySelectorAll('.cat-section');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const cat = tab.dataset.cat;
-      cards.forEach(card => {
-        if (cat === 'all' || card.dataset.cat === cat) {
-          card.classList.remove('hidden');
+      sections.forEach(sec => {
+        if (cat === 'all' || sec.dataset.section === cat) {
+          sec.classList.remove('hidden');
         } else {
-          card.classList.add('hidden');
+          sec.classList.add('hidden');
         }
       });
     });
