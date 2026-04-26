@@ -176,22 +176,19 @@
   .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
   .product-card:hover .product-img-wrap img { transform: scale(1.08); }
   .product-badge { position: absolute; top: 14px; right: 14px; background: var(--yellow); color: var(--choco); font-weight: 800; font-size: 0.75rem; padding: 5px 14px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
-  .product-info { padding: 24px; }
-  .product-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; color: var(--choco); }
-  .product-feats { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-  .product-feats li { font-size: 0.9rem; color: var(--brown); font-weight: 600; display: flex; align-items: center; gap: 7px; }
-  .product-feats li::before { content: '✦'; color: var(--pink); font-size: 0.75rem; }
+
+  /* PLACEHOLDER IMAGES */
+  .product-img-placeholder { display: flex; align-items: center; justify-content: center; }
+  .placeholder-emoji { font-size: 4.5rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
 
   #nosotros { background: linear-gradient(135deg, #FFF0FB, #FFF8F0); display: flex; align-items: center; justify-content: center; }
   .about-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
-  .about-img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; position: relative; }
-  .about-img-grid img { width: 100%; border-radius: 20px; object-fit: cover; box-shadow: 0 8px 28px rgba(62,28,0,0.12); transition: transform 0.3s; }
-  .about-img-grid img:hover { transform: scale(1.04) rotate(-1deg); }
-  .about-img-grid img:nth-child(1) { height: 220px; }
-  .about-img-grid img:nth-child(2) { height: 160px; margin-top: 60px; }
-  .about-img-grid img:nth-child(3) { height: 160px; }
-  .about-img-grid img:nth-child(4) { height: 220px; margin-top: -60px; }
+  .about-img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .owner-photo-slot { width: 100%; aspect-ratio: 3/4; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 28px rgba(62,28,0,0.13); border: 3px solid white; background: linear-gradient(135deg, var(--soft-pink), #ffe8cc); display: flex; align-items: center; justify-content: center; position: relative; }
+  .owner-photo-slot img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+  .owner-photo-slot img:hover { transform: scale(1.04); }
   .about-text .section-sub { max-width: 100%; }
+  .owner-bio-text { font-style: italic; color: var(--brown); background: white; border-left: 4px solid var(--pink); padding: 16px 20px; border-radius: 0 12px 12px 0; line-height: 1.8; }
   .features-list { margin-top: 32px; display: flex; flex-direction: column; gap: 16px; }
   .feature-item { display: flex; align-items: center; gap: 16px; background: white; padding: 16px 20px; border-radius: 16px; box-shadow: 0 4px 16px rgba(62,28,0,0.06); transition: transform 0.2s; }
   .feature-item:hover { transform: translateX(6px); }
@@ -252,11 +249,125 @@
   .cat-title { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 900; color: var(--choco); margin-bottom: 4px; }
   .cat-sub { font-size: 0.92rem; color: var(--brown); font-weight: 600; }
 
-  /* PLACEHOLDER IMAGES */
-  .product-img-placeholder { display: flex; align-items: center; justify-content: center; }
-  .placeholder-emoji { font-size: 4.5rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+  /* ===== CART BUTTON ON PRODUCT CARD ===== */
+  .product-info { padding: 24px; }
+  .product-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; color: var(--choco); }
+  .product-feats { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
+  .product-feats li { font-size: 0.9rem; color: var(--brown); font-weight: 600; display: flex; align-items: center; gap: 7px; }
+  .product-feats li::before { content: '✦'; color: var(--pink); font-size: 0.75rem; }
+  .add-to-cart-btn {
+    width: 100%; padding: 11px 0; border-radius: 50px;
+    background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+    color: white; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem;
+    border: none; cursor: pointer; letter-spacing: 0.5px;
+    box-shadow: 0 5px 18px rgba(255,0,110,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .add-to-cart-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255,0,110,0.45); }
+  .add-to-cart-btn.added { background: linear-gradient(135deg, #27ae60, #1e8449); box-shadow: 0 5px 18px rgba(39,174,96,0.35); }
+
+  /* ===== CART FAB BUTTON ===== */
+  #cart-fab {
+    position: fixed; bottom: 100px; right: 32px; z-index: 1001;
+    background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+    color: white; width: 62px; height: 62px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; border: none; cursor: pointer;
+    box-shadow: 0 8px 28px rgba(255,0,110,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #cart-fab:hover { transform: scale(1.1); box-shadow: 0 14px 36px rgba(255,0,110,0.55); }
+  #cart-fab .cart-count {
+    position: absolute; top: -4px; right: -4px;
+    background: var(--yellow); color: var(--choco);
+    font-size: 0.7rem; font-weight: 900; width: 22px; height: 22px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: 2px solid white; opacity: 0; transition: opacity 0.2s, transform 0.2s;
+    transform: scale(0);
+  }
+  #cart-fab .cart-count.show { opacity: 1; transform: scale(1); }
+  @keyframes cartBounce { 0%,100%{transform:scale(1)} 40%{transform:scale(1.25)} 70%{transform:scale(0.95)} }
+  #cart-fab.bounce { animation: cartBounce 0.4s ease; }
+
+  /* ===== CART OVERLAY ===== */
+  #cart-overlay {
+    position: fixed; inset: 0; z-index: 1100;
+    background: rgba(62,28,0,0.45); backdrop-filter: blur(4px);
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  #cart-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* ===== CART PANEL ===== */
+  #cart-panel {
+    position: fixed; top: 50%; right: 32px; z-index: 1200;
+    transform: translateY(-50%) translateX(120%);
+    width: 380px; max-height: 80vh;
+    background: white; border-radius: 28px;
+    box-shadow: 0 24px 64px rgba(62,28,0,0.22);
+    display: flex; flex-direction: column;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    overflow: hidden; border: 2px solid var(--soft-pink);
+  }
+  #cart-panel.open { transform: translateY(-50%) translateX(0); }
+  .cart-header {
+    background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+    color: white; padding: 22px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .cart-header h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 900; }
+  .cart-header p { font-size: 0.82rem; opacity: 0.85; margin-top: 2px; }
+  .cart-close {
+    background: rgba(255,255,255,0.25); border: none; color: white;
+    width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; flex-shrink: 0;
+  }
+  .cart-close:hover { background: rgba(255,255,255,0.4); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .cart-empty { text-align: center; padding: 48px 24px; color: var(--brown); }
+  .cart-empty span { font-size: 3.5rem; display: block; margin-bottom: 12px; }
+  .cart-empty p { font-weight: 700; font-size: 1rem; }
+  .cart-empty small { font-size: 0.85rem; opacity: 0.7; }
+  .cart-item {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--cream); border-radius: 16px; padding: 12px 14px;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:none} }
+  .cart-item-emoji { font-size: 2rem; min-width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 12px; }
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-name { font-weight: 800; font-size: 0.88rem; color: var(--choco); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cart-item-cat { font-size: 0.75rem; color: var(--hot-pink); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .cart-item-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--pink); background: white; color: var(--pink); font-size: 1rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; line-height: 1; }
+  .qty-btn:hover { background: var(--pink); color: white; }
+  .qty-num { font-weight: 900; font-size: 0.95rem; color: var(--choco); min-width: 20px; text-align: center; }
+  .cart-footer { padding: 16px 20px; border-top: 2px dashed rgba(255,61,168,0.2); flex-shrink: 0; }
+  .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .cart-total span { font-weight: 800; font-size: 1rem; color: var(--choco); }
+  .cart-total strong { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--hot-pink); }
+  .cart-total-items { font-size: 0.8rem; color: var(--brown); margin-bottom: 14px; }
+  .cart-checkout-btn {
+    width: 100%; padding: 14px; border-radius: 50px;
+    background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+    color: white; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+    border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(255,0,110,0.35);
+    transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 10px;
+  }
+  .cart-checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,0,110,0.45); }
+  .cart-clear-btn {
+    width: 100%; padding: 10px; border-radius: 50px;
+    background: transparent; color: var(--brown);
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.88rem;
+    border: 2px solid rgba(123,63,0,0.2); cursor: pointer; transition: all 0.2s;
+  }
+  .cart-clear-btn:hover { border-color: var(--hot-pink); color: var(--hot-pink); background: #fff0f5; }
 
   @media(max-width: 900px) {
+    #cart-panel { width: calc(100vw - 32px); right: 16px; }
+  }
     nav { padding: 10px 20px; }
     .nav-links { display: none; }
     section { padding: 70px 20px; }
@@ -327,15 +438,17 @@
 <section id="nosotros">
   <div class="about-inner">
     <div class="about-img-grid reveal">
-      <img src="Imagen/IMG_20260312_170518.png" alt="Strawberry Cookie" loading="lazy">
-      <img src="Imagen/IMG_20260312_170516.png" alt="Blueberry Parfait" loading="lazy">
-      <img src="Imagen/IMG_20260312_170528.png" alt="Cheesecake Cup" loading="lazy">
-      <img src="Imagen/IMG_20260312_170526.png" alt="Red Velvet Cookie" loading="lazy">
+      <div class="owner-photo-slot">
+        <img src="Imagen/IMG_20260312_170518.png" alt="Owner photo 1" loading="lazy">
+      </div>
+      <div class="owner-photo-slot">
+        <img src="Imagen/IMG_20260312_170516.png" alt="Owner photo 2" loading="lazy">
+      </div>
     </div>
     <div class="about-text reveal">
       <span class="section-tag">✦ Our story</span>
-      <h2 class="section-title">Made with love, straight from the oven</h2>
-      <p class="section-sub">At LaChihuahua Snack & Sweets we believe every dessert should be an experience. We use fresh, top-quality ingredients to create jumbo cookies, parfaits and more — all ready to sweeten your day.</p>
+      <h2 class="section-title">Meet the people behind the magic</h2>
+      <p class="section-sub owner-bio-text">[ Write about the owners of the business here — their story, passion, and what inspired them to start LaChihuahua Snack & Sweets. ]</p>
       <div class="features-list">
         <div class="feature-item"><div class="feature-icon">🧁</div><div class="feature-text"><strong>Freshly baked</strong><span>Every order is prepared to order for maximum freshness</span></div></div>
         <div class="feature-item"><div class="feature-icon">🫶</div><div class="feature-text"><strong>Handmade</strong><span>Artisan, no shortcuts — just love and great baking</span></div></div>
@@ -585,6 +698,18 @@
         <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#fce4ec,#e91e63);"><span class="placeholder-emoji">🍓</span><div class="product-badge">🍓 Mexicano</div></div>
         <div class="product-info"><h3 class="product-name">Fresas con Crema Ice Cream</h3><ul class="product-feats"><li>Sweet fresh strawberries</li><li>Creamy Mexican-style cream</li><li>Light & refreshing</li></ul></div>
       </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#fff9c4,#3e2723);"><span class="placeholder-emoji">🍫</span><div class="product-badge">🍫 Clásico</div></div>
+        <div class="product-info"><h3 class="product-name">Vainilla con Capa de Chocolate</h3><ul class="product-feats"><li>Creamy vanilla base</li><li>Rich chocolate shell coating</li><li>Classic & irresistible</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#f8bbd0,#ce93d8,#b3e5fc,#c8e6c9);"><span class="placeholder-emoji">🦄</span><div class="product-badge">🦄 Mágico</div></div>
+        <div class="product-info"><h3 class="product-name">Unicornio Ice Cream</h3><ul class="product-feats"><li>Rainbow swirl colors</li><li>Sweet fruity flavor</li><li>Magical & fun</li></ul></div>
+      </div>
+      <div class="product-card reveal" data-cat="icecream">
+        <div class="product-img-wrap product-img-placeholder" style="background:linear-gradient(135deg,#f48fb1,#ad1457);"><span class="placeholder-emoji">🫧</span><div class="product-badge">🫧 Fun</div></div>
+        <div class="product-info"><h3 class="product-name">Chicle Ice Cream</h3><ul class="product-feats"><li>Classic bubblegum flavor</li><li>Sweet & playful</li><li>Bright pink color</li></ul></div>
+      </div>
     </div>
   </div>
 
@@ -695,7 +820,44 @@
 
 <a href="#inicio" id="back-top" title="Back to top">↑</a>
 
+<!-- CART FAB -->
+<button id="cart-fab" onclick="toggleCart()" title="Ver carrito">
+  🛒
+  <span class="cart-count" id="cart-count">0</span>
+</button>
+
+<!-- CART OVERLAY -->
+<div id="cart-overlay" onclick="toggleCart()"></div>
+
+<!-- CART PANEL -->
+<div id="cart-panel">
+  <div class="cart-header">
+    <div>
+      <h3>🛒 Tu Carrito</h3>
+      <p id="cart-header-sub">Tu carrito está vacío</p>
+    </div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">
+      <span>🍪</span>
+      <p>¡Tu carrito está vacío!</p>
+      <small>Agrega algo delicioso del menú</small>
+    </div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none;">
+    <div class="cart-total-items" id="cart-total-items"></div>
+    <div class="cart-total">
+      <span>Total de productos:</span>
+      <strong id="cart-total-count">0</strong>
+    </div>
+    <button class="cart-checkout-btn" onclick="checkout()">📞 Ordenar por WhatsApp</button>
+    <button class="cart-clear-btn" onclick="clearCart()">🗑 Vaciar carrito</button>
+  </div>
+</div>
+
 <script>
+  // ===== REVEAL =====
   const reveals = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver(entries => {
     entries.forEach((e, i) => {
@@ -707,11 +869,13 @@
   }, { threshold: 0.1 });
   reveals.forEach(el => obs.observe(el));
 
+  // ===== BACK TO TOP =====
   const btn = document.getElementById('back-top');
   window.addEventListener('scroll', () => {
     btn.classList.toggle('show', window.scrollY > 400);
   });
 
+  // ===== TABS =====
   const tabs = document.querySelectorAll('.tab-btn');
   const sections = document.querySelectorAll('.cat-section');
   tabs.forEach(tab => {
@@ -728,6 +892,114 @@
       });
     });
   });
+
+  // ===== CART =====
+  let cart = [];
+  let cartOpen = false;
+
+  // Inject "Agregar" button into every product card
+  document.querySelectorAll('.product-card').forEach(card => {
+    const name = card.querySelector('.product-name')?.textContent?.trim() || 'Producto';
+    const cat = card.closest('.cat-section')?.querySelector('.cat-title')?.textContent?.trim() || '';
+    const emoji = card.closest('.cat-section')?.querySelector('.cat-emoji')?.textContent?.trim() || '🍪';
+    const info = card.querySelector('.product-info');
+    if (!info) return;
+    const btn = document.createElement('button');
+    btn.className = 'add-to-cart-btn';
+    btn.innerHTML = '🛒 Agregar al carrito';
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      addToCart(name, cat, emoji, btn);
+    });
+    info.appendChild(btn);
+  });
+
+  function addToCart(name, cat, emoji, btnEl) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ name, cat, emoji, qty: 1 });
+    }
+    renderCart();
+    // Button feedback
+    btnEl.innerHTML = '✔ Agregado!';
+    btnEl.classList.add('added');
+    setTimeout(() => {
+      btnEl.innerHTML = '🛒 Agregar al carrito';
+      btnEl.classList.remove('added');
+    }, 1400);
+    // FAB bounce
+    const fab = document.getElementById('cart-fab');
+    fab.classList.remove('bounce');
+    void fab.offsetWidth;
+    fab.classList.add('bounce');
+    setTimeout(() => fab.classList.remove('bounce'), 400);
+  }
+
+  function renderCart() {
+    const itemsEl = document.getElementById('cart-items');
+    const countEl = document.getElementById('cart-count');
+    const footerEl = document.getElementById('cart-footer');
+    const headerSub = document.getElementById('cart-header-sub');
+    const totalCount = document.getElementById('cart-total-count');
+    const totalItems = document.getElementById('cart-total-items');
+
+    const total = cart.reduce((s, i) => s + i.qty, 0);
+    countEl.textContent = total;
+    countEl.classList.toggle('show', total > 0);
+
+    if (cart.length === 0) {
+      itemsEl.innerHTML = `<div class="cart-empty"><span>🍪</span><p>¡Tu carrito está vacío!</p><small>Agrega algo delicioso del menú</small></div>`;
+      footerEl.style.display = 'none';
+      headerSub.textContent = 'Tu carrito está vacío';
+      return;
+    }
+
+    footerEl.style.display = 'block';
+    headerSub.textContent = `${total} ${total === 1 ? 'producto' : 'productos'} seleccionados`;
+    totalCount.textContent = total;
+    totalItems.textContent = cart.map(i => `${i.emoji} ${i.name} x${i.qty}`).join(' · ');
+
+    itemsEl.innerHTML = cart.map((item, idx) => `
+      <div class="cart-item">
+        <div class="cart-item-emoji">${item.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-cat">${item.cat}</div>
+        </div>
+        <div class="cart-item-controls">
+          <button class="qty-btn" onclick="changeQty(${idx}, -1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function changeQty(idx, delta) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    renderCart();
+  }
+
+  function clearCart() {
+    cart = [];
+    renderCart();
+  }
+
+  function toggleCart() {
+    cartOpen = !cartOpen;
+    document.getElementById('cart-panel').classList.toggle('open', cartOpen);
+    document.getElementById('cart-overlay').classList.toggle('open', cartOpen);
+  }
+
+  function checkout() {
+    if (cart.length === 0) return;
+    const lines = cart.map(i => `• ${i.emoji} ${i.name} x${i.qty}`).join('%0A');
+    const msg = `¡Hola! Me gustaría ordenar:%0A%0A${lines}%0A%0A¡Gracias! 🍪`;
+    window.open(`https://wa.me/1234567890?text=${msg}`, '_blank');
+  }
 </script>
 </body>
 </html>
