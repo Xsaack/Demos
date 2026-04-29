@@ -365,14 +365,299 @@
   }
   .cart-clear-btn:hover { border-color: var(--hot-pink); color: var(--hot-pink); background: #fff0f5; }
 
+  /* ========================================
+     COMBO MIX SECTION
+  ======================================== */
+  #combo-mix {
+    padding: 0;
+    position: relative;
+    background: #1a0a00;
+    overflow: hidden;
+  }
+
+  /* Coming soon overlay */
+  .combo-coming-soon-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    background: rgba(20, 5, 0, 0.72);
+    backdrop-filter: blur(6px) saturate(0.4);
+    -webkit-backdrop-filter: blur(6px) saturate(0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    pointer-events: all;
+  }
+
+  .combo-proximamente-badge {
+    background: linear-gradient(135deg, var(--yellow), #ffb300);
+    color: var(--choco);
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-weight: 900;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    padding: 18px 52px;
+    border-radius: 60px;
+    box-shadow: 0 0 0 6px rgba(255,229,102,0.25), 0 16px 50px rgba(255,179,0,0.45);
+    animation: proximamentePulse 2.8s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+  }
+  .combo-proximamente-badge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+    transform: translateX(-100%);
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    60%, 100% { transform: translateX(100%); }
+  }
+  @keyframes proximamentePulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255,229,102,0.25), 0 16px 50px rgba(255,179,0,0.45); }
+    50% { transform: scale(1.04); box-shadow: 0 0 0 12px rgba(255,229,102,0.15), 0 24px 70px rgba(255,179,0,0.6); }
+  }
+
+  .combo-coming-soon-sub {
+    color: rgba(255,248,240,0.75);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Section header */
+  .combo-mix-header {
+    padding: 90px 40px 70px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(180deg, #2a0e00 0%, #1a0800 100%);
+  }
+  .combo-mix-header .section-tag { color: var(--yellow); }
+  .combo-mix-header .section-title { color: #fff8f0; }
+  .combo-mix-header .section-sub {
+    color: rgba(255,183,71,0.8);
+    margin: 0 auto;
+    max-width: 580px;
+  }
+
+  /* Cards layout — full-width stacked banners */
+  .combo-cards-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .combo-card {
+    position: relative;
+    width: 100%;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* Alternating layout */
+  .combo-card:nth-child(even) { flex-direction: row-reverse; }
+
+  /* Photo half */
+  .combo-card-photo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .combo-card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s ease;
+  }
+  .combo-card:hover .combo-card-photo img {
+    transform: scale(1.04);
+  }
+
+  /* Dark gradient overlay on photo */
+  .combo-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg,
+      rgba(20,5,0,0.88) 0%,
+      rgba(20,5,0,0.70) 38%,
+      rgba(20,5,0,0.15) 65%,
+      rgba(20,5,0,0.05) 100%
+    );
+  }
+  .combo-card:nth-child(even)::before {
+    background: linear-gradient(270deg,
+      rgba(20,5,0,0.88) 0%,
+      rgba(20,5,0,0.70) 38%,
+      rgba(20,5,0,0.15) 65%,
+      rgba(20,5,0,0.05) 100%
+    );
+  }
+
+  /* Content box */
+  .combo-card-content {
+    position: relative;
+    z-index: 2;
+    max-width: 560px;
+    padding: 70px 64px 70px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .combo-card:nth-child(even) .combo-card-content {
+    padding: 70px 80px 70px 64px;
+    margin-left: auto;
+  }
+
+  .combo-card-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--yellow);
+    color: var(--choco);
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    padding: 6px 18px;
+    border-radius: 50px;
+    width: fit-content;
+    box-shadow: 0 4px 16px rgba(255,229,102,0.4);
+  }
+
+  .combo-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 900;
+    color: #fff8f0;
+    line-height: 1.1;
+  }
+  .combo-card-title em {
+    font-style: italic;
+    color: var(--pink);
+  }
+
+  .combo-card-desc {
+    font-size: 1rem;
+    color: rgba(255,232,204,0.85);
+    line-height: 1.75;
+    font-weight: 600;
+    max-width: 460px;
+  }
+
+  /* What's included list */
+  .combo-includes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .combo-includes li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: rgba(255,248,240,0.9);
+    line-height: 1.4;
+  }
+  .combo-includes li .combo-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    background: var(--pink);
+    border-radius: 50%;
+    font-size: 0.65rem;
+    color: white;
+    font-weight: 900;
+    margin-top: 1px;
+  }
+
+  /* Capacity tag */
+  .combo-capacity {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,248,240,0.1);
+    border: 1.5px solid rgba(255,248,240,0.22);
+    color: rgba(255,248,240,0.85);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 8px 18px;
+    border-radius: 50px;
+    width: fit-content;
+    backdrop-filter: blur(6px);
+  }
+
+  /* Decorative number */
+  .combo-card-number {
+    position: absolute;
+    bottom: -30px;
+    right: 40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18rem;
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .combo-card:nth-child(even) .combo-card-number {
+    right: auto;
+    left: 40px;
+  }
+
+  /* Separator between cards */
+  .combo-card + .combo-card {
+    border-top: 2px solid rgba(255,61,168,0.2);
+  }
+
   @media(max-width: 900px) {
     #cart-panel { width: calc(100vw - 32px); right: 16px; }
-  }
     nav { padding: 10px 20px; }
     .nav-links { display: none; }
     section { padding: 70px 20px; }
     .about-inner { grid-template-columns: 1fr; gap: 40px; }
     .hero { padding: 110px 20px 70px; }
+
+    .combo-mix-header { padding: 70px 24px 50px; }
+    .combo-card { min-height: 600px; }
+    .combo-card::before,
+    .combo-card:nth-child(even)::before {
+      background: linear-gradient(180deg,
+        rgba(20,5,0,0.92) 0%,
+        rgba(20,5,0,0.80) 50%,
+        rgba(20,5,0,0.55) 100%
+      );
+    }
+    .combo-card-content,
+    .combo-card:nth-child(even) .combo-card-content {
+      padding: 48px 28px;
+      max-width: 100%;
+      margin-left: 0;
+    }
+    .combo-card-number { display: none; }
   }
 </style>
 </head>
@@ -434,15 +719,15 @@
   </div>
 </div>
 
-<!-- ABOUT (moved here, right after hero) -->
+<!-- ABOUT -->
 <section id="nosotros">
   <div class="about-inner">
     <div class="about-img-grid reveal">
       <div class="owner-photo-slot">
-        <img src="Imagen/verofoto.jpeg" alt="Owner photo 1" loading="lazy">
+        <img src="Imagen/verofoto.jpeg" alt="Vero" loading="lazy">
       </div>
       <div class="owner-photo-slot">
-        <img src="Imagen/dannafoto.png" alt="Owner photo 2" loading="lazy">
+        <img src="Imagen/dannafoto.png" alt="Danna" loading="lazy">
       </div>
     </div>
     <div class="about-text reveal">
@@ -753,6 +1038,95 @@
 
 </section>
 
+
+<!-- =============================================
+     COMBO MIX — Party Dessert Carts
+============================================= -->
+<section id="combo-mix">
+
+  <!-- PROXIMAMENTE OVERLAY -->
+  <div class="combo-coming-soon-overlay">
+    <div class="combo-proximamente-badge">✦ Próximamente ✦</div>
+    <p class="combo-coming-soon-sub">Esta sección estará disponible muy pronto 🎉</p>
+  </div>
+
+  <!-- Section header -->
+  <div class="combo-mix-header">
+    <span class="section-tag reveal">✦ Para tus fiestas</span>
+    <h2 class="section-title reveal">Combo Mix</h2>
+    <p class="section-sub reveal">Carritos de postres variados para hacer de cada celebración un momento dulce e inolvidable. Personalizados, llenos de sabor y listos para sorprender.</p>
+  </div>
+
+  <!-- Three full-width banner cards -->
+  <div class="combo-cards-wrap">
+
+    <!-- CARD 1 — Carrito Fiesta Total -->
+    <div class="combo-card reveal">
+      <div class="combo-card-photo">
+        <img src="Imagen/mix.jpg" alt="Carrito Fiesta Total" loading="lazy">
+      </div>
+      <div class="combo-card-content">
+        <span class="combo-card-eyebrow">🎉 Combo 01</span>
+        <h3 class="combo-card-title">Carrito<em> Fiesta Total</em></h3>
+        <p class="combo-card-desc">El combo estrella para quienes quieren que su fiesta lo tenga todo. Un carrito espectacular repleto de nuestros postres más populares: cookies jumbo, cupcakes decorados, mini cakes y cheesecakes individuales, presentados con nuestra decoración festiva característica.</p>
+        <ul class="combo-includes">
+          <li><span class="combo-check">✓</span> Surtido de cookies jumbo — 5 sabores a elección</li>
+          <li><span class="combo-check">✓</span> Mini cakes individuales — 3 sabores variados</li>
+          <li><span class="combo-check">✓</span> Cupcakes decorados temáticamente para tu evento</li>
+          <li><span class="combo-check">✓</span> Cheesecakes individuales surtidos</li>
+          <li><span class="combo-check">✓</span> Decoración del carrito incluida y personalizable</li>
+        </ul>
+        <span class="combo-capacity">🎊 Ideal para 20 – 40 personas</span>
+      </div>
+      <span class="combo-card-number">01</span>
+    </div>
+
+    <!-- CARD 2 — Carrito Dulce Sueño -->
+    <div class="combo-card reveal">
+      <div class="combo-card-photo">
+        <img src="Imagen/mix1.jpg" alt="Carrito Dulce Sueño" loading="lazy">
+      </div>
+      <div class="combo-card-content">
+        <span class="combo-card-eyebrow">🍰 Combo 02</span>
+        <h3 class="combo-card-title">Carrito<em> Dulce Sueño</em></h3>
+        <p class="combo-card-desc">Pensado para fiestas íntimas y celebraciones elegantes. Un carrito curado con nuestras piezas más sofisticadas: cinnamon rolls artesanales recién horneados, cheesecakes en vasito y helados de temporada, todo con una presentación que enamora antes de probar.</p>
+        <ul class="combo-includes">
+          <li><span class="combo-check">✓</span> Cinnamon rolls artesanales — 4 sabores surtidos</li>
+          <li><span class="combo-check">✓</span> Cheesecake en vasito — 3 sabores de temporada</li>
+          <li><span class="combo-check">✓</span> Helados artesanales en paleta o copa</li>
+          <li><span class="combo-check">✓</span> Salsas y toppings para personalizar al gusto</li>
+          <li><span class="combo-check">✓</span> Presentación elegante con etiquetas personalizadas</li>
+        </ul>
+        <span class="combo-capacity">🌸 Ideal para 15 – 30 personas</span>
+      </div>
+      <span class="combo-card-number">02</span>
+    </div>
+
+    <!-- CARD 3 — Carrito Todo Mix -->
+    <div class="combo-card reveal">
+      <div class="combo-card-photo">
+        <img src="Imagen/mix2.jpg" alt="Carrito Todo Mix" loading="lazy">
+      </div>
+      <div class="combo-card-content">
+        <span class="combo-card-eyebrow">🎂 Combo 03</span>
+        <h3 class="combo-card-title">Carrito<em> Todo Mix</em></h3>
+        <p class="combo-card-desc">El combo más completo de LaChihuahua. Para fiestas grandes que merecen una experiencia dulce sin límites. Combina absolutamente todo: cookies, cinnamon rolls, cupcakes, cheesecakes, helados y mini cakes en un solo carrito espectacular con estación de toppings incluida.</p>
+        <ul class="combo-includes">
+          <li><span class="combo-check">✓</span> Toda la línea de cookies jumbo — hasta 9 sabores</li>
+          <li><span class="combo-check">✓</span> Cinnamon rolls, cupcakes y mini cakes surtidos</li>
+          <li><span class="combo-check">✓</span> Cheesecakes individuales y helados de temporada</li>
+          <li><span class="combo-check">✓</span> Estación de toppings y salsas gourmet</li>
+          <li><span class="combo-check">✓</span> Decoración premium + letrero personalizado incluido</li>
+        </ul>
+        <span class="combo-capacity">🎆 Ideal para 50 – 100+ personas</span>
+      </div>
+      <span class="combo-card-number">03</span>
+    </div>
+
+  </div>
+</section>
+
+
 <!-- REVIEWS -->
 <section id="reviews">
   <span class="section-tag">✦ What our customers say</span>
@@ -812,6 +1186,7 @@
     <a href="#inicio">Home</a>
     <a href="#nosotros">About Us</a>
     <a href="#menu">Menu</a>
+    <a href="#combo-mix">Combo Mix</a>
     <a href="#reviews">Reviews</a>
     <a href="#contacto">Contact</a>
   </div>
@@ -897,7 +1272,6 @@
   let cart = [];
   let cartOpen = false;
 
-  // Inject "Agregar" button into every product card
   document.querySelectorAll('.product-card').forEach(card => {
     const name = card.querySelector('.product-name')?.textContent?.trim() || 'Producto';
     const cat = card.closest('.cat-section')?.querySelector('.cat-title')?.textContent?.trim() || '';
@@ -922,14 +1296,12 @@
       cart.push({ name, cat, emoji, qty: 1 });
     }
     renderCart();
-    // Button feedback
     btnEl.innerHTML = '✔ Agregado!';
     btnEl.classList.add('added');
     setTimeout(() => {
       btnEl.innerHTML = '🛒 Agregar al carrito';
       btnEl.classList.remove('added');
     }, 1400);
-    // FAB bounce
     const fab = document.getElementById('cart-fab');
     fab.classList.remove('bounce');
     void fab.offsetWidth;
