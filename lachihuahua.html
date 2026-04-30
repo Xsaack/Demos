@@ -729,6 +729,29 @@
     margin-bottom: 3px;
     display: block;
   }
+  /* Cart button on preview card */
+  .preview-cart-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: calc(100% - 24px);
+    margin: 0 12px 12px;
+    padding: 9px 0;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.78rem;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 14px rgba(255,0,110,0.3);
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .preview-cart-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,0,110,0.45); }
+  .preview-cart-btn.added { background: linear-gradient(135deg, #27ae60, #1e8449); box-shadow: 0 4px 14px rgba(39,174,96,0.35); }
 
   @media(max-width: 900px) {
     #cart-panel { width: calc(100vw - 32px); right: 16px; }
@@ -1368,15 +1391,22 @@
   const tabs = document.querySelectorAll('.tab-btn');
   const catSections = document.querySelectorAll('.cat-section');
   const menuPreview = document.getElementById('menu-preview');
+  let menuHasSelection = false;
+
+  function showCarousel() {
+    menuHasSelection = false;
+    tabs.forEach(t => t.classList.remove('active'));
+    catSections.forEach(sec => sec.classList.remove('visible'));
+    menuPreview.style.display = '';
+  }
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const cat = tab.dataset.cat;
-      // Hide preview carousel
+      menuHasSelection = true;
       menuPreview.style.display = 'none';
-      // Show only matching section
       catSections.forEach(sec => {
         if (cat === 'all' || sec.dataset.section === cat) {
           sec.classList.add('visible');
@@ -1387,8 +1417,25 @@
     });
   });
 
+  // Click on blank/empty area inside #menu → return to carousel
+  document.getElementById('menu').addEventListener('click', function(e) {
+    if (!menuHasSelection) return;
+    // Only trigger if the click target is the section itself or its direct background
+    const isBlank =
+      e.target === this ||
+      e.target.classList.contains('menu-header') ||
+      (e.target.tagName !== 'BUTTON' &&
+       !e.target.closest('.product-card') &&
+       !e.target.closest('.tab-btn') &&
+       !e.target.closest('.cat-header') &&
+       !e.target.closest('.products-grid') &&
+       e.target.closest('#menu'));
+    if (isBlank) {
+      showCarousel();
+    }
+  });
+
   // ===== BUILD PREVIEW CAROUSEL =====
-  // Collect product data from all product cards
   const previewData = [];
   document.querySelectorAll('.product-card').forEach(card => {
     const name = card.querySelector('.product-name')?.textContent?.trim() || '';
@@ -1400,9 +1447,7 @@
     previewData.push({ name, catTitle, catEmoji, catKey, imgSrc: imgEl ? imgEl.src : '', bgStyle });
   });
 
-  // Shuffle a bit so the carousel looks varied
   const shuffled = [...previewData].sort(() => Math.random() - 0.5);
-  // Duplicate for infinite loop
   const doubled = [...shuffled, ...shuffled];
 
   const track = document.getElementById('preview-track');
@@ -1410,12 +1455,6 @@
     const card = document.createElement('div');
     card.className = 'preview-card';
     card.title = item.name;
-    card.addEventListener('click', () => {
-      // Clicking a preview card opens that category
-      const matchTab = document.querySelector(`.tab-btn[data-cat="${item.catKey}"]`);
-      if (matchTab) matchTab.click();
-      document.getElementById('menu').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
 
     let thumbHtml = '';
     if (item.imgSrc && !item.imgSrc.includes('undefined')) {
@@ -1430,7 +1469,24 @@
         <span class="preview-card-cat">${item.catEmoji} ${item.catTitle}</span>
         ${item.name}
       </div>
+      <button class="preview-cart-btn">🛒 Agregar</button>
     `;
+
+    // Click on card body (not button) → open category
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.preview-cart-btn')) return;
+      const matchTab = document.querySelector(`.tab-btn[data-cat="${item.catKey}"]`);
+      if (matchTab) matchTab.click();
+      document.getElementById('menu').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Cart button on preview card
+    const cartBtn = card.querySelector('.preview-cart-btn');
+    cartBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      addToCart(item.name, item.catTitle, item.catEmoji, cartBtn);
+    });
+
     track.appendChild(card);
   });
 
