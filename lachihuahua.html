@@ -242,8 +242,8 @@
   .product-card.hidden { display: none; }
 
   /* CATEGORY SECTIONS */
-  .cat-section { max-width: 1200px; margin: 0 auto 70px; }
-  .cat-section.hidden { display: none; }
+  .cat-section { max-width: 1200px; margin: 0 auto 70px; display: none; }
+  .cat-section.visible { display: block; }
   .cat-header { display: flex; align-items: center; gap: 20px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 3px dashed rgba(255,61,168,0.25); }
   .cat-emoji { font-size: 3rem; min-width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: var(--soft-pink); border-radius: 20px; box-shadow: 0 4px 14px rgba(255,61,168,0.15); }
   .cat-title { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 900; color: var(--choco); margin-bottom: 4px; }
@@ -633,6 +633,103 @@
     border-top: 2px solid rgba(255,61,168,0.2);
   }
 
+  /* ===== MENU PREVIEW CAROUSEL ===== */
+  .menu-preview-wrap {
+    max-width: 100%;
+    margin: 0 0 60px;
+    text-align: center;
+  }
+  .menu-preview-hint {
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--pink);
+    margin-bottom: 28px;
+    animation: bounce 2.2s ease-in-out infinite;
+    display: inline-block;
+  }
+  .menu-preview-track-outer {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+  }
+  .menu-preview-track-outer::before,
+  .menu-preview-track-outer::after {
+    content: '';
+    position: absolute;
+    top: 0; width: 80px; height: 100%; z-index: 2;
+    pointer-events: none;
+  }
+  .menu-preview-track-outer::before {
+    left: 0;
+    background: linear-gradient(90deg, white 0%, transparent 100%);
+  }
+  .menu-preview-track-outer::after {
+    right: 0;
+    background: linear-gradient(270deg, white 0%, transparent 100%);
+  }
+  .menu-preview-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: previewScroll 60s linear infinite;
+    padding: 12px 0 20px;
+  }
+  .menu-preview-track:hover { animation-play-state: paused; }
+  @keyframes previewScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .preview-card {
+    width: 200px;
+    flex-shrink: 0;
+    background: var(--cream);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 22px rgba(62,28,0,0.09);
+    border: 2px solid transparent;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .preview-card:hover {
+    transform: translateY(-6px) scale(1.04);
+    border-color: var(--pink);
+    box-shadow: 0 14px 36px rgba(255,61,168,0.22);
+  }
+  .preview-card-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+  }
+  .preview-card-img.emoji-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    height: 150px;
+  }
+  .preview-card-label {
+    padding: 10px 12px 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--choco);
+    line-height: 1.3;
+    text-align: left;
+  }
+  .preview-card-cat {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--hot-pink);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+    display: block;
+  }
+
   @media(max-width: 900px) {
     #cart-panel { width: calc(100vw - 32px); right: 16px; }
     nav { padding: 10px 20px; }
@@ -659,6 +756,7 @@
     }
     .combo-card-number { display: none; }
   }
+
 </style>
 </head>
 <body>
@@ -723,11 +821,17 @@
 <section id="nosotros">
   <div class="about-inner">
     <div class="about-img-grid reveal">
-      <div class="owner-photo-slot">
-        <img src="Imagen/verofoto.jpeg" alt="Vero" loading="lazy">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div class="owner-photo-slot">
+          <img src="Imagen/verofoto.jpeg" alt="Vero" loading="lazy">
+        </div>
+        <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--choco);letter-spacing:0.3px;">Verónica Ponce</span>
       </div>
-      <div class="owner-photo-slot">
-        <img src="Imagen/dannafoto.png" alt="Danna" loading="lazy">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div class="owner-photo-slot">
+          <img src="Imagen/dannafoto.png" alt="Danna" loading="lazy">
+        </div>
+        <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--choco);letter-spacing:0.3px;">Danna Valverde</span>
       </div>
     </div>
     <div class="about-text reveal">
@@ -757,7 +861,17 @@
     <button class="tab-btn" data-cat="cheesecake">🍰 Cheesecake</button>
     <button class="tab-btn" data-cat="icecream">🍦 Ice Cream</button>
     <button class="tab-btn" data-cat="cupcake">🧁 Cupcakes</button>
-    <button class="tab-btn active" data-cat="all">✦ All</button>
+    <button class="tab-btn" data-cat="all">✦ Todos</button>
+  </div>
+
+  <!-- PREVIEW CAROUSEL — visible before any tab is selected -->
+  <div id="menu-preview" class="menu-preview-wrap">
+    <p class="menu-preview-hint">✦ Elige una categoría para explorar el menú ✦</p>
+    <div class="menu-preview-track-outer">
+      <div class="menu-preview-track" id="preview-track">
+        <!-- cards injected by JS -->
+      </div>
+    </div>
   </div>
 
   <!-- COOKIES -->
@@ -1252,20 +1366,72 @@
 
   // ===== TABS =====
   const tabs = document.querySelectorAll('.tab-btn');
-  const sections = document.querySelectorAll('.cat-section');
+  const catSections = document.querySelectorAll('.cat-section');
+  const menuPreview = document.getElementById('menu-preview');
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const cat = tab.dataset.cat;
-      sections.forEach(sec => {
+      // Hide preview carousel
+      menuPreview.style.display = 'none';
+      // Show only matching section
+      catSections.forEach(sec => {
         if (cat === 'all' || sec.dataset.section === cat) {
-          sec.classList.remove('hidden');
+          sec.classList.add('visible');
         } else {
-          sec.classList.add('hidden');
+          sec.classList.remove('visible');
         }
       });
     });
+  });
+
+  // ===== BUILD PREVIEW CAROUSEL =====
+  // Collect product data from all product cards
+  const previewData = [];
+  document.querySelectorAll('.product-card').forEach(card => {
+    const name = card.querySelector('.product-name')?.textContent?.trim() || '';
+    const catTitle = card.closest('.cat-section')?.querySelector('.cat-title')?.textContent?.trim() || '';
+    const catEmoji = card.closest('.cat-section')?.querySelector('.cat-emoji')?.textContent?.trim() || '🍪';
+    const catKey = card.closest('.cat-section')?.dataset?.section || '';
+    const imgEl = card.querySelector('.product-img-wrap img');
+    const bgStyle = card.querySelector('.product-img-placeholder')?.style?.background || '';
+    previewData.push({ name, catTitle, catEmoji, catKey, imgSrc: imgEl ? imgEl.src : '', bgStyle });
+  });
+
+  // Shuffle a bit so the carousel looks varied
+  const shuffled = [...previewData].sort(() => Math.random() - 0.5);
+  // Duplicate for infinite loop
+  const doubled = [...shuffled, ...shuffled];
+
+  const track = document.getElementById('preview-track');
+  doubled.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'preview-card';
+    card.title = item.name;
+    card.addEventListener('click', () => {
+      // Clicking a preview card opens that category
+      const matchTab = document.querySelector(`.tab-btn[data-cat="${item.catKey}"]`);
+      if (matchTab) matchTab.click();
+      document.getElementById('menu').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    let thumbHtml = '';
+    if (item.imgSrc && !item.imgSrc.includes('undefined')) {
+      thumbHtml = `<img class="preview-card-img" src="${item.imgSrc}" alt="${item.name}" loading="lazy">`;
+    } else {
+      thumbHtml = `<div class="preview-card-img emoji-thumb" style="background:${item.bgStyle || 'linear-gradient(135deg,#FFD6EC,#FFF8F0)'}">${item.catEmoji}</div>`;
+    }
+
+    card.innerHTML = `
+      ${thumbHtml}
+      <div class="preview-card-label">
+        <span class="preview-card-cat">${item.catEmoji} ${item.catTitle}</span>
+        ${item.name}
+      </div>
+    `;
+    track.appendChild(card);
   });
 
   // ===== CART =====
