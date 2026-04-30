@@ -762,105 +762,156 @@
 
   @media(max-width: 900px) {
     #cart-panel { width: calc(100vw - 32px); right: 16px; }
-    /* ── Burger menu ── */
+
+    /* ── Nav padding tighter on mobile ── */
+    nav { padding: 8px 16px; }
+
+    /* ── Cart FAB hidden on mobile (cart button lives in nav bar instead) ── */
+    #cart-fab { display: none !important; }
+
+    /* ── Mobile nav right group: Contacto | Carrito | Burger ── */
     .nav-mobile-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
+
+    /* Contacto button */
     .nav-mobile-cta {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: var(--pink);
       color: white;
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
-      font-size: 0.82rem;
-      padding: 8px 16px;
+      font-size: 0.75rem;
+      padding: 7px 12px;
       border-radius: 50px;
       text-decoration: none;
-      box-shadow: 0 4px 14px rgba(255,61,168,0.35);
+      box-shadow: 0 3px 10px rgba(255,61,168,0.35);
       white-space: nowrap;
+      flex-shrink: 0;
     }
+
+    /* Cart button in nav bar */
+    .nav-mobile-cart {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(255,0,110,0.3);
+      flex-shrink: 0;
+    }
+    .nav-mobile-cart-count {
+      position: absolute;
+      top: -5px; right: -5px;
+      background: var(--yellow);
+      color: var(--choco);
+      font-size: 0.58rem;
+      font-weight: 900;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid white;
+      opacity: 0;
+      transform: scale(0);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .nav-mobile-cart-count.show { opacity: 1; transform: scale(1); }
+
+    /* Burger button */
     .burger {
       display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 5px;
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       background: none;
       border: 2px solid var(--pink);
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
       padding: 8px;
       transition: background 0.2s;
+      flex-shrink: 0;
     }
     .burger:hover { background: var(--soft-pink); }
     .burger span {
       display: block;
-      height: 2.5px;
+      height: 2px;
       background: var(--hot-pink);
       border-radius: 4px;
       transition: transform 0.3s, opacity 0.3s, width 0.3s;
       transform-origin: center;
     }
     .burger span:nth-child(3) { width: 65%; }
-    .burger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .burger.open span:nth-child(3) { width: 100%; transform: translateY(-7.5px) rotate(-45deg); }
+    .burger.open span:nth-child(3) { width: 100%; transform: translateY(-7px) rotate(-45deg); }
 
-    /* Mobile drawer */
+    /* ── Mobile drawer ── */
     .nav-links {
       position: fixed;
       top: 0; right: -100%;
-      width: min(320px, 85vw);
+      width: min(260px, 78vw);
       height: 100dvh;
-      background: rgba(255,248,240,0.98);
-      backdrop-filter: blur(20px);
+      background: #fff8f0;
       flex-direction: column;
       gap: 0;
-      padding: 100px 32px 40px;
-      box-shadow: -8px 0 40px rgba(62,28,0,0.18);
+      padding: 90px 28px 40px;
+      box-shadow: -6px 0 32px rgba(62,28,0,0.15);
       border-left: 3px solid var(--pink);
-      transition: right 0.38s cubic-bezier(0.34,1.2,0.64,1);
+      transition: right 0.35s cubic-bezier(0.34,1.2,0.64,1);
       z-index: 1050;
+      pointer-events: auto;
+      list-style: none;
     }
     .nav-links.open { right: 0; }
-    .nav-links li { width: 100%; }
+    .nav-links li { width: 100%; list-style: none; }
     .nav-links a.nav-link-item {
       display: block;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 800;
-      padding: 16px 0;
-      border-bottom: 1.5px solid rgba(255,61,168,0.12);
+      padding: 15px 0;
+      border-bottom: 1.5px solid rgba(255,61,168,0.1);
       color: var(--choco);
-      letter-spacing: 0.3px;
+      text-decoration: none;
+      transition: color 0.2s, padding-left 0.2s;
     }
-    .nav-links a.nav-link-item:hover { color: var(--hot-pink); padding-left: 8px; }
+    .nav-links a.nav-link-item:active,
+    .nav-links a.nav-link-item:focus { color: var(--hot-pink); }
     .nav-links a.nav-cta {
       display: block;
-      margin-top: 24px;
+      margin-top: 20px;
       text-align: center;
       font-size: 1rem;
-      padding: 14px 0;
+      padding: 13px 0;
       border-bottom: none;
+      border-radius: 50px;
     }
 
-    /* Overlay behind drawer */
+    /* ── Drawer overlay (light, no blur so content is visible) ── */
     .nav-drawer-overlay {
       display: block;
       position: fixed;
       inset: 0;
       z-index: 1049;
-      background: rgba(62,28,0,0.4);
-      backdrop-filter: blur(3px);
+      background: rgba(62,28,0,0.22);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s;
     }
     .nav-drawer-overlay.open { opacity: 1; pointer-events: all; }
+
     section { padding: 70px 20px; }
     .about-inner { grid-template-columns: 1fr; gap: 40px; }
     .hero { padding: 110px 20px 70px; }
@@ -885,22 +936,15 @@
     .combo-card-number { display: none; }
 
     /* Próximamente overlay — mobile */
-    .combo-coming-soon-overlay {
-      gap: 14px;
-      padding: 24px 16px;
-    }
+    .combo-coming-soon-overlay { gap: 14px; padding: 24px 16px; }
     .combo-proximamente-badge {
       font-size: clamp(1rem, 5.5vw, 1.5rem);
-      letter-spacing: 3px;
-      padding: 14px 28px;
-      border-radius: 40px;
-      text-align: center;
+      letter-spacing: 3px; padding: 14px 28px;
+      border-radius: 40px; text-align: center;
     }
     .combo-coming-soon-sub {
-      font-size: 0.78rem;
-      letter-spacing: 1px;
-      text-align: center;
-      padding: 0 12px;
+      font-size: 0.78rem; letter-spacing: 1px;
+      text-align: center; padding: 0 12px;
     }
 
     /* Carousel preview mobile */
@@ -937,6 +981,10 @@
   </ul>
   <div class="nav-mobile-right">
     <a href="#contacto" class="nav-mobile-cta">📞 Contacto</a>
+    <button class="nav-mobile-cart" id="nav-mobile-cart-btn" onclick="toggleCart()" title="Ver carrito">
+      🛒
+      <span class="nav-mobile-cart-count" id="nav-mobile-cart-count">0</span>
+    </button>
     <button class="burger" id="burger-btn" aria-label="Abrir menú">
       <span></span><span></span><span></span>
     </button>
@@ -1672,10 +1720,12 @@
       btnEl.classList.remove('added');
     }, 1400);
     const fab = document.getElementById('cart-fab');
-    fab.classList.remove('bounce');
-    void fab.offsetWidth;
-    fab.classList.add('bounce');
-    setTimeout(() => fab.classList.remove('bounce'), 400);
+    if (fab && fab.offsetParent !== null) {
+      fab.classList.remove('bounce');
+      void fab.offsetWidth;
+      fab.classList.add('bounce');
+      setTimeout(() => fab.classList.remove('bounce'), 400);
+    }
   }
 
   function renderCart() {
@@ -1689,6 +1739,8 @@
     const total = cart.reduce((s, i) => s + i.qty, 0);
     countEl.textContent = total;
     countEl.classList.toggle('show', total > 0);
+    const mobileCount = document.getElementById('nav-mobile-cart-count');
+    if (mobileCount) { mobileCount.textContent = total; mobileCount.classList.toggle('show', total > 0); }
 
     if (cart.length === 0) {
       itemsEl.innerHTML = `<div class="cart-empty"><span>🍪</span><p>¡Tu carrito está vacío!</p><small>Agrega algo delicioso del menú</small></div>`;
@@ -1744,27 +1796,30 @@
 
   // ===== BURGER MENU =====
   const burgerBtn = document.getElementById('burger-btn');
-  const navLinks  = document.getElementById('nav-links');
-  const navOverlay = document.getElementById('nav-overlay');
+  const navLinksEl = document.getElementById('nav-links');
+  const navOverlayEl = document.getElementById('nav-overlay');
 
   function openNav() {
     burgerBtn.classList.add('open');
-    navLinks.classList.add('open');
-    navOverlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    navLinksEl.classList.add('open');
+    navOverlayEl.classList.add('open');
   }
   function closeNav() {
     burgerBtn.classList.remove('open');
-    navLinks.classList.remove('open');
-    navOverlay.classList.remove('open');
-    document.body.style.overflow = '';
+    navLinksEl.classList.remove('open');
+    navOverlayEl.classList.remove('open');
   }
-  burgerBtn.addEventListener('click', () => {
-    navLinks.classList.contains('open') ? closeNav() : openNav();
+
+  burgerBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    navLinksEl.classList.contains('open') ? closeNav() : openNav();
   });
-  navOverlay.addEventListener('click', closeNav);
-  // Close when any link inside drawer is tapped
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+
+  navOverlayEl.addEventListener('click', closeNav);
+
+  navLinksEl.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', closeNav);
+  });
 </script>
 </body>
 </html>
