@@ -295,7 +295,7 @@
   /* ===== CART OVERLAY ===== */
   #cart-overlay {
     position: fixed; inset: 0; z-index: 1100;
-    background: rgba(62,28,0,0.45); backdrop-filter: blur(4px);
+    background: rgba(62,28,0,0.45);
     opacity: 0; pointer-events: none; transition: opacity 0.3s;
   }
   #cart-overlay.open { opacity: 1; pointer-events: all; }
@@ -382,15 +382,17 @@
     position: absolute;
     inset: 0;
     z-index: 100;
-    background: rgba(20, 5, 0, 0.72);
-    backdrop-filter: blur(6px) saturate(0.4);
-    -webkit-backdrop-filter: blur(6px) saturate(0.4);
+    background: rgba(10, 2, 0, 0.96);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 20px;
-    pointer-events: all;
+    pointer-events: none; /* contained inside #combo-mix — no outside interference */
+  }
+  /* Re-enable pointer events only on the interactive badge children */
+  .combo-coming-soon-overlay > * {
+    pointer-events: auto;
   }
 
   .combo-proximamente-badge {
@@ -763,13 +765,13 @@
   @media(max-width: 900px) {
     #cart-panel { width: calc(100vw - 32px); right: 16px; }
 
-    /* ── Nav padding tighter on mobile ── */
-    nav { padding: 8px 16px; }
-
-    /* ── Cart FAB hidden on mobile (cart button lives in nav bar instead) ── */
+    /* ── Cart FAB hidden on mobile ── */
     #cart-fab { display: none !important; }
 
-    /* ── Mobile nav right group: Contacto | Carrito | Burger ── */
+    /* ── Nav padding ── */
+    nav { padding: 8px 16px; }
+
+    /* ── Mobile nav right group ── */
     .nav-mobile-right {
       display: flex;
       align-items: center;
@@ -783,7 +785,7 @@
       align-items: center;
       gap: 4px;
       background: var(--pink);
-      color: white;
+      color: white !important;
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
       font-size: 0.75rem;
@@ -798,7 +800,7 @@
     /* Cart button in nav bar */
     .nav-mobile-cart {
       position: relative;
-      display: flex;
+      display: flex !important;
       align-items: center;
       justify-content: center;
       width: 38px;
@@ -822,95 +824,13 @@
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       border: 1.5px solid white;
-      opacity: 0;
-      transform: scale(0);
+      opacity: 0; transform: scale(0);
       transition: opacity 0.2s, transform 0.2s;
     }
     .nav-mobile-cart-count.show { opacity: 1; transform: scale(1); }
 
-    /* Burger button */
-    .burger {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      width: 38px;
-      height: 38px;
-      background: none;
-      border: 2px solid var(--pink);
-      border-radius: 10px;
-      cursor: pointer;
-      padding: 8px;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-    .burger:hover { background: var(--soft-pink); }
-    .burger span {
-      display: block;
-      height: 2px;
-      background: var(--hot-pink);
-      border-radius: 4px;
-      transition: transform 0.3s, opacity 0.3s, width 0.3s;
-      transform-origin: center;
-    }
-    .burger span:nth-child(3) { width: 65%; }
-    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .burger.open span:nth-child(3) { width: 100%; transform: translateY(-7px) rotate(-45deg); }
-
-    /* ── Mobile drawer ── */
-    .nav-links {
-      position: fixed;
-      top: 0; right: -100%;
-      width: min(260px, 78vw);
-      height: 100dvh;
-      background: #fff8f0;
-      flex-direction: column;
-      gap: 0;
-      padding: 90px 28px 40px;
-      box-shadow: -6px 0 32px rgba(62,28,0,0.15);
-      border-left: 3px solid var(--pink);
-      transition: right 0.35s cubic-bezier(0.34,1.2,0.64,1);
-      z-index: 1050;
-      pointer-events: auto;
-      list-style: none;
-    }
-    .nav-links.open { right: 0; }
-    .nav-links li { width: 100%; list-style: none; }
-    .nav-links a.nav-link-item {
-      display: block;
-      font-size: 1.15rem;
-      font-weight: 800;
-      padding: 15px 0;
-      border-bottom: 1.5px solid rgba(255,61,168,0.1);
-      color: var(--choco);
-      text-decoration: none;
-      transition: color 0.2s, padding-left 0.2s;
-    }
-    .nav-links a.nav-link-item:active,
-    .nav-links a.nav-link-item:focus { color: var(--hot-pink); }
-    .nav-links a.nav-cta {
-      display: block;
-      margin-top: 20px;
-      text-align: center;
-      font-size: 1rem;
-      padding: 13px 0;
-      border-bottom: none;
-      border-radius: 50px;
-    }
-
-    /* ── Drawer overlay (light, no blur so content is visible) ── */
-    .nav-drawer-overlay {
-      display: block;
-      position: fixed;
-      inset: 0;
-      z-index: 1049;
-      background: rgba(62,28,0,0.22);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-    .nav-drawer-overlay.open { opacity: 1; pointer-events: all; }
+    /* Hide desktop nav links on mobile */
+    .nav-links { display: none !important; }
 
     section { padding: 70px 20px; }
     .about-inner { grid-template-columns: 1fr; gap: 40px; }
@@ -921,33 +841,14 @@
     .combo-card { min-height: 560px; }
     .combo-card::before,
     .combo-card:nth-child(even)::before {
-      background: linear-gradient(180deg,
-        rgba(20,5,0,0.92) 0%,
-        rgba(20,5,0,0.80) 50%,
-        rgba(20,5,0,0.55) 100%
-      );
+      background: linear-gradient(180deg, rgba(20,5,0,0.92) 0%, rgba(20,5,0,0.80) 50%, rgba(20,5,0,0.55) 100%);
     }
     .combo-card-content,
-    .combo-card:nth-child(even) .combo-card-content {
-      padding: 48px 28px;
-      max-width: 100%;
-      margin-left: 0;
-    }
+    .combo-card:nth-child(even) .combo-card-content { padding: 48px 28px; max-width: 100%; margin-left: 0; }
     .combo-card-number { display: none; }
-
-    /* Próximamente overlay — mobile */
     .combo-coming-soon-overlay { gap: 14px; padding: 24px 16px; }
-    .combo-proximamente-badge {
-      font-size: clamp(1rem, 5.5vw, 1.5rem);
-      letter-spacing: 3px; padding: 14px 28px;
-      border-radius: 40px; text-align: center;
-    }
-    .combo-coming-soon-sub {
-      font-size: 0.78rem; letter-spacing: 1px;
-      text-align: center; padding: 0 12px;
-    }
-
-    /* Carousel preview mobile */
+    .combo-proximamente-badge { font-size: clamp(1rem, 5.5vw, 1.5rem); letter-spacing: 3px; padding: 14px 28px; border-radius: 40px; text-align: center; }
+    .combo-coming-soon-sub { font-size: 0.78rem; letter-spacing: 1px; text-align: center; padding: 0 12px; }
     .preview-card { width: 160px; }
     .preview-card-img, .preview-card-img.emoji-thumb { height: 120px; }
   }
@@ -985,12 +886,8 @@
       🛒
       <span class="nav-mobile-cart-count" id="nav-mobile-cart-count">0</span>
     </button>
-    <button class="burger" id="burger-btn" aria-label="Abrir menú">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 </nav>
-<div class="nav-drawer-overlay" id="nav-overlay"></div>
 
 <!-- HERO -->
 <section class="hero" id="inicio">
@@ -1080,6 +977,7 @@
     <button class="tab-btn" data-cat="icecream">🍦 Ice Cream</button>
     <button class="tab-btn" data-cat="cupcake">🧁 Cupcakes</button>
     <button class="tab-btn" data-cat="all">✦ Todos</button>
+    <button class="tab-btn tab-btn-reset" id="tab-reset-btn" style="display:none;" data-cat="reset">↩ Ver todo</button>
   </div>
 
   <!-- PREVIEW CAROUSEL — visible before any tab is selected -->
@@ -1583,16 +1481,16 @@
   });
 
   // ===== TABS =====
-  const tabs = document.querySelectorAll('.tab-btn');
+  const tabs = document.querySelectorAll('.tab-btn:not(#tab-reset-btn)');
   const catSections = document.querySelectorAll('.cat-section');
   const menuPreview = document.getElementById('menu-preview');
-  let menuHasSelection = false;
+  const resetBtn = document.getElementById('tab-reset-btn');
 
   function showCarousel() {
-    menuHasSelection = false;
     tabs.forEach(t => t.classList.remove('active'));
     catSections.forEach(sec => sec.classList.remove('visible'));
     menuPreview.style.display = '';
+    resetBtn.style.display = 'none';
   }
 
   tabs.forEach(tab => {
@@ -1600,8 +1498,8 @@
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const cat = tab.dataset.cat;
-      menuHasSelection = true;
       menuPreview.style.display = 'none';
+      resetBtn.style.display = '';
       catSections.forEach(sec => {
         if (cat === 'all' || sec.dataset.section === cat) {
           sec.classList.add('visible');
@@ -1612,23 +1510,7 @@
     });
   });
 
-  // Click on blank/empty area inside #menu → return to carousel
-  document.getElementById('menu').addEventListener('click', function(e) {
-    if (!menuHasSelection) return;
-    // Only trigger if the click target is the section itself or its direct background
-    const isBlank =
-      e.target === this ||
-      e.target.classList.contains('menu-header') ||
-      (e.target.tagName !== 'BUTTON' &&
-       !e.target.closest('.product-card') &&
-       !e.target.closest('.tab-btn') &&
-       !e.target.closest('.cat-header') &&
-       !e.target.closest('.products-grid') &&
-       e.target.closest('#menu'));
-    if (isBlank) {
-      showCarousel();
-    }
-  });
+  resetBtn.addEventListener('click', showCarousel);
 
   // ===== BUILD PREVIEW CAROUSEL =====
   const previewData = [];
@@ -1794,32 +1676,6 @@
     window.open(`https://wa.me/1234567890?text=${msg}`, '_blank');
   }
 
-  // ===== BURGER MENU =====
-  const burgerBtn = document.getElementById('burger-btn');
-  const navLinksEl = document.getElementById('nav-links');
-  const navOverlayEl = document.getElementById('nav-overlay');
-
-  function openNav() {
-    burgerBtn.classList.add('open');
-    navLinksEl.classList.add('open');
-    navOverlayEl.classList.add('open');
-  }
-  function closeNav() {
-    burgerBtn.classList.remove('open');
-    navLinksEl.classList.remove('open');
-    navOverlayEl.classList.remove('open');
-  }
-
-  burgerBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    navLinksEl.classList.contains('open') ? closeNav() : openNav();
-  });
-
-  navOverlayEl.addEventListener('click', closeNav);
-
-  navLinksEl.querySelectorAll('a').forEach(function(a) {
-    a.addEventListener('click', closeNav);
-  });
 </script>
 </body>
 </html>
