@@ -330,7 +330,7 @@
     <div class="about-text reveal">
       <span class="section-tag" data-i18n="about.tag">✦ Nuestra historia</span>
       <h2 class="section-title" data-i18n="about.title">Conoce a las personas detrás de la magia</h2>
-      <p class="section-sub owner-bio-text" data-i18n="about.bio">[ Escribe aquí sobre las dueñas del negocio — su historia, pasión y qué las inspiró a comenzar LaChihuahua Snack &amp; Sweets. ]</p>
+      <p class="section-sub owner-bio-text" data-i18n="about.bio">Un pequeño negocio lleno de sabor y cariño, creado por una joven y su mamá originarias de Chihuahua. Especializadas en pastelitos, postres y dulces caseros hechos con amor, llevando un pedacito de su tierra y tradición en cada bocado.</p>
       <div class="features-list">
         <div class="feature-item"><div class="feature-icon">🧁</div><div class="feature-text"><strong data-i18n="about.f1.title">Recién horneado</strong><span data-i18n="about.f1.sub">Cada pedido se prepara al momento para máxima frescura</span></div></div>
         <div class="feature-item"><div class="feature-icon">🫶</div><div class="feature-text"><strong data-i18n="about.f2.title">Artesanal</strong><span data-i18n="about.f2.sub">Sin atajos — solo amor y buena repostería</span></div></div>
@@ -540,9 +540,9 @@
     <h2 class="section-title reveal" data-i18n="contact.title">¡Contáctanos!</h2>
     <p class="section-sub reveal" style="margin:0 auto" data-i18n="contact.sub">¿Se te antojó algo dulce? ¿Pedido especial para un evento? Estamos aquí para endulzar tu día.</p>
     <div class="contact-cards">
-      <a href="tel:+1234567890" class="contact-card reveal"><span class="contact-icon">📞</span><div class="contact-label" data-i18n="contact.phone.label">Teléfono</div><div class="contact-value">(123) 456-7890</div></a>
-      <a href="mailto:hello@lachihuahua.com" class="contact-card reveal"><span class="contact-icon">✉️</span><div class="contact-label" data-i18n="contact.email.label">Correo</div><div class="contact-value">hello@lachihuahua.com</div></a>
-      <a href="https://wa.me/1234567890" target="_blank" class="contact-card reveal"><span class="contact-icon">💬</span><div class="contact-label">WhatsApp</div><div class="contact-value" data-i18n="contact.wa.value">Escríbenos aquí</div></a>
+      <a href="tel:+19132099559" class="contact-card reveal"><span class="contact-icon">📞</span><div class="contact-label" data-i18n="contact.phone.label">Teléfono</div><div class="contact-value">(913) 209-9559</div></a>
+      <a href="mailto:camivalv@icloud.com" class="contact-card reveal"><span class="contact-icon">✉️</span><div class="contact-label" data-i18n="contact.email.label">Correo</div><div class="contact-value">camivalv@icloud.com</div></a>
+      <a href="https://wa.me/19132099559" target="_blank" class="contact-card reveal"><span class="contact-icon">💬</span><div class="contact-label">WhatsApp</div><div class="contact-value" data-i18n="contact.wa.value">Escríbenos aquí</div></a>
       <div class="contact-card reveal"><span class="contact-icon">📍</span><div class="contact-label" data-i18n="contact.addr.label">Dirección</div><div class="contact-value">123 Sweet Street<br>Your City, State</div></div>
     </div>
     <div class="map-section reveal">
@@ -594,7 +594,7 @@ const i18n={
     'hero.btn1':'🍪 Ver Nuestro Menú','hero.btn2':'📞 Ordenar Ahora',
     'marquee.text':'¡NUEVAS OFERTAS TODOS LOS DÍAS!',
     'about.tag':'✦ Nuestra historia','about.title':'Conoce a las personas detrás de la magia',
-    'about.bio':'[ Escribe aquí sobre las dueñas del negocio — su historia, pasión y qué las inspiró a comenzar LaChihuahua Snack & Sweets. ]',
+    'about.bio':'Un pequeño negocio lleno de sabor y cariño, creado por una joven y su mamá originarias de Chihuahua. Especializadas en pastelitos, postres y dulces caseros hechos con amor, llevando un pedacito de su tierra y tradición en cada bocado.',
     'about.f1.title':'Recién horneado','about.f1.sub':'Cada pedido se prepara al momento para máxima frescura',
     'about.f2.title':'Artesanal','about.f2.sub':'Sin atajos — solo amor y buena repostería',
     'about.f3.title':'Ingredientes premium','about.f3.sub':'Pistachos reales, Biscoff auténtico, fresas frescas y más',
@@ -704,7 +704,7 @@ const i18n={
     'hero.btn1':'🍪 View Our Menu','hero.btn2':'📞 Order Now',
     'marquee.text':'NEW OFFERS EVERY DAY!',
     'about.tag':'✦ Our story','about.title':'Meet the people behind the magic',
-    'about.bio':'[ Write about the owners of the business here — their story, passion and what inspired them to start LaChihuahua Snack & Sweets. ]',
+    'about.bio':'A small business full of flavor and heart, created by a young woman and her mom from Chihuahua. Specialists in homemade cakes, desserts and sweets made with love, bringing a little piece of their hometown and tradition in every bite.',
     'about.f1.title':'Freshly baked','about.f1.sub':'Every order is prepared to order for maximum freshness',
     'about.f2.title':'Handmade','about.f2.sub':'No shortcuts — just love and great baking',
     'about.f3.title':'Premium ingredients','about.f3.sub':'Real pistachios, authentic Biscoff, fresh strawberries and more',
@@ -823,7 +823,6 @@ function setLang(lang){
     const v=i18n[lang][el.getAttribute('data-i18n')];
     if(v!==undefined&&typeof v==='string')el.innerHTML=v;
   });
-  // *** FIX: update carousel cat labels dynamically ***
   document.querySelectorAll('.preview-card-cat[data-catkey]').forEach(el=>{
     el.textContent=el.getAttribute('data-catemoji')+' '+t('cat.'+el.getAttribute('data-catkey')+'.title');
   });
@@ -832,14 +831,11 @@ function setLang(lang){
   document.querySelectorAll('.preview-cart-btn:not(.added)').forEach(b=>b.innerHTML=t('cart.add'));
 }
 
-// Reveal on scroll
 const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target)}}),{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-// Back to top
 window.addEventListener('scroll',()=>document.getElementById('back-top').classList.toggle('show',scrollY>400));
 
-// Tabs
 const tabs=document.querySelectorAll('.tab-btn:not(#tab-reset-btn)');
 const catSections=document.querySelectorAll('.cat-section');
 const menuPreview=document.getElementById('menu-preview');
@@ -854,7 +850,6 @@ resetBtn.addEventListener('click',()=>{
   menuPreview.style.display='';resetBtn.style.display='none';
 });
 
-// *** FIX: Build preview carousel storing catKey (not Spanish text) ***
 const previewData=[];
 document.querySelectorAll('.product-card').forEach(card=>{
   const name=card.querySelector('.product-name')?.textContent?.trim()||'';
@@ -889,7 +884,6 @@ doubled.forEach(item=>{
   track.appendChild(card);
 });
 
-// *** FIX: Cart stores catKey, renders with t() ***
 let cart=[],cartOpen=false;
 document.querySelectorAll('.product-card').forEach(card=>{
   const name=card.querySelector('.product-name')?.textContent?.trim()||'Producto';
@@ -932,7 +926,6 @@ function renderCart(){
   headerSub.textContent=typeof lbl==='function'?lbl(total):total+' items';
   totalCount.textContent=total;
   totalItems.textContent=cart.map(i=>`${i.emoji} ${i.name} x${i.qty}`).join(' · ');
-  // *** FIX: translate category using t() not stored text ***
   itemsEl.innerHTML=cart.map((item,idx)=>`
     <div class="cart-item">
       <div class="cart-item-emoji">${item.emoji}</div>
@@ -955,7 +948,7 @@ function checkout(){
   if(!cart.length)return;
   const lines=cart.map(i=>`• ${i.emoji} ${i.name} x${i.qty}`).join('%0A');
   const msg=currentLang==='es'?`¡Hola! Me gustaría ordenar:%0A%0A${lines}%0A%0A¡Gracias! 🍪`:`Hello! I'd like to order:%0A%0A${lines}%0A%0AThank you! 🍪`;
-  window.open(`https://wa.me/1234567890?text=${msg}`,'_blank');
+  window.open(`https://wa.me/19132099559?text=${msg}`,'_blank');
 }
 
 setLang('es');
