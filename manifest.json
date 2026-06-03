@@ -4,6 +4,7 @@
   "description": "Tu despensa inteligente — organiza recetas, stock e ingredientes",
   "start_url": "https://xsaack.github.io/Demos/alacenia.html",
   "id": "https://xsaack.github.io/Demos/alacenia.html",
+  "scope": "https://xsaack.github.io/Demos/alacenia.html",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#f97316",
@@ -29,6 +30,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "scope": "https://xsaack.github.io/Demos/"
+  ]
 }
