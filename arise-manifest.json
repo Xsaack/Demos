@@ -1,10 +1,10 @@
 {
   "name": "ARISE — Sistema de Cazadores",
   "short_name": "ARISE",
-  "description": "Sistema gamificado de entrenamiento fitness inspirado en Solo Leveling. Sube de rango, completa misiones y conviértete en el cazador más fuerte.",
+  "description": "Sistema gamificado de entrenamiento fitness inspirado en Solo Leveling.",
   "start_url": "https://xsaack.github.io/Demos/arise-workout-v13__1_.html",
   "id": "https://xsaack.github.io/Demos/arise-workout-v13__1_.html",
-  "scope": "https://xsaack.github.io/Demos/",
+  "scope": "https://xsaack.github.io/Demos/arise-workout-v13__1_.html",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#7c3aff",
