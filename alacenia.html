@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-title" content="Alacenia">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Tu despensa inteligente — organiza recetas, stock e ingredientes">
-<link rel="manifest" href="#" id="pwa-manifest">
-<link rel="apple-touch-icon" id="apple-icon">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <title>🥗 Alacenia</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -426,61 +426,6 @@ main{position:relative;z-index:1;padding:18px;max-width:720px;margin:0 auto}
 // PWA BOOTSTRAP — manifest + service worker (self-contained)
 // ═══════════════════════════════════════════════════════
 
-// ── SVG Icon generator (gradient orange→pink→purple) ──
-function makeSVGIcon(size) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f97316"/>
-      <stop offset="50%" stop-color="#ec4899"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
-    </linearGradient>
-    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1a2235"/>
-      <stop offset="100%" stop-color="#253047"/>
-    </linearGradient>
-  </defs>
-  <rect width="${size}" height="${size}" rx="${size*0.22}" fill="url(#g2)"/>
-  <rect x="${size*0.06}" y="${size*0.06}" width="${size*0.88}" height="${size*0.88}" rx="${size*0.18}" fill="url(#g)" opacity="0.15"/>
-  <text x="50%" y="56%" font-size="${size*0.52}" text-anchor="middle" dominant-baseline="middle">🥗</text>
-  <text x="50%" y="82%" font-family="'Nunito',sans-serif" font-size="${size*0.14}" font-weight="900" fill="white" opacity="0.9" text-anchor="middle" letter-spacing="1">ALACENIA</text>
-</svg>`;
-}
-
-function svgToDataURL(svg) {
-  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
-}
-
-// ── Build manifest object ──
-const icons = [72,96,128,144,152,192,384,512].map(s => ({
-  src: svgToDataURL(makeSVGIcon(s)),
-  sizes: `${s}x${s}`,
-  type: 'image/svg+xml',
-  purpose: s >= 192 ? 'any maskable' : 'any'
-}));
-
-const manifest = {
-  name: 'Alacenia',
-  short_name: 'Alacenia',
-  description: 'Tu despensa inteligente — organiza recetas, stock e ingredientes',
-  start_url: '.',
-  display: 'standalone',
-  orientation: 'portrait-primary',
-  theme_color: '#f97316',
-  background_color: '#0d1117',
-  categories: ['food', 'lifestyle', 'productivity'],
-  icons
-};
-
-// Inject manifest as blob URL
-const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
-const manifestURL  = URL.createObjectURL(manifestBlob);
-document.getElementById('pwa-manifest').href = manifestURL;
-
-// Apple touch icon (192px)
-document.getElementById('apple-icon').href = svgToDataURL(makeSVGIcon(192));
-
-// ── Service Worker (inline via blob) ──
 // ── Install prompt (no SW needed for manifest install) ──
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
