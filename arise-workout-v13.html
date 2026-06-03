@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7c3aff">
+<meta name="background-color" content="#03020a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ARISE">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Sistema gamificado de entrenamiento fitness inspirado en Solo Leveling. Sube de rango E hasta S.">
+<link rel="manifest" href="./arise-manifest.json">
+<link rel="apple-touch-icon" href="./arise-icon-192.png">
+<title>ARISE — SISTEMA DE CAZADORES</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+:root{--bg:#03020a;--panel:rgba(10,6,25,0.96);--border:rgba(120,60,255,0.25);--purple:#7c3aff;--pg:#a855f7;--blue:#3b82f6;--cyan:#06b6d4;--gold:#f59e0b;--red:#ef4444;--green:#10b981;--text:#e2d9f3;--muted:#6b5d8a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(124,58,255,.12) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.grid{position:fixed;inset:0;background-image:linear-gradient(rgba(124,58,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,255,.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+.ptcls{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.ptcl{position:absolute;width:2px;height:2px;border-radius:50%;background:var(--pg);animation:fp linear infinite;opacity:0;}
+@keyframes fp{0%{transform:translateY(100vh);opacity:0;}10%{opacity:.5;}90%{opacity:.2;}100%{transform:translateY(-10vh) translateX(20px);opacity:0;}}
+
+/* PAGES */
+.page{display:none;position:relative;z-index:1;min-height:100vh;}
+.page.on{display:flex;}
+#pgAuth{align-items:center;justify-content:center;padding:20px;}
+#pgMain{display:none;flex-direction:column;}
+#pgMain.on{display:flex;}
+
+/* AUTH */
+.auth-wrap{width:100%;max-width:400px;}
+.auth-logo{text-align:center;margin-bottom:32px;}
+.logo-txt{font-family:'Cinzel Decorative',serif;font-size:clamp(36px,9vw,60px);font-weight:900;background:linear-gradient(135deg,#e2d9f3,#a855f7 40%,#7c3aff 70%,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(168,85,247,.5));}
+.logo-sub{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:5px;color:var(--muted);margin-top:6px;}
+.auth-box{background:var(--panel);border:1px solid var(--border);padding:28px;position:relative;overflow:hidden;}
+.auth-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--purple),var(--cyan),transparent);}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:24px;}
+.tab{flex:1;padding:10px;background:none;border:none;color:var(--muted);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.2s;}
+.tab.on{color:var(--pg);border-bottom-color:var(--pg);}
+.fl{margin-bottom:16px;}
+.fl label{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);display:block;margin-bottom:7px;text-transform:uppercase;}
+.fi{width:100%;background:rgba(124,58,255,.06);border:1px solid rgba(124,58,255,.2);padding:11px 14px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;outline:none;transition:.2s;border-radius:0;}
+.fi:focus{border-color:var(--pg);box-shadow:0 0 12px rgba(124,58,255,.2);}
+.fi::placeholder{color:var(--muted);}
+.fi option{background:#07040f;color:var(--text);}
+.av-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:6px;}
+.av{background:rgba(124,58,255,.05);border:1px solid rgba(124,58,255,.15);padding:8px;text-align:center;font-size:20px;cursor:pointer;transition:.2s;border-radius:2px;}
+.av:hover,.av.on{border-color:var(--purple);background:rgba(124,58,255,.18);box-shadow:0 0 10px rgba(124,58,255,.2);}
+.abtn{width:100%;padding:14px;background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:.2s;margin-top:6px;}
+.abtn:hover{box-shadow:0 0 28px rgba(124,58,255,.4);transform:translateY(-1px);}
+.aerr{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--red);letter-spacing:1px;margin-top:10px;text-align:center;min-height:18px;}
+.aerr.ok{color:var(--green);}
+.rst-zone{margin-top:20px;padding-top:18px;border-top:1px solid rgba(124,58,255,.1);text-align:center;}
+.rst-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:9px;}
+.rst-btn{background:none;border:1px solid rgba(239,68,68,.3);color:rgba(239,68,68,.55);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:7px 14px;cursor:pointer;transition:.2s;}
+.rst-btn:hover{border-color:var(--red);color:var(--red);}
+.rst-confirm{display:none;margin-top:10px;}
+.rst-confirm p{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--red);margin-bottom:8px;}
+.rst-yes{background:rgba(239,68,68,.15);border:1px solid var(--red);color:var(--red);font-family:'Share Tech Mono',monospace;font-size:11px;padding:7px 18px;cursor:pointer;margin-right:6px;}
+.rst-no{background:none;border:1px solid rgba(124,58,255,.3);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;padding:7px 18px;cursor:pointer;}
+
+/* PROFILE PICKER */
+.profile-section{margin-bottom:20px;}
+.profile-label{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:12px;text-align:center;}
+.profile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-bottom:6px;}
+.profile-card{background:rgba(124,58,255,.05);border:1px solid rgba(124,58,255,.18);padding:16px 10px;text-align:center;cursor:pointer;transition:.25s;position:relative;overflow:hidden;}
+.profile-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--purple),transparent);opacity:0;transition:.25s;}
+.profile-card:hover{border-color:rgba(124,58,255,.5);background:rgba(124,58,255,.12);transform:translateY(-2px);box-shadow:0 4px 20px rgba(124,58,255,.2);}
+.profile-card:hover::before{opacity:1;}
+.profile-card:active{transform:translateY(0);}
+.pc-avatar{font-size:30px;margin-bottom:8px;filter:drop-shadow(0 0 6px rgba(124,58,255,.4));}
+.pc-name{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text);letter-spacing:1px;word-break:break-all;line-height:1.3;}
+.pc-rank{font-family:'Cinzel Decorative',serif;font-size:11px;margin-top:4px;}
+.pc-streak{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gold);margin-top:2px;}
+.profile-empty{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);text-align:center;padding:20px;letter-spacing:2px;border:1px dashed rgba(124,58,255,.15);margin-bottom:10px;}
+.new-hunter-btn{width:100%;padding:12px;background:rgba(124,58,255,.08);border:1px dashed rgba(124,58,255,.3);color:var(--pg);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;cursor:pointer;transition:.2s;text-transform:uppercase;}
+.new-hunter-btn:hover{background:rgba(124,58,255,.16);border-color:var(--purple);box-shadow:0 0 14px rgba(124,58,255,.15);}
+.back-btn{background:none;border:none;color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;padding:8px 0;display:flex;align-items:center;gap:6px;transition:.2s;margin-bottom:16px;}
+.back-btn:hover{color:var(--text);}
+.profile-divider{display:flex;align-items:center;gap:10px;margin:14px 0;}
+.profile-divider::before,.profile-divider::after{content:'';flex:1;height:1px;background:rgba(124,58,255,.12);}
+.profile-divider span{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;white-space:nowrap;}
+
+/* MAIN */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);background:rgba(3,2,10,.6);backdrop-filter:blur(8px);position:sticky;top:0;z-index:50;}
+.topbar-logo{font-family:'Cinzel Decorative',serif;font-size:18px;background:linear-gradient(135deg,#e2d9f3,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.streak-badge{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:2px;}
+.out-btn{background:none;border:1px solid rgba(124,58,255,.2);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:5px 11px;cursor:pointer;transition:.2s;}
+.out-btn:hover{border-color:var(--red);color:var(--red);}
+.reset-char-btn{background:none;border:1px solid rgba(239,68,68,.2);color:rgba(239,68,68,.5);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:5px 11px;cursor:pointer;transition:.2s;}
+.reset-char-btn:hover{border-color:var(--red);color:var(--red);box-shadow:0 0 10px rgba(239,68,68,.15);}
+
+/* reset confirm modal */
+.reset-modal-ov{position:fixed;inset:0;background:rgba(3,2,10,.95);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px);}
+.reset-modal-ov.on{opacity:1;pointer-events:all;}
+.reset-modal-box{background:rgba(8,2,2,.98);border:1px solid rgba(239,68,68,.45);padding:30px 26px;max-width:360px;width:100%;text-align:center;position:relative;box-shadow:0 0 60px rgba(239,68,68,.18);transform:translateY(18px);transition:transform .3s;}
+.reset-modal-ov.on .reset-modal-box{transform:translateY(0);}
+.reset-modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.reset-modal-icon{font-size:38px;margin-bottom:12px;filter:drop-shadow(0 0 12px rgba(239,68,68,.5));}
+.reset-modal-title{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--red);margin-bottom:6px;filter:drop-shadow(0 0 6px rgba(239,68,68,.4));}
+.reset-modal-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(239,68,68,.65);letter-spacing:1px;line-height:1.7;margin-bottom:20px;}
+.reset-modal-warn{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);padding:12px 14px;margin-bottom:22px;text-align:left;}
+.reset-modal-warn-row{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(239,68,68,.6);letter-spacing:1px;padding:3px 0;display:flex;align-items:center;gap:7px;}
+.reset-modal-warn-row::before{content:'✕';color:var(--red);font-size:11px;}
+.reset-confirm-input{width:100%;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);padding:10px 13px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:3px;outline:none;text-align:center;margin-bottom:16px;transition:.2s;}
+.reset-confirm-input:focus{border-color:var(--red);box-shadow:0 0 10px rgba(239,68,68,.2);}
+.reset-confirm-input::placeholder{color:rgba(239,68,68,.3);letter-spacing:2px;}
+.reset-confirm-btn{width:100%;padding:13px;background:linear-gradient(135deg,rgba(127,29,29,.8),rgba(239,68,68,.6));border:1px solid var(--red);color:#fff;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:.2s;margin-bottom:8px;opacity:.4;pointer-events:none;}
+.reset-confirm-btn.active{opacity:1;pointer-events:all;}
+.reset-confirm-btn.active:hover{box-shadow:0 0 30px rgba(239,68,68,.4);transform:translateY(-1px);}
+.reset-cancel-btn{width:100%;padding:11px;background:transparent;border:1px solid rgba(124,58,255,.25);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:.2s;}
+.reset-cancel-btn:hover{border-color:var(--purple);color:var(--text);}
+.main-body{flex:1;max-width:860px;width:100%;margin:0 auto;padding:14px 14px 60px;}
+
+/* penalty banner */
+.pen-banner{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.4);padding:14px 18px;margin:12px 0;position:relative;overflow:hidden;animation:ppulse 2s ease infinite;}
+@keyframes ppulse{0%,100%{border-color:rgba(239,68,68,.4);}50%{border-color:rgba(239,68,68,.85);box-shadow:0 0 18px rgba(239,68,68,.2);}}
+.pen-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.pb-title{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--red);margin-bottom:3px;}
+.pb-desc{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(239,68,68,.7);letter-spacing:1px;}
+
+/* player card */
+.card{background:var(--panel);border:1px solid var(--border);padding:20px;margin:12px 0;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--purple),var(--cyan),transparent);animation:shim 3s ease infinite;}
+@keyframes shim{0%,100%{opacity:.5;}50%{opacity:1;}}
+.ph{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.pav{width:64px;height:64px;border-radius:50%;border:2px solid var(--purple);background:radial-gradient(circle at 40% 30%,rgba(124,58,255,.4),rgba(3,2,10,.9));display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 0 18px rgba(124,58,255,.3);flex-shrink:0;}
+.pi{flex:1;min-width:0;}
+.pname{font-family:'Cinzel Decorative',serif;font-size:17px;color:var(--text);margin-bottom:4px;}
+.rbadge{display:inline-block;padding:2px 10px;font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;border:1px solid currentColor;}
+.plvl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);margin-top:5px;}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px;}
+.sbox{background:rgba(124,58,255,.06);border:1px solid rgba(124,58,255,.15);padding:10px;text-align:center;}
+.slbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;}
+.sval{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--pg);margin-top:3px;}
+.xps{margin-top:14px;}
+.xph{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:5px;}
+.xpbar{height:7px;background:rgba(124,58,255,.1);border:1px solid rgba(124,58,255,.2);overflow:hidden;}
+.xpfill{height:100%;background:linear-gradient(90deg,var(--purple),var(--pg),var(--cyan));transition:width 1s ease;}
+.stk{margin-top:10px;display:flex;align-items:center;gap:8px;}
+.stklbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:2px;}
+.stkdots{display:flex;gap:4px;}
+.sd{width:9px;height:9px;border-radius:50%;border:1px solid rgba(245,158,11,.3);}
+.sd.on{background:var(--gold);box-shadow:0 0 6px var(--gold);border-color:var(--gold);}
+
+/* rank display (locked) */
+.rank-section{margin:16px 0;}
+.sec-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--pg);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-title::before{content:'▶';font-size:7px;}
+.rank-track{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+.rank-track::-webkit-scrollbar{height:3px;}
+.rank-track::-webkit-scrollbar-track{background:rgba(124,58,255,.05);}
+.rank-track::-webkit-scrollbar-thumb{background:rgba(124,58,255,.3);}
+.rtile{min-width:90px;background:rgba(10,6,25,.8);border:1px solid rgba(124,58,255,.15);padding:12px 8px;text-align:center;position:relative;flex-shrink:0;transition:.2s;}
+.rtile.current{border-color:var(--rc,var(--purple));background:rgba(124,58,255,.08);box-shadow:0 0 16px rgba(124,58,255,.12);}
+.rtile.current::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--rc,var(--purple));box-shadow:0 0 6px var(--rc,var(--purple));}
+.rtile.locked{opacity:.4;filter:grayscale(.6);}
+.rtile.locked::after{content:'🔒';position:absolute;top:4px;right:4px;font-size:10px;}
+.rtile.done{opacity:.7;}
+.rtile.done::after{content:'✓';position:absolute;top:4px;right:5px;font-size:11px;color:var(--green);}
+.rletter{font-family:'Cinzel Decorative',serif;font-size:22px;font-weight:900;margin-bottom:2px;}
+.rname{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--muted);}
+.rprog{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--cyan);margin-top:3px;}
+
+/* quest panel */
+.qpanel{background:var(--panel);border:1px solid var(--border);padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
+.qpanel::after{content:'SISTEMA';position:absolute;bottom:-8px;right:6px;font-family:'Cinzel Decorative',serif;font-size:52px;color:rgba(124,58,255,.03);pointer-events:none;}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.pwarn{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--red);letter-spacing:1px;display:flex;align-items:center;gap:5px;animation:blk 2s ease infinite;}
+@keyframes blk{0%,100%{opacity:1;}50%{opacity:.4;}}
+.exlist{display:flex;flex-direction:column;gap:8px;}
+.exi{display:flex;align-items:center;gap:12px;background:rgba(124,58,255,.04);border:1px solid rgba(124,58,255,.1);padding:12px 13px;cursor:pointer;transition:.2s;position:relative;overflow:hidden;}
+.exi:hover{border-color:rgba(124,58,255,.3);background:rgba(124,58,255,.08);}
+.exi.done{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04);}
+.exi.done::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green);box-shadow:0 0 8px var(--green);}
+.exi.pen-ex{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.05);}
+.exi.pen-ex::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);box-shadow:0 0 8px var(--red);}
+.exi.boosted{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.04);}
+.exi.boosted::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);box-shadow:0 0 8px var(--gold);}
+.chk{width:25px;height:25px;border-radius:50%;border:2px solid rgba(124,58,255,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;transition:.3s;}
+.exi.done .chk{border-color:var(--green);background:rgba(16,185,129,.2);box-shadow:0 0 10px rgba(16,185,129,.3);}
+.exinfo{flex:1;min-width:0;}
+.exname{font-size:14px;font-weight:600;color:var(--text);margin-bottom:1px;}
+.exi.done .exname{color:var(--green);text-decoration:line-through;opacity:.7;}
+.exdet{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
+.exxp{font-family:'Cinzel Decorative',serif;font-size:12px;color:var(--gold);white-space:nowrap;}
+.tag{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:8px;padding:1px 5px;border-radius:2px;margin-left:5px;letter-spacing:1px;vertical-align:middle;}
+.tag-r{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.tag-b{background:rgba(245,158,11,.15);color:var(--gold);border:1px solid rgba(245,158,11,.3);}
+
+/* complete btn */
+.cbtn-wrap{text-align:center;margin:16px 0;}
+.cbtn{padding:14px 40px;background:linear-gradient(135deg,rgba(124,58,255,.2),rgba(59,130,246,.2));border:1px solid var(--purple);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;cursor:pointer;text-transform:uppercase;transition:.3s;box-shadow:0 0 25px rgba(124,58,255,.2);}
+.cbtn:hover:not(:disabled){background:linear-gradient(135deg,rgba(124,58,255,.4),rgba(59,130,246,.4));box-shadow:0 0 45px rgba(124,58,255,.4);transform:translateY(-2px);}
+.cbtn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* history */
+.hist-panel{background:var(--panel);border:1px solid var(--border);padding:18px;margin-top:14px;}
+.hi{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(124,58,255,.08);}
+.hi:last-child{border-bottom:none;}
+.hidate{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);}
+.hibadge{font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 6px;letter-spacing:1px;border:1px solid;}
+
+/* MODAL */
+.moverlay{position:fixed;inset:0;background:rgba(3,2,10,.93);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
+.moverlay.on{opacity:1;pointer-events:all;}
+.mbox{background:var(--panel);border:1px solid rgba(124,58,255,.4);padding:28px;max-width:400px;width:100%;text-align:center;position:relative;box-shadow:0 0 55px rgba(124,58,255,.2);transform:translateY(20px);transition:transform .3s;}
+.moverlay.on .mbox{transform:translateY(0);}
+.mbox::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--purple),var(--cyan),transparent);}
+.mbox.pen{background:rgba(8,2,2,.97);border-color:rgba(239,68,68,.5);box-shadow:0 0 55px rgba(239,68,68,.2);}
+.mbox.pen::before{background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.mex-name{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--text);margin-bottom:5px;}
+.mex-sets{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--pg);letter-spacing:2px;margin-bottom:22px;}
+.tring{width:140px;height:140px;margin:0 auto 18px;position:relative;}
+.tring svg{transform:rotate(-90deg);}
+.tring circle{fill:none;stroke-width:6;stroke-linecap:butt;transition:stroke-dashoffset 1s linear;}
+.tring .bgc{stroke:rgba(124,58,255,.1);}
+.tring .pgc{stroke:url(#tg);}
+.tdisp{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.tnum{font-family:'Cinzel Decorative',serif;font-size:34px;color:var(--text);line-height:1;}
+.tlbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:3px;}
+.sdots{display:flex;gap:6px;justify-content:center;margin-bottom:18px;}
+.sdot{width:9px;height:9px;border-radius:50%;border:1px solid var(--purple);transition:.3s;}
+.sdot.done{background:var(--pg);box-shadow:0 0 7px var(--pg);}
+.sdot.cur{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 7px var(--cyan);animation:pulse 1s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.rbar-wrap{display:none;margin:12px 0 0;}
+.rbar-wrap.on{display:block;}
+.rbar-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);letter-spacing:2px;margin-bottom:5px;}
+.rbar{height:4px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);}
+.rfill{height:100%;background:var(--cyan);box-shadow:0 0 7px var(--cyan);transition:width 1s linear;}
+.mbtn{padding:12px 26px;border:none;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:.2s;margin:3px;}
+.mbtn-p{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;box-shadow:0 0 18px rgba(124,58,255,.3);}
+.mbtn-p:hover{box-shadow:0 0 28px rgba(124,58,255,.5);transform:translateY(-1px);}
+.mbtn-s{background:transparent;border:1px solid rgba(124,58,255,.3);color:var(--muted);}
+.mbtn-s:hover{border-color:var(--purple);color:var(--text);}
+
+/* pen modal */
+.pen-title-m{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--red);margin-bottom:7px;filter:drop-shadow(0 0 8px rgba(239,68,68,.5));}
+.pen-sub-m{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(239,68,68,.7);letter-spacing:1px;margin-bottom:18px;}
+.pen-dbox{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);padding:14px;margin-bottom:18px;text-align:left;}
+.prow{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:10px;padding:4px 0;border-bottom:1px solid rgba(239,68,68,.1);}
+.prow:last-child{border-bottom:none;}
+.prow-l{color:rgba(239,68,68,.6);}
+.prow-v{color:var(--red);font-weight:700;}
+
+/* level up */
+.lvl-ov{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(3,2,10,.95);opacity:0;pointer-events:none;transition:opacity .5s;}
+.lvl-ov.on{opacity:1;pointer-events:all;}
+.lvl-txt{font-family:'Cinzel Decorative',serif;font-size:clamp(28px,8vw,58px);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--pg),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:la .8s ease;filter:drop-shadow(0 0 35px rgba(245,158,11,.5));}
+@keyframes la{0%{transform:scale(.5);opacity:0;}50%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+.lvl-sub{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--pg);letter-spacing:4px;margin-top:10px;}
+
+/* notif */
+.notif{position:fixed;top:14px;right:14px;z-index:200;background:var(--panel);border:1px solid var(--green);padding:13px 16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--green);letter-spacing:1px;box-shadow:0 0 28px rgba(16,185,129,.3);transform:translateX(130%);transition:transform .3s;max-width:260px;}
+.notif.on{transform:translateX(0);}
+.notif.xp{border-color:var(--gold);color:var(--gold);box-shadow:0 0 28px rgba(245,158,11,.3);}
+.notif.bad{border-color:var(--red);color:var(--red);box-shadow:0 0 28px rgba(239,68,68,.3);}
+
+/* INVENTORY / BACKPACK */
+.inv-panel{background:var(--panel);border:1px solid var(--border);padding:20px;margin:12px 0;position:relative;overflow:hidden;}
+.inv-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);}
+.inv-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.inv-title-wrap{display:flex;align-items:center;gap:10px;}
+.inv-bag-icon{font-size:26px;filter:drop-shadow(0 0 8px rgba(6,182,212,.4));}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;}
+.inv-slot{background:rgba(124,58,255,.05);border:1px solid rgba(124,58,255,.15);padding:12px 8px;text-align:center;position:relative;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:.2s;}
+.inv-slot.has-item{border-color:rgba(6,182,212,.35);background:rgba(6,182,212,.06);cursor:pointer;}
+.inv-slot.has-item:hover{border-color:var(--cyan);background:rgba(6,182,212,.12);box-shadow:0 0 14px rgba(6,182,212,.15);}
+.inv-slot.empty{opacity:.35;}
+.inv-slot-icon{font-size:22px;}
+.inv-slot-name{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--cyan);letter-spacing:1px;text-align:center;line-height:1.2;}
+.inv-slot-qty{position:absolute;top:4px;right:5px;font-family:'Cinzel Decorative',serif;font-size:11px;color:var(--gold);font-weight:900;}
+.inv-slot.empty .inv-slot-icon{font-size:18px;opacity:.4;}
+.inv-slot.empty .inv-slot-name{color:var(--muted);}
+.inv-empty-msg{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-align:center;padding:14px;}
+/* rest ticket use button in quest area */
+.rest-btn{padding:8px 16px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.4);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;transition:.2s;}
+.rest-btn:hover{background:rgba(6,182,212,.22);box-shadow:0 0 12px rgba(6,182,212,.2);}
+.rest-banner{background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.3);padding:14px 18px;margin:12px 0;position:relative;overflow:hidden;}
+.rest-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.rb-title{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--cyan);margin-bottom:3px;}
+.rb-desc{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(6,182,212,.7);letter-spacing:1px;}
+/* ticket earned toast area */
+.ticket-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);z-index:250;background:rgba(6,182,212,.12);border:1px solid var(--cyan);padding:12px 22px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:2px;text-align:center;transition:transform .4s ease,opacity .4s ease;opacity:0;box-shadow:0 0 30px rgba(6,182,212,.25);}
+.ticket-toast.on{transform:translateX(-50%) translateY(0);opacity:1;}
+.trial-banner{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.5);padding:14px 18px;margin:12px 0;position:relative;overflow:hidden;animation:tpulse 2.5s ease infinite;}
+@keyframes tpulse{0%,100%{border-color:rgba(245,158,11,.5);}50%{border-color:rgba(245,158,11,1);box-shadow:0 0 22px rgba(245,158,11,.25);}}
+.trial-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.tb-title{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--gold);margin-bottom:3px;}
+.tb-desc{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(245,158,11,.75);letter-spacing:1px;}
+.trial-btn{margin-top:10px;padding:8px 18px;background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(245,158,11,.1));border:1px solid var(--gold);color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;transition:.2s;}
+.trial-btn:hover{background:rgba(245,158,11,.25);box-shadow:0 0 14px rgba(245,158,11,.3);}
+.exi.trial{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.05);}
+.exi.trial::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);box-shadow:0 0 8px var(--gold);}
+.tag-t{background:rgba(245,158,11,.18);color:var(--gold);border:1px solid rgba(245,158,11,.4);}
+/* rank up overlay */
+.rankup-ov{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(3,2,10,.97);opacity:0;pointer-events:none;transition:opacity .5s;}
+.rankup-ov.on{opacity:1;pointer-events:all;}
+.rankup-box{text-align:center;padding:30px;}
+.rankup-title{font-family:'Cinzel Decorative',serif;font-size:clamp(22px,6vw,44px);font-weight:900;background:linear-gradient(135deg,var(--gold),#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:la .8s ease;filter:drop-shadow(0 0 30px rgba(245,158,11,.6));}
+.rankup-badge{font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:4px;margin-top:10px;}
+.rankup-trial-list{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.25);padding:18px;margin:18px 0;text-align:left;max-width:340px;}
+.rtl-title{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:3px;margin-bottom:10px;}
+.rtl-ex{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(245,158,11,.8);padding:4px 0;border-bottom:1px solid rgba(245,158,11,.1);}
+.rtl-ex:last-child{border-bottom:none;}
+
+/* mission editor (S-Rank) */
+.editor-panel{background:var(--panel);border:1px solid rgba(239,68,68,.4);padding:20px;margin:12px 0;position:relative;overflow:hidden;display:none;}
+.editor-panel.visible{display:block;}
+.editor-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),var(--gold),transparent);}
+.editor-panel::after{content:'MONARCA';position:absolute;bottom:-8px;right:6px;font-family:'Cinzel Decorative',serif;font-size:52px;color:rgba(239,68,68,.03);pointer-events:none;}
+.editor-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.editor-crown{font-size:22px;filter:drop-shadow(0 0 8px rgba(239,68,68,.5));}
+.editor-ex-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.editor-ex-row{display:flex;gap:8px;align-items:center;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);padding:10px 12px;flex-wrap:wrap;}
+.editor-ex-row input,.editor-ex-row select{background:rgba(124,58,255,.06);border:1px solid rgba(124,58,255,.2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:6px 8px;outline:none;min-width:0;}
+.editor-ex-row input:focus,.editor-ex-row select:focus{border-color:var(--pg);}
+.editor-ex-row input[type="text"]{flex:2;min-width:120px;}
+.editor-ex-row input[type="number"]{flex:1;min-width:60px;max-width:90px;}
+.editor-ex-row select{flex:1;min-width:80px;}
+.editor-del-btn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:var(--red);font-family:'Share Tech Mono',monospace;font-size:11px;padding:6px 10px;cursor:pointer;transition:.2s;white-space:nowrap;}
+.editor-del-btn:hover{background:rgba(239,68,68,.3);}
+.editor-add-btn{background:rgba(124,58,255,.1);border:1px solid rgba(124,58,255,.3);color:var(--pg);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:9px 16px;cursor:pointer;transition:.2s;width:100%;}
+.editor-add-btn:hover{background:rgba(124,58,255,.2);}
+.editor-save-btn{background:linear-gradient(135deg,rgba(239,68,68,.3),rgba(245,158,11,.3));border:1px solid var(--gold);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;padding:11px 24px;cursor:pointer;transition:.2s;text-transform:uppercase;}
+.editor-save-btn:hover{box-shadow:0 0 20px rgba(245,158,11,.3);transform:translateY(-1px);}
+.editor-toggle-btn{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.35);color:var(--red);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:7px 14px;cursor:pointer;transition:.2s;}
+.editor-toggle-btn:hover{background:rgba(239,68,68,.18);box-shadow:0 0 12px rgba(239,68,68,.2);}
+</style>
+
+<script>
+// ARISE PWA Install
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  window._installPrompt = e;
+  if (localStorage.getItem('arise_installed')) return;
+  const banner = document.createElement('div');
+  banner.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(10,6,25,0.97);border:1px solid rgba(124,58,255,0.5);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 0 30px rgba(124,58,255,0.3);z-index:9999;max-width:320px;width:90%';
+  banner.innerHTML = `<div style="font-size:1.8rem">⚔️</div><div style="flex:1"><div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:0.9rem;color:#e2d9f3;letter-spacing:2px">INSTALAR ARISE</div><div style="font-size:0.68rem;color:#6b5d8a;margin-top:2px">Agregar a pantalla de inicio</div></div><button id="arise-install" style="padding:7px 14px;border-radius:6px;border:none;background:linear-gradient(135deg,#7c3aff,#3b82f6);color:#fff;font-family:Rajdhani,sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:1px;cursor:pointer">INSTALAR</button><button id="arise-dismiss" style="background:none;border:none;color:#6b5d8a;font-size:1rem;cursor:pointer">✕</button>`;
+  document.body.appendChild(banner);
+  document.getElementById('arise-install').onclick = () => {
+    window._installPrompt.prompt();
+    window._installPrompt.userChoice.then(r => {
+      if (r.outcome === 'accepted') { localStorage.setItem('arise_installed','1'); banner.remove(); }
+    });
+  };
+  document.getElementById('arise-dismiss').onclick = () => { banner.remove(); localStorage.setItem('arise_installed','1'); };
+});
+window.addEventListener('appinstalled', () => { localStorage.setItem('arise_installed','1'); });
+// iOS hint
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+if (isIOS && !window.navigator.standalone && !localStorage.getItem('arise_installed')) {
+  setTimeout(() => {
+    const h = document.createElement('div');
+    h.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(10,6,25,0.97);border:1px solid rgba(124,58,255,0.4);border-radius:12px;padding:12px 16px;text-align:center;z-index:9999;max-width:300px;width:88%';
+    h.innerHTML = '<div style="font-size:0.82rem;color:#e2d9f3;font-weight:600;font-family:Rajdhani,sans-serif;letter-spacing:1px;margin-bottom:6px">INSTALAR ARISE EN iOS</div><div style="font-size:0.72rem;color:#6b5d8a;line-height:1.5">Toca <strong style="color:#a855f7">Compartir</strong> → <strong style="color:#a855f7">Agregar a inicio</strong></div><button onclick="this.parentElement.remove();localStorage.setItem('arise_installed','1')" style="margin-top:10px;padding:5px 16px;border-radius:6px;border:1px solid rgba(124,58,255,0.3);background:transparent;color:#a855f7;font-size:0.72rem;cursor:pointer;font-family:Rajdhani,sans-serif">ENTENDIDO</button>';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 8000);
+  }, 2500);
+}
+</script>
+</head>
+<body>
+<div class="grid"></div>
+<div class="ptcls" id="ptcls"></div>
+
+<!-- LEVEL UP -->
+<div class="lvl-ov" id="lvlOv" onclick="this.classList.remove('on')">
+  <div style="text-align:center">
+    <div class="lvl-txt">¡LEVEL UP!</div>
+    <div class="lvl-sub" id="lvlSub">NIVEL ALCANZADO</div>
+    <div style="margin-top:18px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted)">[TOCA PARA CONTINUAR]</div>
+  </div>
+</div>
+
+<!-- RANK UP OVERLAY -->
+<div class="rankup-ov" id="rankupOv">
+  <div class="rankup-box">
+    <div class="rankup-title">⚔ RANGO DESBLOQUEADO ⚔</div>
+    <div class="rankup-badge" id="rankupBadge" style="color:var(--gold)">RANGO D ALCANZADO</div>
+    <div class="rankup-trial-list">
+      <div class="rtl-title">▶ PRUEBA DE RANGO — COMPLETA PARA AVANZAR</div>
+      <div id="rankupTrialList"></div>
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:16px;letter-spacing:1px">
+      ⚠ DEBES COMPLETAR LA PRUEBA ANTES DE GANAR XP EN EL NUEVO RANGO
+    </div>
+    <button class="mbtn mbtn-p" onclick="dismissRankup()">ACEPTAR DESAFÍO</button>
+  </div>
+</div>
+
+<!-- NOTIF -->
+<div class="notif" id="notif"></div>
+
+<!-- EXERCISE MODAL -->
+<div class="moverlay" id="exMov">
+  <div class="mbox" id="exMbox">
+    <svg width="0" height="0"><defs><linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#7c3aff"/><stop offset="100%" style="stop-color:#06b6d4"/></linearGradient></defs></svg>
+    <div class="mex-name" id="mName"></div>
+    <div class="mex-sets" id="mSets"></div>
+    <div class="tring">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle class="bgc" cx="70" cy="70" r="62"/>
+        <circle class="pgc" id="tcirc" cx="70" cy="70" r="62" stroke-dasharray="389.56" stroke-dashoffset="0"/>
+      </svg>
+      <div class="tdisp"><div class="tnum" id="tnum">--</div><div class="tlbl" id="tlbl">EN ESPERA</div></div>
+    </div>
+    <div class="sdots" id="sdots"></div>
+    <div class="rbar-wrap" id="rbarWrap"><div class="rbar-lbl">⟳ RECUPERACIÓN</div><div class="rbar"><div class="rfill" id="rfill" style="width:100%"></div></div></div>
+    <div style="margin-top:16px">
+      <button class="mbtn mbtn-p" id="mMainBtn" onclick="handleMBtn()">INICIAR SERIE</button>
+      <button class="mbtn mbtn-s" onclick="closeEx()">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- PENALTY MODAL -->
+<div class="moverlay" id="penMov">
+  <div class="mbox pen">
+    <div class="pen-title-m">⚠ CASTIGO DEL SISTEMA ⚠</div>
+    <div class="pen-sub-m" id="penSub">MISIÓN ABANDONADA</div>
+    <div class="pen-dbox" id="penDbox"></div>
+    <button class="mbtn mbtn-p" style="background:linear-gradient(135deg,#7f1d1d,#ef4444)" onclick="acceptPenalty()">ACEPTAR CASTIGO</button>
+  </div>
+</div>
+
+<!-- ══════ AUTH PAGE ══════ -->
+<div class="page on" id="pgAuth">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <div class="logo-txt">ARISE</div>
+      <div class="logo-sub">SISTEMA DE CAZADORES</div>
+    </div>
+    <div class="auth-box">
+
+      <!-- PROFILE PICKER (default view) -->
+      <div id="fPicker">
+        <div class="profile-section">
+          <div class="profile-label">▶ ELIGE TU CAZADOR</div>
+          <div class="profile-grid" id="profileGrid"></div>
+          <div class="aerr" id="lErr"></div>
+        </div>
+        <div class="profile-divider"><span>NUEVO CAZADOR</span></div>
+        <button class="new-hunter-btn" onclick="swTab('reg')">⚔ REGISTRAR NUEVO CAZADOR</button>
+        <!-- RESET -->
+        <div class="rst-zone">
+          <div class="rst-lbl">¿PROBLEMAS CON EL SISTEMA?</div>
+          <button class="rst-btn" onclick="document.getElementById('rstC').style.display='block'">⚠ BORRAR DATOS DEL SISTEMA</button>
+          <div class="rst-confirm" id="rstC">
+            <p>ESTA ACCIÓN BORRA TODAS LAS CUENTAS</p>
+            <button class="rst-yes" onclick="hardReset()">CONFIRMAR</button>
+            <button class="rst-no" onclick="document.getElementById('rstC').style.display='none'">CANCELAR</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="fReg" style="display:none">
+        <button class="back-btn" onclick="swTab('picker')">◀ VOLVER</button>
+        <div class="fl"><label>NOMBRE DE CAZADOR</label><input class="fi" id="rUser" type="text" placeholder="elige tu nombre" maxlength="16"></div>
+        <div class="fl"><label>AVATAR</label>
+          <div class="av-grid">
+            <div class="av on" data-av="⚔️" onclick="pickAv(this)">⚔️</div>
+            <div class="av" data-av="🗡️" onclick="pickAv(this)">🗡️</div>
+            <div class="av" data-av="🛡️" onclick="pickAv(this)">🛡️</div>
+            <div class="av" data-av="💀" onclick="pickAv(this)">💀</div>
+            <div class="av" data-av="🔮" onclick="pickAv(this)">🔮</div>
+            <div class="av" data-av="👁️" onclick="pickAv(this)">👁️</div>
+            <div class="av" data-av="🐉" onclick="pickAv(this)">🐉</div>
+            <div class="av" data-av="⚡" onclick="pickAv(this)">⚡</div>
+            <div class="av" data-av="🌑" onclick="pickAv(this)">🌑</div>
+            <div class="av" data-av="🦴" onclick="pickAv(this)">🦴</div>
+          </div>
+        </div>
+        <div class="fl"><label>OBJETIVO</label>
+          <select class="fi" id="rGoal">
+            <option value="general">⚔️ Cazador Completo</option>
+            <option value="fuerza">💪 Ganar Fuerza</option>
+            <option value="resistencia">🔥 Resistencia Máxima</option>
+            <option value="agilidad">⚡ Velocidad y Agilidad</option>
+          </select>
+        </div>
+        <button class="abtn" onclick="doReg()">DESPERTAR PODER</button>
+        <div class="aerr" id="rErr"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MAIN PAGE ══════ -->
+<div class="page" id="pgMain">
+  <div class="topbar">
+    <div class="topbar-logo">ARISE</div>
+    <div class="topbar-right">
+      <span class="streak-badge" id="hStreak"></span>
+      <button class="reset-char-btn" onclick="openResetModal()" title="Reiniciar personaje">↺ RESET</button>
+      <button class="out-btn" onclick="doLogout()">SALIR</button>
+    </div>
+  </div>
+
+<!-- RESET CONFIRM MODAL -->
+<div class="reset-modal-ov" id="resetModalOv">
+  <div class="reset-modal-box">
+    <div class="reset-modal-icon">💀</div>
+    <div class="reset-modal-title">REINICIO DEL SISTEMA</div>
+    <div class="reset-modal-sub">ESTA ACCIÓN NO SE PUEDE DESHACER<br>TU PROGRESO SERÁ DESTRUIDO POR COMPLETO</div>
+    <div class="reset-modal-warn">
+      <div class="reset-modal-warn-row">Nivel, XP y estadísticas → 0</div>
+      <div class="reset-modal-warn-row">Rango E · Misiones reiniciadas</div>
+      <div class="reset-modal-warn-row">Racha e historial borrados</div>
+      <div class="reset-modal-warn-row">Tickets de descanso eliminados</div>
+    </div>
+    <input class="reset-confirm-input" id="resetConfirmInput" type="text" placeholder='ESCRIBE "RESET"' oninput="onResetInput(this)">
+    <button class="reset-confirm-btn" id="resetConfirmBtn" onclick="doCharReset()">☠ DESTRUIR MI PROGRESO</button>
+    <button class="reset-cancel-btn" onclick="closeResetModal()">CANCELAR — MANTENER PROGRESO</button>
+  </div>
+</div>
+  <div class="main-body">
+    <!-- penalty banner -->
+    <div class="pen-banner" id="penBanner" style="display:none">
+      <div class="pb-title">☠ CASTIGO ACTIVO DEL SISTEMA</div>
+      <div class="pb-desc" id="penBannerDesc"></div>
+    </div>
+    <!-- rank trial banner -->
+    <div class="trial-banner" id="trialBanner" style="display:none">
+      <div class="tb-title">⚔ PRUEBA DE RANGO PENDIENTE</div>
+      <div class="tb-desc" id="trialBannerDesc"></div>
+    </div>
+    <!-- rest day banner -->
+    <div class="rest-banner" id="restBanner" style="display:none">
+      <div class="rb-title">🌙 DÍA DE DESCANSO ACTIVO</div>
+      <div class="rb-desc">Ticket canjeado — el sistema te ha concedido este día. La racha continúa.</div>
+    </div>
+    <!-- player card -->
+    <div class="card">
+      <div class="ph">
+        <div class="pav" id="pAv">⚔️</div>
+        <div class="pi">
+          <div class="pname" id="pName">CAZADOR</div>
+          <div class="rbadge" id="rBadge">RANGO E</div>
+          <div class="plvl" id="pLvl">LVL 1 · APRENDIZ</div>
+        </div>
+      </div>
+      <div class="sgrid">
+        <div class="sbox"><div class="slbl">FUERZA</div><div class="sval" id="stStr">10</div></div>
+        <div class="sbox"><div class="slbl">AGILIDAD</div><div class="sval" id="stAgi">10</div></div>
+        <div class="sbox"><div class="slbl">RESISTENCIA</div><div class="sval" id="stEnd">10</div></div>
+      </div>
+      <div class="xps">
+        <div class="xph"><span>EXPERIENCIA</span><span id="xpTxt">0 / 100 XP</span></div>
+        <div class="xpbar"><div class="xpfill" id="xpFill" style="width:0%"></div></div>
+      </div>
+      <div class="stk">
+        <div class="stklbl" id="stkLbl">🔥 RACHA: 0</div>
+        <div class="stkdots" id="stkDots"></div>
+      </div>
+    </div>
+    <!-- rank progression -->
+    <div class="rank-section">
+      <div class="sec-title">PROGRESIÓN DE RANGO</div>
+      <div class="rank-track" id="rankTrack"></div>
+    </div>
+    <!-- quest -->
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="sec-title" style="margin:0">MISIÓN DIARIA</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <button class="rest-btn" id="useTicketBtn" onclick="useRestTicket()" style="display:none">🎫 USAR TICKET</button>
+          <div class="pwarn">⚠ PENALIZACIÓN POR ABANDONO</div>
+        </div>
+      </div>
+      <div class="exlist" id="exList"></div>
+    </div>
+    <div class="cbtn-wrap">
+      <button class="cbtn" id="cBtn" onclick="completeMission()" disabled>COMPLETAR MISIÓN</button>
+    </div>
+    <!-- history -->
+    <div class="hist-panel">
+      <div class="sec-title">REGISTRO DE MISIONES</div>
+      <div id="histList"></div>
+    </div>
+
+    <!-- inventory / backpack -->
+    <div class="inv-panel" id="invPanel">
+      <div class="inv-header">
+        <div class="inv-title-wrap">
+          <span class="inv-bag-icon">🎒</span>
+          <div>
+            <div class="sec-title" style="margin:0">MOCHILA DEL CAZADOR</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-top:2px">INVENTARIO DE OBJETOS</div>
+          </div>
+        </div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px">RACHA ×3 = 🎫 TICKET (MÁX 5)</div>
+      </div>
+      <div class="inv-grid" id="invGrid"></div>
+    </div>
+
+    <!-- mission editor (only visible at S rank) -->
+    <div class="editor-panel" id="editorPanel">
+      <div class="editor-header">
+        <div class="inv-title-wrap">
+          <span class="editor-crown">👑</span>
+          <div>
+            <div class="sec-title" style="margin:0;color:var(--red)">EDITOR DE MISIONES — MONARCA</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(239,68,68,.6);letter-spacing:2px;margin-top:2px">PRIVILEGIO EXCLUSIVO DEL RANGO S</div>
+          </div>
+        </div>
+        <button class="editor-toggle-btn" id="editorToggleBtn" onclick="toggleEditor()">EDITAR MISIONES</button>
+      </div>
+      <div id="editorContent" style="display:none">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(239,68,68,.5);letter-spacing:1px;margin-bottom:12px;">⚠ PERSONALIZA TUS MISIONES DIARIAS — LOS CAMBIOS APLICAN AL DÍA SIGUIENTE</div>
+        <div class="editor-ex-list" id="editorList"></div>
+        <button class="editor-add-btn" onclick="editorAddEx()">+ AGREGAR EJERCICIO</button>
+        <div style="margin-top:14px;text-align:center;">
+          <button class="editor-save-btn" onclick="editorSave()">⚔ GUARDAR MISIONES</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TICKET TOAST -->
+<div class="ticket-toast" id="ticketToast">🎫 TICKET DE DESCANSO OBTENIDO</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const RANKS = [
+  // E — Principiante absoluto. Volumen bajo, movimientos básicos.
+  {id:'E',name:'RANGO E',label:'Humano Común',color:'#6b7280',xpNeeded:100,mult:1,
+   ex:[
+     {n:'Flexiones',s:3,r:10,rest:60,xp:15,ic:'💪',t:'str'},
+     {n:'Sentadillas',s:3,r:20,rest:60,xp:15,ic:'🦵',t:'str'},
+     {n:'Abdominales',s:3,r:20,rest:45,xp:10,ic:'🔥',t:'end'},
+     {n:'Zancadas',s:2,r:12,rest:60,xp:10,ic:'🏃',t:'agi'},
+     {n:'Plancha',s:3,r:30,rest:45,xp:10,ic:'⚡',t:'end',tm:true},
+   ]},
+  // D — Cazador novato. +1 serie en los grandes, ejercicios algo más técnicos.
+  {id:'D',name:'RANGO D',label:'Cazador Novato',color:'#10b981',xpNeeded:250,mult:1.5,
+   ex:[
+     {n:'Flexiones',s:4,r:15,rest:60,xp:20,ic:'💪',t:'str'},
+     {n:'Sentadillas Búlgaras',s:3,r:10,rest:75,xp:20,ic:'🔱',t:'str'},
+     {n:'Burpees',s:3,r:10,rest:90,xp:25,ic:'⚡',t:'end'},
+     {n:'Mountain Climbers',s:3,r:20,rest:60,xp:18,ic:'🏔️',t:'agi'},
+     {n:'Fondos de Tríceps',s:3,r:12,rest:75,xp:18,ic:'🦴',t:'str'},
+     {n:'Plancha',s:3,r:45,rest:45,xp:15,ic:'🔥',t:'end',tm:true},
+   ]},
+  // C — Cazador medio. Pull-ups aparecen, volumen moderado, descansos más cortos.
+  {id:'C',name:'RANGO C',label:'Cazador Medio',color:'#3b82f6',xpNeeded:500,mult:2,
+   ex:[
+     {n:'Flexiones Diamante',s:4,r:12,rest:60,xp:30,ic:'💎',t:'str'},
+     {n:'Sentadillas Búlgaras',s:4,r:12,rest:75,xp:28,ic:'🔱',t:'str'},
+     {n:'Burpees',s:4,r:12,rest:90,xp:32,ic:'⚡',t:'end'},
+     {n:'Pull-ups Asistidas',s:3,r:6,rest:90,xp:30,ic:'🔝',t:'str'},
+     {n:'Saltos al Cajón',s:3,r:12,rest:75,xp:25,ic:'📦',t:'agi'},
+     {n:'Plancha Lateral',s:3,r:40,rest:45,xp:20,ic:'⚔️',t:'end',tm:true},
+   ]},
+  // B — Élite. Pull-ups reales, ejercicios técnicos, volumen sostenido.
+  {id:'B',name:'RANGO B',label:'Elite',color:'#8b5cf6',xpNeeded:1000,mult:2.5,
+   ex:[
+     {n:'Flexiones Arquero',s:4,r:10,rest:75,xp:40,ic:'🏹',t:'str'},
+     {n:'Pistol Squat asistido',s:4,r:8,rest:90,xp:40,ic:'🎯',t:'str'},
+     {n:'Burpees con Salto',s:4,r:12,rest:90,xp:42,ic:'💥',t:'end'},
+     {n:'Pull-ups',s:4,r:6,rest:90,xp:42,ic:'🔝',t:'str'},
+     {n:'L-Sit',s:3,r:15,rest:75,xp:35,ic:'🔮',t:'end',tm:true},
+     {n:'Sprint 100m',s:5,r:1,rest:60,xp:35,ic:'⚡',t:'agi'},
+   ]},
+  // A — S-Rank emergente. Movimientos de calistenia avanzada, volumen alto.
+  {id:'A',name:'RANGO A',label:'S-Rank Emergente',color:'#f59e0b',xpNeeded:2000,mult:3,
+   ex:[
+     {n:'Flexiones Pliométricas',s:5,r:12,rest:75,xp:60,ic:'👊',t:'str'},
+     {n:'Pistol Squat',s:4,r:8,rest:90,xp:58,ic:'🎯',t:'str'},
+     {n:'Muscle-up Negativo',s:4,r:5,rest:120,xp:65,ic:'🏆',t:'str'},
+     {n:'Dragon Flag',s:3,r:6,rest:120,xp:62,ic:'🐉',t:'end'},
+     {n:'Handstand Push-up',s:3,r:5,rest:120,xp:65,ic:'🌀',t:'str'},
+     {n:'L-Sit',s:4,r:30,rest:75,xp:55,ic:'🔮',t:'end',tm:true},
+   ]},
+  // S — Monarca. Élite absoluta, cada ejercicio diario es un desafío serio.
+  {id:'S',name:'RANGO S',label:'Monarca de las Sombras',color:'#ef4444',xpNeeded:9999,mult:4,
+   ex:[
+     {n:'Flexiones Pliométricas',s:5,r:15,rest:75,xp:100,ic:'👊',t:'str'},
+     {n:'Pistol Squat',s:5,r:10,rest:90,xp:100,ic:'🎯',t:'str'},
+     {n:'Muscle-up',s:4,r:6,rest:120,xp:110,ic:'🏆',t:'str'},
+     {n:'Dragon Flag',s:4,r:8,rest:120,xp:108,ic:'🐉',t:'end'},
+     {n:'Handstand Push-up',s:4,r:6,rest:120,xp:110,ic:'🌀',t:'str'},
+     {n:'L-Sit',s:5,r:40,rest:75,xp:100,ic:'🔮',t:'end',tm:true},
+     {n:'Sprint 200m',s:6,r:1,rest:90,xp:95,ic:'⚡',t:'agi'},
+   ]},
+];
+
+// ═══════════════════════════════════════════════════
+// RANK TRIAL DATA — prueba que bloquea el avance
+// ═══════════════════════════════════════════════════
+// Each entry = trial required to LEAVE that rank (unlock next)
+// Key is rank id: E→trial to unlock D, D→trial to unlock C, etc.
+const RANK_TRIALS = {
+  'E': {
+    name: 'PRUEBA DE ASCENSO — RANGO D',
+    desc: 'Demuestra que puedes abandonar la humanidad común',
+    exercises: [
+      {n:'Flexiones', r:50, ic:'💪', desc:'50 flexiones sin parar'},
+      {n:'Sentadillas', r:100, ic:'🦵', desc:'100 sentadillas'},
+      {n:'Burpees', r:20, ic:'⚡', desc:'20 burpees sin descanso'},
+    ]
+  },
+  'D': {
+    name: 'PRUEBA DE ASCENSO — RANGO C',
+    desc: 'El sistema exige más que un novato',
+    exercises: [
+      {n:'Flexiones Diamante', r:40, ic:'💎', desc:'40 flexiones diamante'},
+      {n:'Burpees', r:30, ic:'⚡', desc:'30 burpees'},
+      {n:'Mountain Climbers', r:60, ic:'🏔️', desc:'60 mountain climbers'},
+      {n:'Fondos de Tríceps', r:30, ic:'🦴', desc:'30 fondos'},
+    ]
+  },
+  'C': {
+    name: 'PRUEBA DE ASCENSO — RANGO B',
+    desc: 'Solo la élite cruza esta barrera',
+    exercises: [
+      {n:'Pull-ups', r:20, ic:'🔝', desc:'20 dominadas seguidas'},
+      {n:'Pistol Squat Asistido', r:15, ic:'🎯', desc:'15 cada pierna'},
+      {n:'Burpees con Salto', r:25, ic:'💥', desc:'25 burpees explosivos'},
+      {n:'Flexiones Arquero', r:20, ic:'🏹', desc:'20 flexiones arquero'},
+      {n:'Plancha', r:180, ic:'⚡', desc:'3 minutos de plancha', tm:true},
+    ]
+  },
+  'B': {
+    name: 'PRUEBA DE ASCENSO — RANGO A',
+    desc: 'El umbral hacia los S-Rank. No habrá vuelta atrás.',
+    exercises: [
+      {n:'Flexiones Pliométricas', r:30, ic:'👊', desc:'30 flexiones pliométricas'},
+      {n:'Pistol Squat', r:12, ic:'🎯', desc:'12 cada pierna'},
+      {n:'Muscle-up', r:5, ic:'🏆', desc:'5 muscle-ups'},
+      {n:'L-Sit', r:30, ic:'🔮', desc:'30 segundos de L-Sit', tm:true},
+      {n:'Sprint 100m', r:15, ic:'⚡', desc:'15 sprints de 100m'},
+      {n:'Handstand Push-up', r:5, ic:'🌀', desc:'5 handstand push-ups'},
+    ]
+  },
+  'A': {
+    name: 'PRUEBA FINAL — MONARCA DE LAS SOMBRAS',
+    desc: '☠ Solo uno entre mil llega aquí. El sistema observa.',
+    exercises: [
+      {n:'One-Arm Push-up', r:10, ic:'💀', desc:'10 cada brazo'},
+      {n:'Dragon Flag', r:15, ic:'🐉', desc:'15 dragon flags'},
+      {n:'Muscle-up', r:15, ic:'👑', desc:'15 muscle-ups'},
+      {n:'Front Lever', r:30, ic:'⚔️', desc:'30 segundos de front lever', tm:true},
+      {n:'Sprint 400m', r:5, ic:'⚡', desc:'5 sprints de 400m'},
+      {n:'Planche', r:20, ic:'✨', desc:'20 segundos de planche', tm:true},
+      {n:'L-Sit Manos Libres', r:45, ic:'🔮', desc:'45 segundos', tm:true},
+    ]
+  },
+};
+
+const PEN_EX = [
+  {n:'Flexiones de Castigo',r:50,ic:'💀',t:'str',desc:'50 flexiones por fallar'},
+  {n:'Burpees del Sistema',r:30,ic:'☠️',t:'end',desc:'30 burpees sin parar'},
+  {n:'Sentadillas de Redención',r:100,ic:'🔱',t:'str',desc:'100 sentadillas'},
+  {n:'Plancha 2 minutos',r:120,ic:'⚡',t:'end',desc:'2 min de plancha continua',tm:true},
+  {n:'Mountain Climbers ×50',r:50,ic:'🏔️',t:'end',desc:'50 mountain climbers'},
+  {n:'Zancadas de Vergüenza',r:60,ic:'🏃',t:'agi',desc:'60 zancadas alternadas'},
+];
+
+// ═══════════════════════════════════════════════════
+// STORAGE — namespaced, clean, no conflicts
+// ═══════════════════════════════════════════════════
+const DB_KEY = 'arise_v2_users';
+const SESSION_KEY = 'arise_v2_session';
+
+function getDB(){ try{ return JSON.parse(localStorage.getItem(DB_KEY)||'{}'); }catch(e){return{};} }
+function setDB(d){ localStorage.setItem(DB_KEY, JSON.stringify(d)); }
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let CU = null; // current username key
+let S  = null; // current user state
+
+function mkState(username, avatar, goal){
+  return {
+    username, avatar, goal,
+    rankIdx:0,
+    xp:0, level:1, totalXP:0,
+    stats:{str:10,agi:10,end:10},
+    history:[],
+    streak:0, lastDone:'',
+    penalty:null,
+    todayDate:'', todayDone:false,
+    doneIdxs:[], penDone:false,
+    // rank trial state
+    trialActive:false,
+    trialDoneIdxs:[],
+    trialRankId:'',
+    // inventory
+    restTickets:0,       // tickets de descanso acumulados
+    restDayActive:false, // si hoy se canjeó un ticket
+    lastTicketStreak:0,  // racha en la que se dio el último ticket (para no dar 2 veces al mismo multiple)
+  };
+}
+
+function today(){ return new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'}); }
+
+function save(){
+  if(!CU) return;
+  const db = getDB();
+  db[CU].state = S;
+  setDB(db);
+}
+
+// ═══════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════
+let selAv = '⚔️';
+
+function pickAv(el){
+  document.querySelectorAll('.av').forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+  selAv = el.dataset.av;
+}
+
+function swTab(t){
+  document.getElementById('fPicker').style.display = t==='picker'?'block':'none';
+  document.getElementById('fReg').style.display   = t==='reg'?'block':'none';
+  if(t==='picker') renderProfileGrid();
+  document.getElementById('rErr').textContent='';
+  document.getElementById('rstC').style.display='none';
+}
+
+function renderProfileGrid(){
+  const db=getDB();
+  const keys=Object.keys(db);
+  const grid=document.getElementById('profileGrid');
+  const err=document.getElementById('lErr');
+  err.textContent='';
+  if(keys.length===0){
+    grid.innerHTML=`<div class="profile-empty" style="grid-column:1/-1">SIN CAZADORES REGISTRADOS<br>CREA TU PERFIL ABAJO</div>`;
+    return;
+  }
+  grid.innerHTML=keys.map(u=>{
+    const s=db[u].state;
+    const rk=RANKS[s.rankIdx]||RANKS[0];
+    const streakTxt=s.streak>0?`🔥 ${s.streak} DÍAS`:'';
+    return `<div class="profile-card" onclick="doLoginAs('${u}')">
+      <div class="pc-avatar">${s.avatar||'⚔️'}</div>
+      <div class="pc-name">${u.replace(/_/g,' ')}</div>
+      <div class="pc-rank" style="color:${rk.color}">${rk.id}</div>
+      ${streakTxt?`<div class="pc-streak">${streakTxt}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function doLoginAs(u){
+  const db=getDB();
+  if(!db[u]) return;
+  CU=u; S=db[u].state;
+  localStorage.setItem(SESSION_KEY, u);
+  sfxLogin();
+  enterMain();
+}
+
+function doLogin(){ /* kept for compat */ }
+
+function doReg(){
+  const raw = document.getElementById('rUser').value.trim();
+  const goal= document.getElementById('rGoal').value;
+  const err = document.getElementById('rErr');
+  err.className='aerr';
+  if(!raw){err.textContent='⚠ INGRESA UN NOMBRE DE CAZADOR';return;}
+  if(raw.length<2){err.textContent='⚠ MÍNIMO 2 CARACTERES EN EL NOMBRE';return;}
+  const u = raw.toUpperCase().replace(/\s+/g,'_');
+  const db = getDB();
+  if(db[u]){err.textContent='⚠ ESE NOMBRE YA EXISTE — ELIGE OTRO';return;}
+  db[u] = { state: mkState(u, selAv, goal) };
+  setDB(db);
+  CU = u; S = db[u].state;
+  localStorage.setItem(SESSION_KEY, u);
+  sfxLogin();
+  enterMain();
+}
+
+function doLogout(){
+  save(); CU=null; S=null;
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('pgAuth').classList.add('on');
+  document.getElementById('pgMain').classList.remove('on');
+  swTab('picker');
+}
+
+function openResetModal(){
+  document.getElementById('resetConfirmInput').value='';
+  document.getElementById('resetConfirmBtn').classList.remove('active');
+  document.getElementById('resetModalOv').classList.add('on');
+}
+
+function closeResetModal(){
+  document.getElementById('resetModalOv').classList.remove('on');
+}
+
+function onResetInput(el){
+  const ok = el.value.trim().toUpperCase() === 'RESET';
+  document.getElementById('resetConfirmBtn').classList.toggle('active', ok);
+}
+
+function doCharReset(){
+  if(!CU || !S) return;
+  // Keep name, avatar and goal — wipe all progress
+  const fresh = mkState(S.username, S.avatar, S.goal);
+  fresh.todayDate = today(); // start fresh today, no penalty
+  S = fresh;
+  const db = getDB();
+  db[CU].state = S;
+  setDB(db);
+  closeResetModal();
+  sfxPenalty();
+  renderAll();
+  showNotif('💀 SISTEMA REINICIADO — COMIENZA DESDE CERO','bad');
+}
+
+function hardReset(){
+  localStorage.removeItem(DB_KEY);
+  localStorage.removeItem(SESSION_KEY);
+  // also clean old keys
+  ['arise_state','arise_users','arise_current','arise_v2_session'].forEach(k=>localStorage.removeItem(k));
+  document.getElementById('rstC').style.display='none';
+  const e=document.getElementById('rErr');
+  e.className='aerr ok';
+  e.textContent='';
+  swTab('picker');
+}
+
+// simple deterministic hash (not for real security, just demo)
+function simHash(s){
+  let h=0;
+  for(let i=0;i<s.length;i++){h=(Math.imul(31,h)+s.charCodeAt(i))|0;}
+  return h.toString(36);
+}
+
+// ═══════════════════════════════════════════════════
+// PENALTY CHECK
+// ═══════════════════════════════════════════════════
+function checkPenalty(){
+  const td = today();
+  if(S.todayDate === td) return; // same day, nothing to do
+
+  const hadPrevDay = !!S.todayDate; // false on very first login
+
+  if(hadPrevDay && !S.todayDone && !S.restDayActive){
+    // Previous day existed and was not completed → penalty
+    applyPenalty(td);
+  } else {
+    // New day reset (first login ever, or previous day was completed/rest)
+    S.todayDate     = td;
+    S.todayDone     = false;
+    S.doneIdxs      = [];
+    S.penDone       = false;
+    S.penalty       = null;
+    S.restDayActive = false;
+    save();
+  }
+}
+
+function applyPenalty(td){
+  const xpLoss = Math.max(10, Math.round(S.xp * 0.20));
+  const strBefore = S.streak;
+  S.xp = Math.max(0, S.xp - xpLoss);
+  S.streak = 0;
+
+  const failCount = S.history.filter(h=>h.failed).length;
+  const penEx = { ...PEN_EX[Math.min(failCount, PEN_EX.length-1)], s:1 };
+  const boostIdx = Math.floor(Math.random() * RANKS[S.rankIdx].ex.length);
+
+  S.penalty = { xpLost:xpLoss, strBefore, penEx, boostIdx, date: S.todayDate||td };
+  S.todayDate = td;
+  S.todayDone = false;
+  S.doneIdxs  = [];
+  S.penDone   = false;
+
+  S.history.unshift({ date: S.todayDate, rank:RANKS[S.rankIdx].id, level:S.level, failed:true });
+  if(S.history.length>15) S.history.pop();
+  save();
+  showPenModal();
+}
+
+function showPenModal(){
+  const p=S.penalty, bx=RANKS[S.rankIdx].ex[p.boostIdx];
+  document.getElementById('penSub').textContent = `MISIÓN ABANDONADA — ${p.date}`;
+  document.getElementById('penDbox').innerHTML=`
+    <div class="prow"><span class="prow-l">XP PERDIDA</span><span class="prow-v">-${p.xpLost} XP</span></div>
+    <div class="prow"><span class="prow-l">RACHA DESTRUIDA</span><span class="prow-v">${p.strBefore} DÍAS → 0</span></div>
+    <div class="prow"><span class="prow-l">EJERCICIO CASTIGO</span><span class="prow-v">${p.penEx.ic} ${p.penEx.n}</span></div>
+    <div class="prow"><span class="prow-l">EJERCICIO REFORZADO</span><span class="prow-v">${bx.ic} ${bx.n} +50%</span></div>
+    <div class="prow"><span class="prow-l" style="font-size:9px;color:rgba(239,68,68,.5)">${p.penEx.desc}</span></div>`;
+  sfxPenalty();
+  document.getElementById('penMov').classList.add('on');
+}
+
+function acceptPenalty(){
+  document.getElementById('penMov').classList.remove('on');
+  renderAll();
+  showNotif('☠ CASTIGO APLICADO — DEMUESTRA TU VALOR','bad');
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════
+let done = new Set();
+
+function renderAll(){
+  done = new Set(S.doneIdxs||[]);
+  // Restore custom missions for S-rank if they exist
+  if(isMaxRank() && S.customMissions && S.customMissions.length>0){
+    RANKS[S.rankIdx].ex = [...S.customMissions];
+  }
+  renderCard();
+  renderRankTrack();
+  renderExercises();
+  renderPenBanner();
+  renderTrialBanner();
+  renderRestBanner();
+  renderInventory();
+  renderHistory();
+  renderStreak();
+  renderTicketBtn();
+  renderEditorPanel();
+}
+
+function renderCard(){
+  const rk = RANKS[S.rankIdx];
+  const pct = Math.min(100, S.xp/rk.xpNeeded*100);
+  document.getElementById('pAv').textContent  = S.avatar;
+  document.getElementById('pName').textContent = S.username;
+  document.getElementById('rBadge').textContent= rk.name;
+  document.getElementById('rBadge').style.color= rk.color;
+  document.getElementById('rBadge').style.borderColor= rk.color;
+  document.getElementById('pLvl').textContent  = `LVL ${S.level} · ${rk.label.toUpperCase()}`;
+  document.getElementById('xpTxt').textContent = `${S.xp} / ${rk.xpNeeded} XP`;
+  document.getElementById('xpFill').style.width= pct+'%';
+  document.getElementById('stStr').textContent = S.stats.str;
+  document.getElementById('stAgi').textContent = S.stats.agi;
+  document.getElementById('stEnd').textContent = S.stats.end;
+}
+
+function renderStreak(){
+  document.getElementById('stkLbl').textContent = `🔥 RACHA: ${S.streak}`;
+  document.getElementById('hStreak').textContent = S.streak>0?`🔥 ${S.streak} DÍAS`:'';
+  const dots=document.getElementById('stkDots');
+  const show=Math.max(7, S.streak);
+  dots.innerHTML=Array.from({length:Math.min(show,14)},(_,i)=>
+    `<div class="sd ${i<S.streak?'on':''}"></div>`).join('');
+}
+
+function renderRankTrack(){
+  const el=document.getElementById('rankTrack');
+  el.innerHTML=RANKS.map((rk,i)=>{
+    const isCur = i===S.rankIdx;
+    const isDone= i<S.rankIdx;
+    const isLocked=i>S.rankIdx;
+    let cls='rtile';
+    if(isCur) cls+=' current';
+    else if(isDone) cls+=' done';
+    else if(isLocked) cls+=' locked';
+    // progress shown only on current
+    const prog = isCur
+      ? `<div class="rprog">${S.xp}/${rk.xpNeeded} XP</div>`
+      : (isDone?'<div class="rprog" style="color:var(--green)">COMPLETADO</div>':'<div class="rprog">BLOQUEADO</div>');
+    return `<div class="${cls}" style="--rc:${rk.color}">
+      <div class="rletter" style="color:${rk.color}">${rk.id}</div>
+      <div class="rname">${rk.name}</div>
+      ${prog}
+    </div>`;
+  }).join('');
+}
+
+function renderExercises(){
+  const rk=RANKS[S.rankIdx], p=S.penalty;
+  let rows=[];
+
+  // If mission already completed today, show sealed screen — no more XP possible
+  if(S.todayDone && !S.restDayActive){
+    document.getElementById('exList').innerHTML=`
+      <div style="text-align:center;padding:30px 14px;">
+        <div style="font-size:40px;margin-bottom:12px;filter:drop-shadow(0 0 14px rgba(16,185,129,.6))">&#x2694;&#xFE0F;</div>
+        <div style="font-family:'Cinzel Decorative',serif;font-size:17px;color:var(--green);margin-bottom:8px;filter:drop-shadow(0 0 8px rgba(16,185,129,.4))">MISIÓN COMPLETADA</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px">EL SISTEMA HA REGISTRADO TU ENTRENAMIENTO</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(16,185,129,.4);letter-spacing:1px">LAS MISIONES SE REINICIAN AL DÍA SIGUIENTE</div>
+        <div style="margin-top:20px;display:flex;justify-content:center;gap:20px;">
+          <div style="text-align:center;">
+            <div style="font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--gold)">&#x1F525; ${S.streak}</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:2px;margin-top:3px">RACHA</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--pg)">${S.level}</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:2px;margin-top:3px">NIVEL</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--cyan)">${S.xp}</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:2px;margin-top:3px">XP HOY</div>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('cBtn').disabled=true;
+    return;
+  }
+
+    // If today is a rest day (ticket used), show rest screen
+  if(S.restDayActive && S.todayDone){
+    document.getElementById('exList').innerHTML=`
+      <div style="text-align:center;padding:28px 14px;">
+        <div style="font-size:36px;margin-bottom:10px">🌙</div>
+        <div style="font-family:'Cinzel Decorative',serif;font-size:16px;color:var(--cyan);margin-bottom:6px">DÍA DE DESCANSO</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px">EL SISTEMA TE CONCEDE ESTE REPOSO · RACHA CONSERVADA</div>
+        <div style="margin-top:16px;font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(6,182,212,.5);letter-spacing:1px">TICKETS RESTANTES: ×${S.restTickets||0}</div>
+      </div>`;
+    document.getElementById('cBtn').disabled=true;
+    return;
+  }
+
+  // penalty exercise first (if active and not done)
+  if(p && !S.penDone){
+    const px=p.penEx;
+    const det=px.tm?`1 SERIE × ${px.r}s`:`1 SERIE × ${px.r} REPS`;
+    rows.push(`
+      <div class="exi pen-ex" onclick="openEx(-1,true,false)">
+        <div class="chk"></div>
+        <div class="exinfo">
+          <div class="exname">${px.ic} ${px.n}<span class="tag tag-r">CASTIGO</span></div>
+          <div class="exdet">${det}</div>
+        </div>
+        <div class="exxp" style="color:var(--red)">OBLIGATORIO</div>
+      </div>`);
+  }
+  if(p && S.penDone){
+    const px=p.penEx;
+    rows.push(`
+      <div class="exi done">
+        <div class="chk">✓</div>
+        <div class="exinfo">
+          <div class="exname">${px.ic} ${px.n}<span class="tag tag-r">CASTIGO</span></div>
+          <div class="exdet">COMPLETADO</div>
+        </div>
+        <div class="exxp" style="color:var(--green)">✓</div>
+      </div>`);
+  }
+
+  // rank trial exercises (shown above daily, must be completed to unlock XP)
+  if(S.trialActive){
+    const trial=RANK_TRIALS[S.trialRankId];
+    const tDone=new Set(S.trialDoneIdxs||[]);
+    rows.push(`<div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:3px;margin:10px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(245,158,11,.2);">⚔ ${trial.name}</div>`);
+    trial.exercises.forEach((ex,i)=>{
+      const isDone=tDone.has(i);
+      const det=ex.tm?`1 SERIE × ${ex.r}s`:`1 SERIE × ${ex.r} REPS`;
+      rows.push(`
+        <div class="exi trial${isDone?' done':''}" id="tri${i}" onclick="${isDone?'':(`openEx(${i},false,true)`)}">
+          <div class="chk" id="trck${i}">${isDone?'✓':''}</div>
+          <div class="exinfo">
+            <div class="exname">${ex.ic} ${ex.n}<span class="tag tag-t">PRUEBA</span></div>
+            <div class="exdet">${det}</div>
+          </div>
+          <div class="exxp" style="color:${isDone?'var(--green)':'var(--gold)'}">${isDone?'✓':'PRUEBA'}</div>
+        </div>`);
+    });
+    rows.push(`<div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin:6px 0 10px;padding-top:4px;border-top:1px solid rgba(124,58,255,.1);">▼ MISIONES DIARIAS — OBLIGATORIAS</div>`);
+  }
+
+  // main exercises
+  rk.ex.forEach((ex,i)=>{
+    const isBoosted=p && p.boostIdx===i;
+    const reps=isBoosted?Math.round(ex.r*1.5):ex.r;
+    const det=ex.tm?`${ex.s} SERIES × ${reps}s · DESCANSO ${ex.rest}s`:`${ex.s} SERIES × ${reps} REPS · DESCANSO ${ex.rest}s`;
+    const isDone=done.has(i);
+    let cls='exi'+(isDone?' done':isBoosted?' boosted':'');
+    const tag=isBoosted?'<span class="tag tag-b">+50% REPS</span>':'';
+    // If trial active, XP label shows locked
+    const xpLabel=S.trialActive
+      ? `<span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted)">🔒 XP BLOQUEADO</span>`
+      : `+${ex.xp} XP`;
+    rows.push(`
+      <div class="${cls}" id="ei${i}" onclick="openEx(${i},false,false)">
+        <div class="chk" id="ck${i}">${isDone?'✓':''}</div>
+        <div class="exinfo">
+          <div class="exname">${ex.ic} ${ex.n}${tag}</div>
+          <div class="exdet">${det}</div>
+        </div>
+        <div class="exxp">${xpLabel}</div>
+      </div>`);
+  });
+
+  document.getElementById('exList').innerHTML=rows.join('');
+  chkComplete();
+}
+
+function renderPenBanner(){
+  const b=document.getElementById('penBanner');
+  if(S.penalty && !S.todayDone){
+    b.style.display='block';
+    document.getElementById('penBannerDesc').textContent=
+      `PERDISTE ${S.penalty.xpLost} XP · RACHA DESTRUIDA · DEBES COMPLETAR EL EJERCICIO DE CASTIGO`;
+  } else { b.style.display='none'; }
+}
+
+function renderTrialBanner(){
+  const b=document.getElementById('trialBanner');
+  if(S.trialActive){
+    b.style.display='block';
+    const trial=RANK_TRIALS[S.trialRankId];
+    const tdone=(S.trialDoneIdxs||[]).length;
+    const ttotal=trial.exercises.length;
+    document.getElementById('trialBannerDesc').textContent=
+      `${trial.name} — ${tdone}/${ttotal} EJERCICIOS · NO PUEDES GANAR XP HASTA COMPLETAR LA PRUEBA · LAS MISIONES DIARIAS SIGUEN SIENDO OBLIGATORIAS`;
+  } else { b.style.display='none'; }
+}
+
+function renderRestBanner(){
+  const b=document.getElementById('restBanner');
+  b.style.display=(S.restDayActive&&!S.todayDone)?'block':'none';
+}
+
+function renderTicketBtn(){
+  const btn=document.getElementById('useTicketBtn');
+  const tickets=S.restTickets||0;
+  if(tickets>0 && !S.todayDone && !S.restDayActive){
+    btn.style.display='inline-block';
+    btn.textContent=`🎫 USAR TICKET (×${tickets}/5)`;
+  } else {
+    btn.style.display='none';
+  }
+}
+
+// MAX 8 inventory slots displayed (expandable later)
+const INV_SLOTS = 8;
+function renderInventory(){
+  const grid=document.getElementById('invGrid');
+  const tickets=S.restTickets||0;
+  let html='';
+  // Slot 0..n-1: tickets
+  for(let i=0;i<INV_SLOTS;i++){
+    if(i===0){
+      if(tickets>0){
+        html+=`<div class="inv-slot has-item" onclick="useRestTicket()" title="Click para usar un ticket de descanso">
+          <span class="inv-slot-qty">×${tickets}/5</span>
+          <span class="inv-slot-icon">🎫</span>
+          <span class="inv-slot-name">TICKET<br>DESCANSO</span>
+        </div>`;
+      } else {
+        html+=`<div class="inv-slot empty">
+          <span class="inv-slot-icon">🎫</span>
+          <span class="inv-slot-name">TICKET<br>DESCANSO</span>
+        </div>`;
+      }
+    } else {
+      html+=`<div class="inv-slot empty">
+        <span class="inv-slot-icon">─</span>
+        <span class="inv-slot-name">VACÍO</span>
+      </div>`;
+    }
+  }
+  grid.innerHTML=html;
+}
+
+function useRestTicket(){
+  if(!S.restTickets||S.restTickets<1){
+    showNotif('⚠ NO TIENES TICKETS DE DESCANSO','bad'); return;
+  }
+  if(S.todayDone){
+    showNotif('⚠ YA COMPLETASTE LA MISIÓN DE HOY','bad'); return;
+  }
+  if(S.restDayActive){
+    showNotif('⚠ YA USASTE UN TICKET HOY','bad'); return;
+  }
+  // Use ticket
+  S.restTickets--;
+  S.restDayActive=true;
+  S.todayDone=true; // counts as "done" so no penalty fires
+  // Maintain streak
+  const td=today();
+  const yesterday=(()=>{const d=new Date();d.setDate(d.getDate()-1);return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});})();
+  if(S.lastDone===yesterday||S.lastDone===td){
+    if(S.lastDone!==td) S.streak++;
+  } else { S.streak=1; }
+  S.lastDone=td;
+  S.history.unshift({date:td,rank:RANKS[S.rankIdx].id,level:S.level,failed:false,rest:true});
+  if(S.history.length>15) S.history.pop();
+  save();
+  sfxLevelUp();
+  showNotif('🌙 DÍA DE DESCANSO ACTIVADO — RACHA CONSERVADA','xp');
+  renderAll();
+}
+
+function showTicketToast(){
+  const el=document.getElementById('ticketToast');
+  el.classList.add('on');
+  setTimeout(()=>el.classList.remove('on'),3500);
+}
+
+function awardTicketIfEarned(newStreak){
+  // Give 1 ticket for every multiple of 3 in streak, max 5 tickets
+  const prev=S.lastTicketStreak||0;
+  const prevMult=Math.floor(prev/3);
+  const newMult=Math.floor(newStreak/3);
+  const currentTickets=S.restTickets||0;
+  if(newMult>prevMult && newStreak>0 && currentTickets<5){
+    S.restTickets=Math.min(5, currentTickets+1);
+    S.lastTicketStreak=newStreak;
+    showTicketToast();
+    showNotif(`🎫 TICKET DE DESCANSO OBTENIDO (×${S.restTickets}/5)`,'xp');
+  } else if(newMult>prevMult && newStreak>0 && currentTickets>=5){
+    S.lastTicketStreak=newStreak;
+    showNotif('🎫 MÁXIMO DE TICKETS ALCANZADO (5/5)','xp');
+  }
+}
+
+function renderHistory(){
+  const el=document.getElementById('histList');
+  if(!S.history.length){
+    el.innerHTML=`<div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);text-align:center;padding:18px">SIN REGISTROS · COMPLETA TU PRIMERA MISIÓN</div>`;
+    return;
+  }
+  el.innerHTML=S.history.map(h=>{
+    const rk=RANKS.find(r=>r.id===h.rank)||RANKS[0];
+    let bc,label;
+    if(h.failed){bc='var(--red)';label='FALLIDA';}
+    else if(h.rest){bc='var(--cyan)';label='DESCANSO 🎫';}
+    else if(h.trial){bc='var(--gold)';label='MISIÓN ⚔';}
+    else{bc='var(--green)';label='COMPLETA';}
+    return `<div class="hi">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:${h.failed?'var(--red)':h.rest?'var(--cyan)':'var(--text)'}">${rk.label}</div>
+        <div class="hidate">${h.date} · LVL ${h.level}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="hibadge" style="color:${bc};border-color:${bc}">${label}</span>
+        <span style="font-family:'Cinzel Decorative',serif;font-size:13px;color:${rk.color}">${rk.id}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function chkComplete(){
+  const rk=RANKS[S.rankIdx];
+  const allMain=rk.ex.every((_,i)=>done.has(i));
+  const penOk=!S.penalty||S.penDone;
+  const allDone=allMain&&penOk;
+  document.getElementById('cBtn').disabled=!allDone;
+  // Auto-complete when all missions are done and not already completed today
+  if(allDone && !S.todayDone && !S.trialActive){
+    setTimeout(()=>{
+      if(!S.todayDone) completeMission();
+    }, 600);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// EXERCISE MODAL
+// ═══════════════════════════════════════════════════
+let mExIdx=-1, mIsPen=false, mIsTrial=false, mSet=0, mPhase='idle';
+let tI=null, rI=null;
+let _ex=null;
+
+function openEx(idx, isPen, isTrial){
+  // Block if day already done — no more XP today
+  if(S.todayDone && !isPen) return;
+  const rk=RANKS[S.rankIdx];
+  if(isPen){
+    _ex={...S.penalty.penEx, s:1};
+  } else if(isTrial){
+    const trial=RANK_TRIALS[S.trialRankId];
+    const tex=trial.exercises[idx];
+    _ex={...tex, s:1, rest:60, xp:0};
+  } else {
+    _ex={...rk.ex[idx]};
+    if(S.penalty && S.penalty.boostIdx===idx) _ex={..._ex, r:Math.round(_ex.r*1.5)};
+  }
+  mExIdx=idx; mIsPen=isPen; mIsTrial=isTrial||false; mSet=0; mPhase='idle';
+  clearT();
+  sfxOpen();
+
+  document.getElementById('mName').textContent=`${_ex.ic} ${_ex.n}`;
+  document.getElementById('mSets').textContent=_ex.tm
+    ?`${_ex.s} SERIES × ${_ex.r}s · DESCANSO ${_ex.rest||60}s`
+    :`${_ex.s} SERIES × ${_ex.r} REPS · DESCANSO ${_ex.rest||60}s`;
+  mkDots(_ex.s);
+  setT('--','EN ESPERA'); setC(0);
+  document.getElementById('mMainBtn').textContent='INICIAR SERIE';
+  document.getElementById('mMainBtn').disabled=false;
+  document.getElementById('mMainBtn').onclick=handleMBtn;
+  document.getElementById('rbarWrap').classList.remove('on');
+  document.getElementById('exMov').classList.add('on');
+}
+
+function closeEx(){
+  clearT();
+  document.getElementById('exMov').classList.remove('on');
+}
+
+function mkDots(n){
+  document.getElementById('sdots').innerHTML=Array.from({length:n},(_,i)=>
+    `<div class="sdot ${i===0?'cur':''}" id="d${i}"></div>`).join('');
+}
+function updDots(cur,n){
+  for(let i=0;i<n;i++){const d=document.getElementById('d'+i);if(d)d.className='sdot'+(i<cur?' done':i===cur?' cur':'');}
+}
+function setT(n,l){document.getElementById('tnum').textContent=n;document.getElementById('tlbl').textContent=l;}
+function setC(r){document.getElementById('tcirc').style.strokeDashoffset=389.56*(1-r);}
+function clearT(){clearInterval(tI);clearInterval(rI);tI=null;rI=null;}
+
+function handleMBtn(){
+  if(mPhase==='idle'){
+    mPhase='active';
+    document.getElementById('rbarWrap').classList.remove('on');
+    // Siempre: cronómetro ascendente, el usuario indica cuando termina
+    sfxStart();
+    let elapsed=0;
+    const goal=_ex.tm ? _ex.r+'s' : _ex.r+' reps';
+    setT('0s', 'META: '+goal); setC(0);
+    document.getElementById('mMainBtn').textContent='✓ SERIE TERMINADA';
+    document.getElementById('mMainBtn').disabled=false;
+    document.getElementById('mMainBtn').onclick=function(){ sfxDone(); clearInterval(tI); tI=null; afterSet(); };
+    tI=setInterval(()=>{
+      elapsed++;
+      setT(elapsed+'s','META: '+goal);
+      sfxCountTick(); // sonido suave en cada segundo del conteo
+      // guía visual suave: para timed usa tiempo real, para reps estima 3s/rep
+      const est=_ex.tm ? elapsed/_ex.r : elapsed/(_ex.r*3);
+      setC(Math.min(0.99, est));
+    },1000);
+  } else if(mPhase==='rest-done'){
+    mPhase='idle';
+    document.getElementById('rbarWrap').classList.remove('on');
+    document.getElementById('mMainBtn').onclick=handleMBtn;
+    handleMBtn();
+  }
+}
+
+function afterSet(){
+  mSet++;
+  updDots(mSet,_ex.s);
+  // Reset button to base handler before deciding what to show
+  document.getElementById('mMainBtn').onclick=handleMBtn;
+  if(mSet>=_ex.s){
+    // All sets done
+    sfxAllSets();
+    mPhase='idle';
+    setT('✓','COMPLETO'); setC(1);
+    document.getElementById('mMainBtn').textContent='EJERCICIO COMPLETO ✓';
+    document.getElementById('mMainBtn').onclick=function(){ markDone(mExIdx,mIsPen); };
+    document.getElementById('mMainBtn').disabled=false;
+  } else {
+    // Rest between sets
+    mPhase='rest';
+    let rem=_ex.rest||60, tot=_ex.rest||60;
+    setT(rem,'DESCANSO'); setC(1);
+    document.getElementById('mMainBtn').textContent='SALTEAR DESCANSO';
+    document.getElementById('mMainBtn').disabled=false;
+    document.getElementById('mMainBtn').onclick=function(){
+      clearInterval(rI); rI=null; mPhase='rest-done';
+      document.getElementById('rbarWrap').classList.remove('on');
+      document.getElementById('mMainBtn').onclick=handleMBtn;
+      sfxRestDone();
+      handleMBtn();
+    };
+    document.getElementById('rbarWrap').classList.add('on');
+    document.getElementById('rfill').style.width='100%';
+    rI=setInterval(()=>{
+      rem--; setT(rem,'DESCANSO'); setC(rem/tot);
+      document.getElementById('rfill').style.width=(rem/tot*100)+'%';
+      if(rem<=0){
+        clearInterval(rI); rI=null; mPhase='rest-done';
+        document.getElementById('rbarWrap').classList.remove('on');
+        setT('▶','SIGUIENTE'); setC(0);
+        document.getElementById('mMainBtn').textContent='INICIAR SERIE '+(mSet+1);
+        document.getElementById('mMainBtn').onclick=handleMBtn;
+        document.getElementById('mMainBtn').disabled=false;
+        sfxRestDone();
+      } else if(rem<=3){
+        sfxRestTick();
+      }
+    },1000);
+  }
+}
+
+function markDone(idx, isPen){
+  if(isPen){
+    S.penDone=true;
+    showNotif('CASTIGO COMPLETADO — REDENCIÓN OBTENIDA','');
+  } else if(mIsTrial){
+    // Mark trial exercise done
+    if(!S.trialDoneIdxs) S.trialDoneIdxs=[];
+    if(!S.trialDoneIdxs.includes(idx)) S.trialDoneIdxs.push(idx);
+    const trial=RANK_TRIALS[S.trialRankId];
+    showNotif(`⚔ PRUEBA ${S.trialDoneIdxs.length}/${trial.exercises.length} — ${trial.exercises[idx].n}`,'xp');
+    // Check if all trial exercises done
+    if(S.trialDoneIdxs.length >= trial.exercises.length){
+      completeTrial();
+      save(); closeEx();
+      document.getElementById('mMainBtn').onclick=handleMBtn;
+      renderAll();
+      return;
+    }
+  } else {
+    done.add(idx); S.doneIdxs=[...done];
+    const ex=RANKS[S.rankIdx].ex[idx];
+    // If trial active, don't grant XP — daily mission must still be done
+    if(!S.trialActive){
+      gainXP(ex.xp, ex.t);
+      showNotif(`+${ex.xp} XP · ${ex.n.toUpperCase()}`,'xp');
+    } else {
+      showNotif(`✓ ${ex.n.toUpperCase()} · XP BLOQUEADO HASTA PASAR PRUEBA`,'');
+    }
+  }
+  save(); closeEx();
+  document.getElementById('mMainBtn').onclick=handleMBtn;
+  renderExercises();
+  if(isPen) renderPenBanner();
+}
+
+function completeTrial(){
+  S.trialActive=false;
+  S.trialDoneIdxs=[];
+  S.trialRankId='';
+  // Now advance rank
+  if(S.rankIdx<RANKS.length-1){
+    S.rankIdx++;
+    document.getElementById('lvlSub').textContent=`¡${RANKS[S.rankIdx].name} DESBLOQUEADO!`;
+  } else {
+    document.getElementById('lvlSub').textContent=`NIVEL MÁXIMO ${S.level} — MONARCA`;
+  }
+  sfxLevelUp();
+  document.getElementById('lvlOv').classList.add('on');
+  setTimeout(()=>document.getElementById('lvlOv').classList.remove('on'),3000);
+  showNotif(`🏆 ¡PRUEBA DE RANGO SUPERADA! XP DESBLOQUEADO`,'xp');
+}
+
+// ═══════════════════════════════════════════════════
+// XP & LEVELING (rank auto-unlocked only by XP)
+// ═══════════════════════════════════════════════════
+function gainXP(amount, type){
+  // If trial is active, block XP gain
+  if(S.trialActive) return;
+
+  const rk=RANKS[S.rankIdx];
+  const gained=Math.round(amount*rk.mult);
+  S.xp+=gained; S.totalXP+=gained;
+  if(type==='str') S.stats.str=Math.min(999,S.stats.str+1);
+  if(type==='agi') S.stats.agi=Math.min(999,S.stats.agi+1);
+  if(type==='end') S.stats.end=Math.min(999,S.stats.end+1);
+
+  // rank trial trigger: when XP fills up, lock XP and demand trial
+  while(S.xp>=RANKS[S.rankIdx].xpNeeded){
+    S.xp-=RANKS[S.rankIdx].xpNeeded;
+    S.level++;
+    const currentRankId=RANKS[S.rankIdx].id;
+
+    // check if there's a trial for this rank
+    if(RANK_TRIALS[currentRankId] && S.rankIdx<RANKS.length-1){
+      // Lock: start trial
+      S.trialActive=true;
+      S.trialRankId=currentRankId;
+      S.trialDoneIdxs=[];
+      // Show rank-up + trial overlay
+      showRankupOverlay(currentRankId);
+      save(); renderCard(); renderRankTrack(); renderTrialBanner();
+      return; // stop here until trial is done
+    } else {
+      // No trial (S rank / max) — advance normally
+      if(S.rankIdx<RANKS.length-1){
+        S.rankIdx++;
+        document.getElementById('lvlSub').textContent=`¡${RANKS[S.rankIdx].name} DESBLOQUEADO!`;
+      } else {
+        document.getElementById('lvlSub').textContent=`NIVEL MÁXIMO ${S.level} — MONARCA`;
+      }
+      sfxLevelUp();
+      document.getElementById('lvlOv').classList.add('on');
+      setTimeout(()=>document.getElementById('lvlOv').classList.remove('on'),3000);
+    }
+  }
+  save(); renderCard(); renderRankTrack();
+}
+
+function showRankupOverlay(fromRankId){
+  const nextRank=RANKS[S.rankIdx+1];
+  const trial=RANK_TRIALS[fromRankId];
+  document.getElementById('rankupBadge').textContent=`${nextRank.name} DESBLOQUEADO`;
+  document.getElementById('rankupBadge').style.color=nextRank.color;
+  document.getElementById('rankupTrialList').innerHTML=trial.exercises.map(ex=>{
+    const det=ex.tm?`${ex.r}s`:`${ex.r} reps`;
+    return `<div class="rtl-ex">${ex.ic} ${ex.n} — ${det}</div>`;
+  }).join('');
+  sfxLevelUp();
+  document.getElementById('rankupOv').classList.add('on');
+}
+
+function dismissRankup(){
+  document.getElementById('rankupOv').classList.remove('on');
+  renderAll();
+}
+
+function completeMission(){
+  const td=today();
+  S.todayDone=true; S.penalty=null; S.penDone=false;
+
+  // streak
+  const yesterday=(()=>{const d=new Date();d.setDate(d.getDate()-1);return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});})();
+  if(S.lastDone===yesterday||S.lastDone===td){
+    if(S.lastDone!==td) S.streak++;
+  } else { S.streak=1; }
+  S.lastDone=td;
+
+  // Award rest ticket every 3-day streak milestone
+  awardTicketIfEarned(S.streak);
+
+  if(S.trialActive){
+    S.history.unshift({date:td,rank:RANKS[S.rankIdx].id,level:S.level,failed:false,trial:true});
+    if(S.history.length>15) S.history.pop();
+    sfxLevelUp();
+    save(); renderAll();
+    showNotif('⚔️ MISIÓN COMPLETADA — PRUEBA DE RANGO PENDIENTE','');
+  } else {
+    if(S.streak>1){ const b=S.streak*5; gainXP(b,'end'); showNotif(`🔥 RACHA ×${S.streak} — BONUS +${b} XP`,'xp'); }
+    S.history.unshift({date:td,rank:RANKS[S.rankIdx].id,level:S.level,failed:false});
+    if(S.history.length>15) S.history.pop();
+    sfxLevelUp();
+    save(); renderAll();
+    showNotif('⚔️ MISIÓN COMPLETADA — EL SISTEMA LO REGISTRÓ','xp');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// MISSION EDITOR (S-Rank only)
+// ═══════════════════════════════════════════════════
+const MAX_RANK_IDX = RANKS.length - 1; // index of S rank
+
+function isMaxRank(){
+  return S.rankIdx >= MAX_RANK_IDX;
+}
+
+function renderEditorPanel(){
+  const panel = document.getElementById('editorPanel');
+  if(isMaxRank()){
+    panel.classList.add('visible');
+  } else {
+    panel.classList.remove('visible');
+    document.getElementById('editorContent').style.display='none';
+    document.getElementById('editorToggleBtn').textContent='EDITAR MISIONES';
+  }
+}
+
+function toggleEditor(){
+  const content = document.getElementById('editorContent');
+  const btn = document.getElementById('editorToggleBtn');
+  if(content.style.display==='none'){
+    content.style.display='block';
+    btn.textContent='CERRAR EDITOR';
+    renderEditorList();
+    sfxOpen();
+  } else {
+    content.style.display='none';
+    btn.textContent='EDITAR MISIONES';
+  }
+}
+
+function renderEditorList(){
+  const rk = RANKS[S.rankIdx];
+  const customEx = S.customMissions || rk.ex;
+  const list = document.getElementById('editorList');
+  list.innerHTML = customEx.map((ex,i)=>`
+    <div class="editor-ex-row" id="edRow${i}">
+      <input type="text" value="${ex.n}" placeholder="Nombre ejercicio" id="edN${i}" style="flex:2;min-width:120px;">
+      <select id="edIc${i}">
+        ${['💪','🦵','🔥','🏃','⚡','💀','🔱','🏹','🎯','💥','🔝','🐉','🌀','🔮','👊','👑','⚔️','💎','🏔️','🦴'].map(ic=>`<option value="${ic}" ${ex.ic===ic?'selected':''}>${ic}</option>`).join('')}
+      </select>
+      <input type="number" value="${ex.s}" min="1" max="10" id="edS${i}" placeholder="Series">
+      <input type="number" value="${ex.r}" min="1" max="999" id="edR${i}" placeholder="Reps/seg">
+      <input type="number" value="${ex.rest||60}" min="10" max="300" id="edRest${i}" placeholder="Descanso">
+      <input type="number" value="${ex.xp||50}" min="5" max="500" id="edXP${i}" placeholder="XP">
+      <select id="edT${i}">
+        <option value="str" ${ex.t==='str'?'selected':''}>STR</option>
+        <option value="agi" ${ex.t==='agi'?'selected':''}>AGI</option>
+        <option value="end" ${ex.t==='end'?'selected':''}>END</option>
+      </select>
+      <select id="edTm${i}">
+        <option value="0" ${!ex.tm?'selected':''}>Reps</option>
+        <option value="1" ${ex.tm?'selected':''}>Tiempo</option>
+      </select>
+      <button class="editor-del-btn" onclick="editorDelEx(${i})">✕</button>
+    </div>`).join('');
+}
+
+function editorAddEx(){
+  if(!S.customMissions){
+    S.customMissions = [...RANKS[S.rankIdx].ex.map(e=>({...e}))];
+  }
+  S.customMissions.push({n:'Nuevo Ejercicio',ic:'⚔️',s:3,r:10,rest:60,xp:80,t:'str',tm:false});
+  renderEditorList();
+}
+
+function editorDelEx(i){
+  if(!S.customMissions) S.customMissions=[...RANKS[S.rankIdx].ex.map(e=>({...e}))];
+  if(S.customMissions.length<=1){showNotif('⚠ MÍNIMO UN EJERCICIO REQUERIDO','bad');return;}
+  S.customMissions.splice(i,1);
+  renderEditorList();
+}
+
+function editorSave(){
+  const rk=RANKS[S.rankIdx];
+  const customEx = S.customMissions || rk.ex;
+  const count=customEx.length;
+  const saved=[];
+  for(let i=0;i<count;i++){
+    const nEl=document.getElementById('edN'+i);
+    const icEl=document.getElementById('edIc'+i);
+    const sEl=document.getElementById('edS'+i);
+    const rEl=document.getElementById('edR'+i);
+    const restEl=document.getElementById('edRest'+i);
+    const xpEl=document.getElementById('edXP'+i);
+    const tEl=document.getElementById('edT'+i);
+    const tmEl=document.getElementById('edTm'+i);
+    if(!nEl) continue;
+    const n=nEl.value.trim()||'Ejercicio';
+    const s=Math.max(1,Math.min(10,parseInt(sEl.value)||3));
+    const r=Math.max(1,Math.min(999,parseInt(rEl.value)||10));
+    const rest=Math.max(10,Math.min(300,parseInt(restEl.value)||60));
+    const xp=Math.max(5,Math.min(500,parseInt(xpEl.value)||50));
+    saved.push({n,ic:icEl.value,s,r,rest,xp,t:tEl.value,tm:tmEl.value==='1'});
+  }
+  if(saved.length===0){showNotif('⚠ AGREGA AL MENOS UN EJERCICIO','bad');return;}
+  S.customMissions=saved;
+  // Apply to S-Rank exercises in RANKS array for this session
+  RANKS[S.rankIdx].ex=[...saved];
+  // Reset today's progress so new exercises apply
+  S.doneIdxs=[];
+  S.todayDone=false;
+  done=new Set();
+  save();
+  sfxAllSets();
+  showNotif('👑 MISIONES ACTUALIZADAS — ¡QUE EL SISTEMA TIEMBLE!','xp');
+  document.getElementById('editorContent').style.display='none';
+  document.getElementById('editorToggleBtn').textContent='EDITAR MISIONES';
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════
+// AUDIO ENGINE (Web Audio API — sin archivos externos)
+// ═══════════════════════════════════════════════════
+const AC = window.AudioContext || window.webkitAudioContext;
+let ctx = null;
+
+function getCtx(){
+  if(!ctx) ctx = new AC();
+  if(ctx.state === 'suspended') ctx.resume();
+  return ctx;
+}
+
+function playTone(freq, type, dur, vol=0.3, delay=0){
+  const c=getCtx(), o=c.createOscillator(), g=c.createGain();
+  o.connect(g); g.connect(c.destination);
+  o.type=type; o.frequency.setValueAtTime(freq, c.currentTime+delay);
+  g.gain.setValueAtTime(0, c.currentTime+delay);
+  g.gain.linearRampToValueAtTime(vol, c.currentTime+delay+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001, c.currentTime+delay+dur);
+  o.start(c.currentTime+delay);
+  o.stop(c.currentTime+delay+dur+0.05);
+}
+
+function playNoise(dur, vol=0.15, delay=0){
+  const c=getCtx(), buf=c.createBuffer(1,c.sampleRate*dur,c.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+  const src=c.createBufferSource(), g=c.createGain();
+  const flt=c.createBiquadFilter(); flt.type='bandpass'; flt.frequency.value=800;
+  src.buffer=buf; src.connect(flt); flt.connect(g); g.connect(c.destination);
+  g.gain.setValueAtTime(vol, c.currentTime+delay);
+  g.gain.exponentialRampToValueAtTime(0.001, c.currentTime+delay+dur);
+  src.start(c.currentTime+delay); src.stop(c.currentTime+delay+dur+0.05);
+}
+
+// "Ping" del sistema al abrir ejercicio
+function sfxOpen(){
+  playTone(520,'sine',0.12,0.18);
+  playTone(780,'sine',0.1,0.12,0.1);
+}
+
+// Pitido de inicio de serie (3-2-1 beeps)
+function sfxStart(){
+  playTone(440,'square',0.08,0.15,0);
+  playTone(440,'square',0.08,0.15,0.35);
+  playTone(880,'sine',0.25,0.25,0.70);
+}
+
+// Golpe al presionar TERMINÉ
+function sfxDone(){
+  playTone(200,'sawtooth',0.06,0.2);
+  playTone(400,'sine',0.15,0.2,0.05);
+  playTone(600,'sine',0.12,0.15,0.12);
+  playNoise(0.08,0.12,0.02);
+}
+
+// Fanfare de serie completada (todos los sets)
+function sfxAllSets(){
+  playTone(523,'sine',0.1,0.3,0);
+  playTone(659,'sine',0.1,0.3,0.1);
+  playTone(784,'sine',0.1,0.3,0.2);
+  playTone(1046,'sine',0.3,0.4,0.3);
+  playNoise(0.15,0.1,0.3);
+}
+
+// Sonido épico de LEVEL UP / misión completa
+function sfxLevelUp(){
+  [261,329,392,523,659,784,1046].forEach((f,i)=>playTone(f,'sine',0.18,0.35,i*0.1));
+  playNoise(0.3,0.15,0.5);
+}
+
+// Alarma de castigo — inquietante
+function sfxPenalty(){
+  for(let i=0;i<4;i++){
+    playTone(150,'sawtooth',0.15,0.4,i*0.22);
+    playTone(155,'square',0.12,0.3,i*0.22+0.05);
+  }
+  playNoise(0.4,0.2,0.1);
+  playTone(80,'sawtooth',0.8,0.35,0.9);
+}
+
+// Beep de descanso terminado
+function sfxRestDone(){
+  playTone(660,'sine',0.12,0.25);
+  playTone(880,'sine',0.18,0.3,0.13);
+}
+
+// Beep cada segundo del descanso (suave)
+function sfxRestTick(){
+  playTone(330,'sine',0.05,0.08);
+}
+
+// Tick suave en cada segundo del conteo activo
+function sfxCountTick(){
+  playTone(480,'sine',0.04,0.06);
+}
+
+// Sonido de login / registro
+function sfxLogin(){
+  playTone(440,'sine',0.1,0.2);
+  playTone(660,'sine',0.15,0.25,0.12);
+  playTone(880,'sine',0.12,0.2,0.26);
+}
+
+// ═══════════════════════════════════════════════════
+// NOTIF
+// ═══════════════════════════════════════════════════
+function showNotif(msg,type=''){
+  const el=document.getElementById('notif');
+  el.textContent=msg; el.className='notif '+type;
+  void el.offsetWidth; el.classList.add('on');
+  setTimeout(()=>el.classList.remove('on'),3200);
+}
+
+// ═══════════════════════════════════════════════════
+// PARTICLES
+// ═══════════════════════════════════════════════════
+function mkParticles(){
+  const c=document.getElementById('ptcls');
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');p.className='ptcl';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(9+Math.random()*14)+'s';
+    p.style.animationDelay=(Math.random()*10)+'s';
+    if(Math.random()>.7)p.style.background='#06b6d4';
+    c.appendChild(p);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// ENTER MAIN
+// ═══════════════════════════════════════════════════
+function enterMain(){
+  document.getElementById('pgAuth').classList.remove('on');
+  document.getElementById('pgMain').classList.add('on');
+  checkPenalty();
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════
+mkParticles();
+
+// clean any old keys from previous versions
+['arise_state','arise_users','arise_current'].forEach(k=>localStorage.removeItem(k));
+
+// auto-login if session saved
+const saved=localStorage.getItem(SESSION_KEY);
+if(saved){
+  const db=getDB();
+  if(db[saved]){ CU=saved; S=db[saved].state; enterMain(); }
+  else { localStorage.removeItem(SESSION_KEY); renderProfileGrid(); }
+} else {
+  renderProfileGrid();
+}
+</script>
+</body>
+</html>
