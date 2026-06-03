@@ -1,10 +1,10 @@
 {
   "name": "Finanzas Familiares",
   "short_name": "Finanzas",
-  "description": "Control inteligente de finanzas familiares. Registra ingresos, gastos y presupuestos por categoría en un solo lugar.",
+  "description": "Control inteligente de finanzas familiares. Registra ingresos, gastos y presupuestos.",
   "start_url": "https://xsaack.github.io/Demos/Finansas_Familaires-2-3.html",
   "id": "https://xsaack.github.io/Demos/Finansas_Familaires-2-3.html",
-  "scope": "https://xsaack.github.io/Demos/",
+  "scope": "https://xsaack.github.io/Demos/Finansas_Familaires-2-3.html",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#00d68f",
