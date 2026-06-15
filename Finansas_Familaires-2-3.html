@@ -1321,9 +1321,14 @@ function saveBudgetData(){
   idbSet('financeOS_budget',data).catch(()=>{});
   rebuildAllCatSelects();
 }
+function getRecurringDebtTotal(){
+  // montoSemanal * 4.33 weeks/month
+  return debts.filter(d=>d.recurrente&&!d.completada).reduce((a,d)=>a+(d.montoSemanal*4.33),0);
+}
 function budgetRest(){
   const totalFixed=FIXED.reduce((a,b)=>a+b.m,0);
-  return Math.max(0,BUDGET.monthly-totalFixed);
+  const totalRec=getRecurringDebtTotal();
+  return Math.max(0,BUDGET.monthly-totalFixed-totalRec);
 }
 
 // ── Drag & Drop for Fixed Items ──────────────────────────────────
@@ -1477,15 +1482,36 @@ function renderFixed(){
       }
     }).join('');
 
+    // Recurring debt rows (read-only, auto-generated)
+    const recDebts=debts.filter(d=>d.recurrente&&!d.completada);
+    const dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    const recHTML=recDebts.map(d=>{
+      const mensual=d.montoSemanal*4.33;
+      return `<div class="fixed-item" style="border-left:3px solid ${d.color};opacity:0.92">
+        <div>
+          <div style="font-size:14px;display:flex;align-items:center;gap:6px">
+            ${d.name}
+            <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;background:${d.color}22;color:${d.color}">🔁 c/${dias[d.diaSemana]}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text3)">$${d.montoSemanal.toFixed(0)}/sem · auto</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:${d.color}">$${mensual.toFixed(0)}</div>
+          <div style="font-size:11px;color:var(--text3)">≈ mensual</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    const grandTotal=totalFixed+getRecurringDebtTotal();
     const totalRow=`<div class="fixed-item" style="background:var(--bg3)">
-      <div style="font-size:12px;font-weight:600;color:var(--text2)">Total fijos</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text2)">Total fijos${recDebts.length?' + recurrentes':''}</div>
       <div style="text-align:right">
-        <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--red)">$${totalFixed.toFixed(0)}</div>
-        <div style="font-size:11px;color:var(--text3)">$${(totalFixed/4).toFixed(2)}/sem</div>
+        <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--red)">$${grandTotal.toFixed(0)}</div>
+        <div style="font-size:11px;color:var(--text3)">$${(grandTotal/4).toFixed(2)}/sem</div>
       </div>
     </div>`;
 
-    fl.innerHTML=itemsHTML+totalRow;
+    fl.innerHTML=itemsHTML+recHTML+totalRow;
 
     // Attach drag events after render
     if(reorderMode){
