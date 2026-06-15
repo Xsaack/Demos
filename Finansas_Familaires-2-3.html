@@ -224,7 +224,7 @@ if (isIOS && !window.navigator.standalone && !localStorage.getItem('ff_installed
     <button class="fab" id="fab" onclick="toggleFab()">＋</button>
     <select class="month-sel" id="monthSelect" onchange="changeMonth(this.value)">
       <option value="Enero">Enero</option><option value="Febrero">Febrero</option>
-      <option value="Marzo">Marzo</option><option value="Abril" selected>Abril</option>
+      <option value="Marzo">Marzo</option><option value="Abril">Abril</option>
       <option value="Mayo">Mayo</option><option value="Junio">Junio</option>
       <option value="Julio">Julio</option><option value="Agosto">Agosto</option>
       <option value="Septiembre">Sep</option><option value="Octubre">Oct</option>
@@ -283,7 +283,7 @@ if (isIOS && !window.navigator.standalone && !localStorage.getItem('ff_installed
     <button class="fab" onclick="toggleFab()">＋</button>
     <select class="month-sel" id="monthSelect2" onchange="changeMonth(this.value)">
       <option value="Enero">Enero</option><option value="Febrero">Febrero</option>
-      <option value="Marzo">Marzo</option><option value="Abril" selected>Abril</option>
+      <option value="Marzo">Marzo</option><option value="Abril">Abril</option>
       <option value="Mayo">Mayo</option><option value="Junio">Junio</option>
       <option value="Julio">Julio</option><option value="Agosto">Agosto</option>
       <option value="Septiembre">Sep</option><option value="Octubre">Oct</option>
@@ -700,7 +700,7 @@ let BUDGET={monthly:3600,weekly:900};
 let transactions=[];
 // ── FIX: debts is always an array ──
 let debts=[];
-let currentMonth='Abril', currentCat='', currentView='lista', currentTipo='gasto', fabOpen=false;
+let currentMonth=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][new Date().getMonth()], currentCat='', currentView='lista', currentTipo='gasto', fabOpen=false;
 let lineC,donutC,debtC;
 let reorderMode=false;
 
