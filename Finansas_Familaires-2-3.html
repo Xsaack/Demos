@@ -661,6 +661,38 @@ if (isIOS && !window.navigator.standalone && !localStorage.getItem('ff_installed
 </div>
 
 <script>
+// ── Diagnóstico global de errores ──────────────────────────────
+// Si algo falla silenciosamente (botón que "no responde"), esto lo
+// muestra en pantalla en vez de morir en silencio en la consola.
+window.addEventListener('error', function(e){
+  try{
+    var msg = (e && e.message) ? e.message : 'Error desconocido';
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:10px;right:10px;bottom:80px;z-index:99999;background:#3a0d12;color:#ff8a8a;border:1px solid #ff4d6a;border-radius:10px;padding:10px 14px;font-size:12px;font-family:monospace;max-height:140px;overflow:auto;box-shadow:0 4px 18px rgba(0,0,0,0.4)';
+    box.textContent = '⚠ Error JS: ' + msg + (e.filename ? (' ('+e.filename.split('/').pop()+':'+e.lineno+')') : '');
+    var closeBtn = document.createElement('div');
+    closeBtn.textContent = '✕ cerrar';
+    closeBtn.style.cssText = 'margin-top:6px;text-decoration:underline;cursor:pointer;font-weight:700';
+    closeBtn.onclick = function(){ box.remove(); };
+    box.appendChild(closeBtn);
+    document.body.appendChild(box);
+  }catch(_){}
+});
+window.addEventListener('unhandledrejection', function(e){
+  try{
+    var msg = (e && e.reason && e.reason.message) ? e.reason.message : String(e.reason);
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:10px;right:10px;bottom:80px;z-index:99999;background:#3a0d12;color:#ff8a8a;border:1px solid #ff4d6a;border-radius:10px;padding:10px 14px;font-size:12px;font-family:monospace;max-height:140px;overflow:auto;box-shadow:0 4px 18px rgba(0,0,0,0.4)';
+    box.textContent = '⚠ Promesa rechazada: ' + msg;
+    var closeBtn = document.createElement('div');
+    closeBtn.textContent = '✕ cerrar';
+    closeBtn.style.cssText = 'margin-top:6px;text-decoration:underline;cursor:pointer;font-weight:700';
+    closeBtn.onclick = function(){ box.remove(); };
+    box.appendChild(closeBtn);
+    document.body.appendChild(box);
+  }catch(_){}
+});
+
 const CAT_COLORS={Comida:'#00d68f',Renta:'#4f8ef7',Transporte:'#f5a623',Salud:'#a78bfa',Hijos:'#ff6eb4',Esposa:'#ff9a9e',Mantto:'#64748b',Deudas:'#ff4d6a',Streaming:'#06b6d4',Seguro:'#8b5cf6',Otro:'#6b7280',Sueldo:'#00d68f',Extra:'#4f8ef7'};
 const CAT_ICONS={Comida:'🥩',Renta:'🏠',Transporte:'🚗',Salud:'💊',Hijos:'👶',Esposa:'💑',Mantto:'🔧',Deudas:'💳',Streaming:'📺',Seguro:'🚘',Sueldo:'💰',Extra:'⭐',Otro:'📌'};
 const BASE_INCOME_CATS=[{v:'Sueldo',l:'💰 Sueldo'},{v:'Extra',l:'⭐ Extra'}];
@@ -2017,9 +2049,19 @@ function importExcel(event){
   const manifest={name:'Finances Gaxiola',short_name:'Finances',description:'Control de finanzas familiares',start_url:'.',display:'standalone',background_color:'#0a0c10',theme_color:'#0a0c10',orientation:'portrait',icons:[{src:icon192,sizes:'192x192',type:'image/png',purpose:'any maskable'},{src:icon512,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
   const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});const mURL=URL.createObjectURL(mBlob);document.getElementById('pwaManifest').href=mURL;
   ['180','167','152','120'].forEach(s=>{const lnk=document.createElement('link');lnk.rel='apple-touch-icon';lnk.sizes=s+'x'+s;lnk.href=makeIcon(parseInt(s));document.head.appendChild(lnk);});
-  // SW registration via blob URL is not supported in all environments (e.g. Claude.ai).
-  // When deployed to GitHub Pages, add a real sw.js file and register it normally:
-  // if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+  // ── Service Worker con auto-actualización ──────────────────
+  // Evita que la app instalada se quede "congelada" en una versión
+  // vieja: cuando hay una versión nueva del sw.js, se activa sola y
+  // recarga la página automáticamente.
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  }
 })();
 </script>
 </body>
